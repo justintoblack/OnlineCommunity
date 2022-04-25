@@ -1,0 +1,67 @@
+/* 图片broder */
+.img_broder {
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.margin_right {
+    margin-right: 5%;
+}
+
+/* 与左间隔，居中 */
+.margin_left {
+    margin-left: 5%;
+    display: flex;
+    align-items: center;
+}
+
+/* 与上下分离 */
+.margin_vertical {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* 按钮居右显示 */
+.right_btn {
+    text-align: right;
+}
+
+/* 导航栏背景颜色 */
+.bg_color {
+    color: rgb(151, 194, 226);
+}
+
+/* 按钮颜色 */
+.btn_color {
+    background-color: rgb(46, 196, 246);
+}
+
+/* 文本居中 */
+.text_center {
+    text-align: center;
+}
+
+
+
+/* 普通broder */
+.normal_border {
+    border-style: solid;
+    border-width: 1px;
+}
+
+/* 普通字体 */
+.char_style {
+    color: black;
+    font-size: 20px;
+}
+
+/* 宽度占满 */
+.div_maxwidth {
+    width: 100%;
+}
+
+/* 评论高度 */
+.comment_height {
+    height: 100px;
+}
