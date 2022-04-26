@@ -10,6 +10,7 @@ public class Repost {
     private Integer mid;
     private Integer ruid;
     private Integer muid;
+    private Timestamp mtime;
     private Timestamp rtime;
 
     public Integer getRid() {
@@ -42,6 +43,14 @@ public class Repost {
 
     public void setMuid(Integer muid) {
         this.muid = muid;
+    }
+
+    public Timestamp getMtime() {
+        return mtime;
+    }
+
+    public void setMtime(Timestamp mtime) {
+        this.mtime = mtime;
     }
 
     public Timestamp getRtime() {

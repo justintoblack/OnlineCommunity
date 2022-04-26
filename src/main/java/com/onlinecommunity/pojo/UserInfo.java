@@ -9,6 +9,7 @@ public class UserInfo {
     private String urealname;
     private String uavatarurl;
     private String uabout;
+    private String ubirthday;
     private Integer ufollowing;
     private Integer ufollowers;
     private Integer umomentcount;
@@ -53,6 +54,14 @@ public class UserInfo {
 
     public void setUabout(String uabout) {
         this.uabout = uabout;
+    }
+
+    public String getUbirthday() {
+        return ubirthday;
+    }
+
+    public void setUbirthday(String ubirthday) {
+        this.ubirthday = ubirthday;
     }
 
     public Integer getUfollowing() {

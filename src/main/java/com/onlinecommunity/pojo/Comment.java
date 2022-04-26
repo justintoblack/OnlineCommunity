@@ -8,10 +8,11 @@ import java.sql.Timestamp;
 public class Comment {
     private Integer cid;
     private String ccontent;
-    private Integer tid;
+    private Integer mid;
     private Integer cuid;
-    private Integer tuid;
+    private Integer muid;
     private Integer clikecount;
+    private Timestamp ctime;
 
     public Integer getCid() {
         return cid;
@@ -29,12 +30,12 @@ public class Comment {
         this.ccontent = ccontent;
     }
 
-    public Integer getTid() {
-        return tid;
+    public Integer getMid() {
+        return mid;
     }
 
-    public void setTid(Integer tid) {
-        this.tid = tid;
+    public void setMid(Integer mid) {
+        this.mid = mid;
     }
 
     public Integer getCuid() {
@@ -45,12 +46,12 @@ public class Comment {
         this.cuid = cuid;
     }
 
-    public Integer getTuid() {
-        return tuid;
+    public Integer getMuid() {
+        return muid;
     }
 
-    public void setTuid(Integer tuid) {
-        this.tuid = tuid;
+    public void setMuid(Integer muid) {
+        this.muid = muid;
     }
 
     public Integer getClikecount() {
@@ -68,7 +69,4 @@ public class Comment {
     public void setCtime(Timestamp ctime) {
         this.ctime = ctime;
     }
-
-    private Timestamp ctime;
-
 }

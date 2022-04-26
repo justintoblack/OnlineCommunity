@@ -7,9 +7,10 @@ import java.sql.Timestamp;
  */
 public class Like {
     private Integer lid;
-    private Integer tid;
+    private Integer mid;
     private Integer luid;
     private Integer muid;
+    private Timestamp ltime;
 
     public Integer getLid() {
         return lid;
@@ -19,12 +20,12 @@ public class Like {
         this.lid = lid;
     }
 
-    public Integer getTid() {
-        return tid;
+    public Integer getMid() {
+        return mid;
     }
 
-    public void setTid(Integer tid) {
-        this.tid = tid;
+    public void setMid(Integer mid) {
+        this.mid = mid;
     }
 
     public Integer getLuid() {
@@ -43,13 +44,11 @@ public class Like {
         this.muid = muid;
     }
 
-    public Timestamp getStime() {
-        return stime;
+    public Timestamp getLtime() {
+        return ltime;
     }
 
-    public void setStime(Timestamp stime) {
-        this.stime = stime;
+    public void setLtime(Timestamp ltime) {
+        this.ltime = ltime;
     }
-
-    private Timestamp stime;
 }

@@ -15,12 +15,12 @@ public class Moment {
     private Integer mcommentcount;
     private Integer mrepostcount;
 
-    public Integer getTid() {
+    public Integer getMid() {
         return mid;
     }
 
-    public void setTid(Integer tid) {
-        this.mid = tid;
+    public void setMid(Integer mid) {
+        this.mid = mid;
     }
 
     public Integer getUid() {

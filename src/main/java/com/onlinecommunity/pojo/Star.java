@@ -10,6 +10,7 @@ public class Star {
     private Integer sid;
     private Integer mid;
     private Integer suid;
+    private Timestamp stime;
 
     public Integer getSid() {
         return sid;
@@ -35,14 +36,6 @@ public class Star {
         this.suid = suid;
     }
 
-    public Integer getTuid() {
-        return tuid;
-    }
-
-    public void setTuid(Integer tuid) {
-        this.tuid = tuid;
-    }
-
     public Timestamp getStime() {
         return stime;
     }
@@ -51,7 +44,5 @@ public class Star {
         this.stime = stime;
     }
 
-    private Integer tuid;
-    private Timestamp stime;
 
 }
