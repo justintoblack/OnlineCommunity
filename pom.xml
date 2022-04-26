@@ -112,7 +112,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.3.7.RELEASE</version>
                 <configuration>
-                    <mainClass>com.mytwitter.SpringbootApplication</mainClass>
+                    <mainClass>com.onlinecommunity.SpringbootApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

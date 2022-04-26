@@ -1,4 +1,4 @@
-package com.mytwitter.exception;
+package com.onlinecommunity.exception;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,25 +1,25 @@
-package com.mytwitter.pojo;
+package com.onlinecommunity.pojo;
 
 /**
  * @create 2022/4/22-22:31
  */
 public class UserInfo {
-    private int uid;
+    private Integer uid;
     private String unickname;
     private String urealname;
     private String uavatarurl;
     private String uabout;
-    private int ufollowing;
-    private int ufollowers;
-    private int utweetcount;
-    private int ulikecount;
-    private int ustarcount;
+    private Integer ufollowing;
+    private Integer ufollowers;
+    private Integer umomentcount;
+    private Integer ulikecount;
+    private Integer ustarcount;
 
-    public int getUid() {
+    public Integer getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(Integer uid) {
         this.uid = uid;
     }
 
@@ -55,43 +55,43 @@ public class UserInfo {
         this.uabout = uabout;
     }
 
-    public int getUfollowing() {
+    public Integer getUfollowing() {
         return ufollowing;
     }
 
-    public void setUfollowing(int ufollowing) {
+    public void setUfollowing(Integer ufollowing) {
         this.ufollowing = ufollowing;
     }
 
-    public int getUfollowers() {
+    public Integer getUfollowers() {
         return ufollowers;
     }
 
-    public void setUfollowers(int ufollowers) {
+    public void setUfollowers(Integer ufollowers) {
         this.ufollowers = ufollowers;
     }
 
-    public int getUtweetcount() {
-        return utweetcount;
+    public Integer getUmomentcount() {
+        return umomentcount;
     }
 
-    public void setUtweetcount(int utweetcount) {
-        this.utweetcount = utweetcount;
+    public void setUmomentcount(Integer umomentcount) {
+        this.umomentcount = umomentcount;
     }
 
-    public int getUlikecount() {
+    public Integer getUlikecount() {
         return ulikecount;
     }
 
-    public void setUlikecount(int ulikecount) {
+    public void setUlikecount(Integer ulikecount) {
         this.ulikecount = ulikecount;
     }
 
-    public int getUstarcount() {
+    public Integer getUstarcount() {
         return ustarcount;
     }
 
-    public void setUstarcount(int ustarcount) {
+    public void setUstarcount(Integer ustarcount) {
         this.ustarcount = ustarcount;
     }
 }

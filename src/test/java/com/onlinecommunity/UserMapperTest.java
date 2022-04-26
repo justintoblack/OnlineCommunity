@@ -1,10 +1,10 @@
-package com.mytwitter;
+package com.onlinecommunity;
 
-import com.mytwitter.pojo.User;
+import com.onlinecommunity.pojo.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.mytwitter.mapper.UserMapper;
+import com.onlinecommunity.mapper.UserMapper;
 
 import java.util.List;
 

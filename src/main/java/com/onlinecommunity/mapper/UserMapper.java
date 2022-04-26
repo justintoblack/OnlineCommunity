@@ -1,9 +1,8 @@
-package com.mytwitter.mapper;
+package com.onlinecommunity.mapper;
 
 
-import com.mytwitter.pojo.User;
+import com.onlinecommunity.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

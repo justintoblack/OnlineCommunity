@@ -1,4 +1,4 @@
-package com.mytwitter.pojo;
+package com.onlinecommunity.pojo;
 
 import java.sql.Timestamp;
 
@@ -6,18 +6,18 @@ import java.sql.Timestamp;
  * @create 2022/4/22-23:17
  */
 public class Comment {
-    private int cid;
+    private Integer cid;
     private String ccontent;
-    private int tid;
-    private int cuid;
-    private int tuid;
-    private int clikecount;
+    private Integer tid;
+    private Integer cuid;
+    private Integer tuid;
+    private Integer clikecount;
 
-    public int getCid() {
+    public Integer getCid() {
         return cid;
     }
 
-    public void setCid(int cid) {
+    public void setCid(Integer cid) {
         this.cid = cid;
     }
 
@@ -29,35 +29,35 @@ public class Comment {
         this.ccontent = ccontent;
     }
 
-    public int getTid() {
+    public Integer getTid() {
         return tid;
     }
 
-    public void setTid(int tid) {
+    public void setTid(Integer tid) {
         this.tid = tid;
     }
 
-    public int getCuid() {
+    public Integer getCuid() {
         return cuid;
     }
 
-    public void setCuid(int cuid) {
+    public void setCuid(Integer cuid) {
         this.cuid = cuid;
     }
 
-    public int getTuid() {
+    public Integer getTuid() {
         return tuid;
     }
 
-    public void setTuid(int tuid) {
+    public void setTuid(Integer tuid) {
         this.tuid = tuid;
     }
 
-    public int getClikecount() {
+    public Integer getClikecount() {
         return clikecount;
     }
 
-    public void setClikecount(int clikecount) {
+    public void setClikecount(Integer clikecount) {
         this.clikecount = clikecount;
     }
 

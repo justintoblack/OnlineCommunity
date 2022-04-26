@@ -1,14 +1,14 @@
-package com.mytwitter.pojo;
+package com.onlinecommunity.pojo;
 
 public class User {
-    private int uid;
+    private Integer uid;
     private String upwd;
 
-    public int getUid() {
+    public Integer getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(Integer uid) {
         this.uid = uid;
     }
 
