@@ -3,8 +3,9 @@ USE online_community;
 
 CREATE TABLE IF NOT EXISTS `user`
 (
-    `uid`  INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `upwd` VARCHAR(20)  NOT NULL
+    `uid`      INT UNSIGNED                NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `username` VARCHAR(30) CHARSET utf8mb4 NOT NULL UNIQUE,
+    `password` VARCHAR(20)                 NOT NULL
 ) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `moment`
@@ -78,7 +79,7 @@ ALTER TABLE `star`
 CREATE TABLE IF NOT EXISTS `user_info`
 (
     `uid`          INT UNSIGNED                NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `unickname`    VARCHAR(30) CHARSET utf8mb4 NOT NULL,
+    `username`     VARCHAR(30) CHARSET utf8mb4 NOT NULL,
     `urealname`    VARCHAR(30) CHARSET utf8mb4,
     `uavatarurl`   VARCHAR(255),
     `uabout`       VARCHAR(255) CHARSET utf8mb4,
@@ -92,7 +93,3 @@ CREATE TABLE IF NOT EXISTS `user_info`
   DEFAULT CHARSET = utf8mb4;
 ALTER TABLE `user_info`
     ADD CONSTRAINT fk_userinfo_user FOREIGN KEY (`uid`) REFERENCES `user` (`uid`);
-
-
-
-
