@@ -3,6 +3,7 @@ package com.onlinecommunity.mapper;
 
 import com.onlinecommunity.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,4 +13,19 @@ public interface UserMapper {
 
     List<User> listAll();
 
+    User findUserByUid(int uid);
+
+    User findUserByUsername(String username);
+
+    Integer saveUser(@Param("username") String username, @Param("password") String password);
+
+    String findUsernameByUid(int uid);
+
+    String findPasswordByUid(int uid);
+
+    String findPasswordByUsername(String username);
+
+    Integer findUidByUsername(String username);
+
+    void setPassword(@Param("user") User user);
 }

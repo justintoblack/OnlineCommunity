@@ -25,4 +25,15 @@ public class UserMapperTest {
             System.out.println(user.toString());
         }
     }
+
+    @Test
+    public void testSetPassword(){
+
+        User user = new User();
+        user.setUid(1);
+        user.setPassword("123456--");
+        userMapper.setPassword(user);
+        System.out.println(userMapper.findPasswordByUid(user.getUid()));
+
+    }
 }

@@ -4,8 +4,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.onlinecommunity.mapper.UserMapper">
+
     <select id="listAll" resultType="com.onlinecommunity.pojo.User">
         select *
-        from online_community.user;
+        from online_community.user
     </select>
+
+    <select id="findUserByUid" parameterType="int" resultType="com.onlinecommunity.pojo.User">
+        select *
+        from online_community.user
+        where uid = #{uid}
+    </select>
+
+    <select id="findUserByUsername" parameterType="String" resultType="com.onlinecommunity.pojo.User">
+        select *
+        from online_community.user
+        where username = #{username}
+    </select>
+
+    <select id="findPasswordByUid" parameterType="int" resultType="String">
+        select password
+        from online_community.user
+        where uid = #{uid}
+    </select>
+
+    <select id="findPasswordByUsername" parameterType="String" resultType="String">
+        select password
+        from online_community.user
+        where username = #{username}
+    </select>
+
+    <select id="findUsernameByUid" parameterType="int" resultType="String">
+        select username
+        from online_community.user
+        where uid = #{uid}
+    </select>
+
+    <select id="findUidByUsername" parameterType="String" resultType="Integer">
+        select uid
+        from online_community.user
+        where username = #{username}
+    </select>
+
+    <update id="setPassword" parameterType="com.onlinecommunity.pojo.User">
+        update online_community.user
+        set password=#{user.password}
+        where uid = #{user.uid}
+    </update>
+
+    <insert id="saveUser" useGeneratedKeys="true" keyProperty="uid">
+        insert into online_community.user (uid, username, password)
+        values (null, #{username}, #{password})
+    </insert>
+
+
 </mapper>
