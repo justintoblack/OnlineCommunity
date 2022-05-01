@@ -14,36 +14,36 @@ public class UserService {
     UserMapper userMapper;
 
     /**
-     * @param username
-     * @param password
+     *
+     * @param user
      * @return
      */
-    public Result register(String username, String password) {
-        if ("".equals(username)) {
+    public Result register(User user) {
+        if ("".equals(user.getUsername())) {
             return Result.failure(ResultCode.NULL_USERNAME);
         }
-        if ("".equals(password)) {
+        if ("".equals(user.getPassword())) {
             return Result.failure(ResultCode.NULL_PASSWORD);
         }
 
-        Integer uid = userMapper.findUidByUsername(username);
+        Integer uid = userMapper.findUidByUsername(user.getUsername());
         if (uid != null) {
             return Result.failure(ResultCode.ALREADY_REGISTERED);
         }
+        userMapper.saveUser(user);
         return Result.success();
     }
 
     /**
      *
-     * @param username
-     * @param password
+     * @param user
      * @return
      */
-    public Result login(String username, String password) {
-        Integer uid = userMapper.findUidByUsername(username);
+    public Result login(User user) {
+        Integer uid = userMapper.findUidByUsername(user.getUsername());
         if (uid != null) {
             String existUserPwd = userMapper.findPasswordByUid(uid);
-            if (existUserPwd.equals(password)) {
+            if (existUserPwd.equals(user.getPassword())) {
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.WRONG_PASSWORD);

@@ -17,7 +17,7 @@ public interface UserMapper {
 
     User findUserByUsername(String username);
 
-    Integer saveUser(@Param("username") String username, @Param("password") String password);
+    Integer saveUser(@Param("user") User user);
 
     String findUsernameByUid(int uid);
 

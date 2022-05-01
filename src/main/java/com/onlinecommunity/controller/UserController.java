@@ -17,12 +17,12 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    public Result register(String username, String password) {
-        return userService.register(username, password);
+    public Result register(User user) {
+        return userService.register(user);
     }
 
     @PostMapping("/login")
-    public Result login(String username, String password){
-        return userService.login(username, password);
+    public Result login(User user){
+        return userService.login(user);
     }
 }

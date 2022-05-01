@@ -52,9 +52,9 @@
         where uid = #{user.uid}
     </update>
 
-    <insert id="saveUser" useGeneratedKeys="true" keyProperty="uid">
+    <insert id="saveUser" parameterType="com.onlinecommunity.pojo.User" keyProperty="uid">
         insert into online_community.user (uid, username, password)
-        values (null, #{username}, #{password})
+        values (null, #{user.username}, #{user.password})
     </insert>
 
 
