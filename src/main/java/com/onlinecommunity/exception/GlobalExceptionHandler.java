@@ -7,13 +7,16 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @ControllerAdvice(basePackages = {"com.onlinecommunity.controller"})
 @Slf4j
+@ResponseBody
 public class GlobalExceptionHandler {
 
 //    @ExceptionHandler(value = Exception.class)
@@ -42,8 +45,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result exceptionHandler(BindException e) {
-        log.error("BindException:{}", e.getMessage());
-        return Result.failure(e.getMessage());
+        log.error("BindException:{}", Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
+        return Result.failure(e.getFieldError().getDefaultMessage());
     }
 
 }
