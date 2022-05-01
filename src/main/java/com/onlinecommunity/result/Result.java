@@ -1,18 +1,14 @@
 package com.onlinecommunity.result;
 
 
-public class Result {
+import java.io.Serializable;
+
+public class Result implements Serializable {
     private Integer code;
     private String msg;
     private Object data;
 
     private Result() {
-    }
-
-    private Result(Object data) {
-        this.code = 0;
-        this.msg = "success";
-        this.data = data;
     }
 
     private Result(ResultCode resultCode, Object data) {
@@ -27,22 +23,17 @@ public class Result {
     }
 
     public static Result success(Object data) {
-        Result result = new Result();
-        result.setResultCode(ResultCode.SUCCESS);
-        result.setData(data);
-        return result;
+        return new Result(ResultCode.SUCCESS, data);
     }
 
     public static Result failure(ResultCode resultCode) {
-        Result result = new Result();
-        result.setResultCode(resultCode);
-        return result;
+        return new Result(resultCode, null);
     }
 
-    public static Result failure(ResultCode resultCode, Object data) {
+    public static Result failure(String message) {
         Result result = new Result();
-        result.setResultCode(resultCode);
-        result.setData(data);
+        result.setCode(400);
+        result.setMsg(message);
         return result;
     }
 

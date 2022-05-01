@@ -37,6 +37,13 @@
             <optional>true</optional>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+
         <!--   对jsp的支持     -->
         <!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
         <dependency>
@@ -80,6 +87,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
