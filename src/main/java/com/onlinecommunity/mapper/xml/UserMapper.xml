@@ -10,7 +10,7 @@
         from online_community.user
     </select>
 
-    <select id="findUserByUid" parameterType="int" resultType="com.onlinecommunity.pojo.User">
+    <select id="findUserByUid" parameterType="Integer" resultType="com.onlinecommunity.pojo.User">
         select *
         from online_community.user
         where uid = #{uid}
@@ -22,7 +22,7 @@
         where username = #{username}
     </select>
 
-    <select id="findPasswordByUid" parameterType="int" resultType="String">
+    <select id="findPasswordByUid" parameterType="Integer" resultType="String">
         select password
         from online_community.user
         where uid = #{uid}
@@ -34,7 +34,7 @@
         where username = #{username}
     </select>
 
-    <select id="findUsernameByUid" parameterType="int" resultType="String">
+    <select id="findUsernameByUid" parameterType="Integer" resultType="String">
         select username
         from online_community.user
         where uid = #{uid}
@@ -54,7 +54,7 @@
 
     <insert id="saveUser" parameterType="com.onlinecommunity.pojo.User" keyProperty="uid">
         insert into online_community.user (uid, username, password)
-        values (null, #{user.username}, #{user.password})
+        values (#{user.uid}, #{user.username}, #{user.password})
     </insert>
 
 

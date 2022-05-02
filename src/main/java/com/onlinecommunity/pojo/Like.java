@@ -51,4 +51,15 @@ public class Like {
     public void setLtime(Timestamp ltime) {
         this.ltime = ltime;
     }
+
+    @Override
+    public String toString() {
+        return "Like{" +
+                "lid=" + lid +
+                ", mid=" + mid +
+                ", luid=" + luid +
+                ", muid=" + muid +
+                ", ltime=" + ltime +
+                '}';
+    }
 }

@@ -20,9 +20,9 @@ public class Moment {
     
     private String mpicurl;
     private Timestamp mtime;
-    private Integer mlikecount;
-    private Integer mcommentcount;
-    private Integer mrepostcount;
+    private Integer mlikecount = 0;
+    private Integer mcommentcount = 0;
+    private Integer mrepostcount = 0;
 
     public Integer getMid() {
         return mid;
@@ -86,5 +86,19 @@ public class Moment {
 
     public void setMrepostcount(Integer mrepostcount) {
         this.mrepostcount = mrepostcount;
+    }
+
+    @Override
+    public String toString() {
+        return "Moment{" +
+                "mid=" + mid +
+                ", uid=" + uid +
+                ", mcontent='" + mcontent + '\'' +
+                ", mpicurl='" + mpicurl + '\'' +
+                ", mtime=" + mtime +
+                ", mlikecount=" + mlikecount +
+                ", mcommentcount=" + mcommentcount +
+                ", mrepostcount=" + mrepostcount +
+                '}';
     }
 }

@@ -13,7 +13,7 @@ public class Comment {
     private Integer mid;
     private Integer cuid;
     private Integer muid;
-    private Integer clikecount;
+    private Integer clikecount = 0;
     private Timestamp ctime;
 
     public Integer getCid() {
@@ -70,5 +70,18 @@ public class Comment {
 
     public void setCtime(Timestamp ctime) {
         this.ctime = ctime;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "cid=" + cid +
+                ", ccontent='" + ccontent + '\'' +
+                ", mid=" + mid +
+                ", cuid=" + cuid +
+                ", muid=" + muid +
+                ", clikecount=" + clikecount +
+                ", ctime=" + ctime +
+                '}';
     }
 }

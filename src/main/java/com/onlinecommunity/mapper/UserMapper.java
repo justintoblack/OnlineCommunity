@@ -13,15 +13,15 @@ public interface UserMapper {
 
     List<User> listAll();
 
-    User findUserByUid(int uid);
+    User findUserByUid(Integer uid);
 
     User findUserByUsername(String username);
 
     Integer saveUser(@Param("user") User user);
 
-    String findUsernameByUid(int uid);
+    String findUsernameByUid(Integer uid);
 
-    String findPasswordByUid(int uid);
+    String findPasswordByUid(Integer uid);
 
     String findPasswordByUsername(String username);
 

@@ -22,10 +22,10 @@ public class UserInfo {
     private String uabout;
 
     private String ubirthday;
-    private Integer ufollowing;
-    private Integer ufollowers;
-    private Integer umomentcount;
-    private Integer ulikecount;
+    private Integer ufollowing = 0;
+    private Integer ufollowers = 0;
+    private Integer umomentcount = 0;
+    private Integer ulikecount = 0;
 
     public Integer getUid() {
         return uid;
@@ -117,4 +117,20 @@ public class UserInfo {
 
     private Integer ustarcount;
 
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "uid=" + uid +
+                ", username='" + username + '\'' +
+                ", urealname='" + urealname + '\'' +
+                ", uavatarurl='" + uavatarurl + '\'' +
+                ", uabout='" + uabout + '\'' +
+                ", ubirthday='" + ubirthday + '\'' +
+                ", ufollowing=" + ufollowing +
+                ", ufollowers=" + ufollowers +
+                ", umomentcount=" + umomentcount +
+                ", ulikecount=" + ulikecount +
+                ", ustarcount=" + ustarcount +
+                '}';
     }
+}

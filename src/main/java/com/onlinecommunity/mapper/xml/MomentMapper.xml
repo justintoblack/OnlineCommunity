@@ -18,7 +18,8 @@
 
     <insert id="saveMoment" parameterType="com.onlinecommunity.pojo.Moment" keyProperty="mid">
         insert into online_community.moment(mid, uid, mcontent, mpicurl, mtime, mlikecount, mcommentcount, mrepostcount)
-        values (#{mid}, #{uid}, #{mcontent}, #{mpicurl}, #{mtime}, #{mlikecount}, #{mcommentcount}, #{mrepostcount})
+        values (#{moment.mid}, #{moment.uid}, #{moment.mcontent}, #{moment.mpicurl}, #{moment.mtime},
+                #{moment.mlikecount}, #{moment.mcommentcount}, #{moment.mrepostcount})
     </insert>
 
     <delete id="deleteMomentByMid" parameterType="Integer">

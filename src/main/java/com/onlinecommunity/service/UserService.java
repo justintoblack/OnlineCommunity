@@ -28,7 +28,7 @@ public class UserService {
 
         Integer uid = userMapper.findUidByUsername(user.getUsername());
         if (uid != null) {
-            return Result.failure(ResultCode.ALREADY_REGISTERED);
+            return Result.failure(ResultCode.EXIST_USERNAME);
         }
         userMapper.saveUser(user);
         return Result.success();
