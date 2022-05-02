@@ -1,6 +1,6 @@
 package com.onlinecommunity.pojo;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 
 /**
@@ -8,9 +8,16 @@ import java.sql.Timestamp;
  */
 public class Moment {
     private Integer mid;
+
+    @NotNull(message = "uid不能为空")
+    @Digits(integer = 10, fraction = 0, message = "uid最多10位")
+    @Max(value = 2147483647, message = "uid最大为2147483647")
+    @Positive(message = "uid非负")
     private Integer uid;
+
     @NotBlank(message = "正文内容不能为空")
     private String mcontent;
+    
     private String mpicurl;
     private Timestamp mtime;
     private Integer mlikecount;
