@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `moment`
     `uid`           INT UNSIGNED                 NOT NULL,
     `mcontent`      varchar(255) CHARSET utf8mb4 NOT NULL,
     `mpicurl`       varchar(255),
-    `mtime`         DATETIME                     NOT NULL,
+    `mtime`         DATETIME                     NOT NULL DEFAULT NOW(),
     `mlikecount`    int,
     `mcommentcount` int,
     `mrepostcount`  int
