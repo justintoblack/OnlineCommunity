@@ -63,21 +63,27 @@ export default {
       switch (id) {
         case 0:
           this.$router.push("/main/home").catch((err) => err);
+          this.$emit("update:change", "首页");
           break;
         case 1:
           this.$router.push("/main/follow").catch((err) => err);
+          this.$emit("update:change", "我的关注");
           break;
         case 2:
           this.$router.push("/main/fans").catch((err) => err);
+          this.$emit("update:change", "我的粉丝");
           break;
         case 3:
           this.$router.push("/main/star").catch((err) => err);
+          this.$emit("update:change", "我的收藏");
           break;
         case 4:
           this.$router.push("/main/like").catch((err) => err);
+          this.$emit("update:change", "我的点赞");
           break;
         case 5:
           this.$router.push("/").catch((err) => err);
+          this.$emit("update:change", "欢迎来到登录界面");
           break;
       }
     },

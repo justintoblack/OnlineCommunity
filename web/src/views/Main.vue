@@ -1,8 +1,20 @@
 <template>
-  <div class="hori">
-    <div class="height100"><Nav></Nav></div>
-    <div class="width100"><router-view /></div>
-  </div>
+  <v-app>
+    <v-app-bar color="blue lighten-1" app dense flat>
+      <div>
+        <v-app-bar-title>
+          <div class="char_style">{{ title }}</div>
+        </v-app-bar-title>
+      </div>
+      <div class="title_content">{{ curView }}</div>
+    </v-app-bar>
+    <v-main>
+      <div class="hori">
+        <div class="height100"><Nav :change.sync="curView"></Nav></div>
+        <div class="width100"><router-view /></div>
+      </div>
+    </v-main>
+  </v-app>
 </template>
 <script >
 import Nav from "@/components/Nav.vue";
@@ -10,7 +22,8 @@ export default {
   components: { Nav },
   data() {
     return {
-      str: "首页",
+      title: "分享交流社区",
+      curView: "首页",
     };
   },
 };
