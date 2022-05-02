@@ -1,5 +1,6 @@
 package com.onlinecommunity.pojo;
 
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
 /**
@@ -7,6 +8,7 @@ import java.sql.Timestamp;
  */
 public class Comment {
     private Integer cid;
+    @NotBlank(message = "评论内容不能为空")
     private String ccontent;
     private Integer mid;
     private Integer cuid;

@@ -1,5 +1,6 @@
 package com.onlinecommunity.pojo;
 
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 
 /**
@@ -8,6 +9,7 @@ import java.sql.Timestamp;
 public class Moment {
     private Integer mid;
     private Integer uid;
+    @NotBlank(message = "正文内容不能为空")
     private String mcontent;
     private String mpicurl;
     private Timestamp mtime;
