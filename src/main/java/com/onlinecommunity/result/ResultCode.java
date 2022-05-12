@@ -21,7 +21,7 @@ public enum ResultCode {
         this.code = code;
         this.msg = msg;
     }
-
+    
     public Integer getCode() {
         return this.code;
     }
