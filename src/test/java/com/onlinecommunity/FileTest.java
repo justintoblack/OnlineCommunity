@@ -1,8 +1,11 @@
 package com.onlinecommunity;
 
+import com.onlinecommunity.config.UploadConfig;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,15 +16,15 @@ import java.nio.charset.StandardCharsets;
 
 @SpringBootTest
 public class FileTest {
-    @Value("${server.uploadPath}")
-    String uploadPath;
+    @Autowired
+    UploadConfig uploadConfig;
 
     @Test
     public void testFile() throws IOException {
-        System.out.println("uploadPath = " + uploadPath);
+        System.out.println("uploadPath = " + uploadConfig.getPath());
         String filename = "file1";
         String suffix = ".jpg";
-        String filePath = uploadPath + "/pictures/";
+        String filePath = uploadConfig.getPath() + "/pictures/";
         String fileurl = filePath + filename + suffix;
         System.out.println("fileurl = " + fileurl);
         File targetFile = new File(filePath);
