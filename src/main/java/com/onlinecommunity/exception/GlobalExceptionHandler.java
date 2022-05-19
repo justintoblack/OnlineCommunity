@@ -30,15 +30,15 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = RuntimeException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Result exceptionHandler(RuntimeException e){
-        log.error("运行时异常：{}",e.getMessage());
+    public Result exceptionHandler(RuntimeException e) {
+        log.error("运行时异常：{}", e.getMessage());
         return Result.failure(e.getMessage());
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Result exceptionHandler(MethodArgumentNotValidException e){
-        log.error("参数校验异常：{}",e.getMessage());
+    public Result exceptionHandler(MethodArgumentNotValidException e) {
+        log.error("参数校验异常：{}", e.getMessage());
         return Result.failure(e.getMessage());
     }
 
@@ -49,4 +49,10 @@ public class GlobalExceptionHandler {
         return Result.failure(e.getFieldError().getDefaultMessage());
     }
 
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result exceptionHandler(IllegalArgumentException e) {
+        log.error("IllegalArgumentException:{}", e.getMessage());
+        return Result.failure(e.getMessage());
+    }
 }
