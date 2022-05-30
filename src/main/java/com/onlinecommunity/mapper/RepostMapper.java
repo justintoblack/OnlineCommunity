@@ -16,7 +16,7 @@ public interface RepostMapper {
     Repost getOneRepostByRid(Integer rid);
 
     @Insert("insert into online_community.repost (rid, mid, ruid, muid) values (#{repost.rid}, #{repost.mid}, #{repost.ruid}, #{repost.muid})")
-    @Options(keyProperty = "rid")
+    @Options(useGeneratedKeys = true, keyProperty = "rid")
     Integer repost(@Param("repost") Repost repost);
 
     @Delete("delete from online_community.repost where rid = #{rid}")

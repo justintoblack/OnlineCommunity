@@ -18,7 +18,7 @@ public interface CommentMapper {
 
     @Insert("insert into online_community.comment (cid, ccontent, mid, cuid, muid, clikecount) " +
             "values(#{comment.cid}, #{comment.ccontent},#{comment.mid},#{comment.cuid}, #{comment.muid}, #{comment.clikecount})")
-    @Options(keyProperty = "cid")
+    @Options(useGeneratedKeys = true, keyProperty = "cid")
     Integer comment(@Param("comment") Comment comment);
 
     @Delete("delete from online_community.comment where cid=${cid}")

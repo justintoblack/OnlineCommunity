@@ -16,7 +16,7 @@ public interface LikeMapper {
     Like getOneLikeByLid(Integer lid);
 
     @Insert("insert into online_community.like (lid, mid, luid, muid) values (#{like.lid}, #{like.mid}, #{like.luid}, #{like.muid})")
-    @Options(keyProperty = "lid")
+    @Options(useGeneratedKeys = true, keyProperty = "lid")
     Integer likeMoment(@Param("like") Like like);
 
     @Delete("delete from online_community.like where lid = #{like.lid}  ")
