@@ -13,15 +13,24 @@ CREATE TABLE IF NOT EXISTS `moment`
     `mid`           INT UNSIGNED                 NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `uid`           INT UNSIGNED                 NOT NULL,
     `mcontent`      varchar(255) CHARSET utf8mb4 NOT NULL,
-    `mpicurl`       varchar(255),
     `mtime`         DATETIME                     NOT NULL DEFAULT NOW(),
-    `mlikecount`    int,
-    `mcommentcount` int,
-    `mrepostcount`  int
+    `picturescount` INT,
+    `mlikecount`    INT,
+    `mcommentcount` INT,
+    `mrepostcount`  INT
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 ALTER TABLE `moment`
     ADD CONSTRAINT fk_moment_user FOREIGN KEY (`uid`) REFERENCES `user` (uid);
+
+CREATE TABLE IF NOT EXISTS `picture`
+(
+    `mid`   INT UNSIGNED NOT NULL,
+    `index` INT          NOT NULL,
+    `url`   VARCHAR(255),
+    PRIMARY KEY (`mid`, `index`),
+    CONSTRAINT `fk_picture_moment` FOREIGN KEY (`mid`) REFERENCES `moment` (mid)
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `comment`
 (
@@ -83,11 +92,11 @@ CREATE TABLE IF NOT EXISTS `user_info`
     `urealname`    VARCHAR(30) CHARSET utf8mb4,
     `uavatarurl`   VARCHAR(255),
     `uabout`       VARCHAR(255) CHARSET utf8mb4,
-    `ufollowing`   int,
-    `ufollowers`   int,
-    `umomentcount` int,
-    `ulikecount`   int,
-    `ustarcount`   int,
+    `ufollowing`   INT,
+    `ufollowers`   INT,
+    `umomentcount` INT,
+    `ulikecount`   INT,
+    `ustarcount`   INT,
     `ubirthday`    DATE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
