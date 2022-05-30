@@ -4,12 +4,15 @@ import com.onlinecommunity.mapper.*;
 import com.onlinecommunity.pojo.*;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
+import com.onlinecommunity.util.MyEnvBeanUtil;
+import com.onlinecommunity.util.UploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -29,6 +32,31 @@ public class MomentService {
     @Autowired
     RepostMapper repostMapper;
 
+    @Autowired
+    PictureMapper pictureMapper;
+
+    /**
+     * @param multiPartFiles 待检查图片
+     * @return 如果检查没问题返回Result.success()，否则返回对应的错误(如：ResultCode.EXCEED_MAX_PIC_SIZE)
+     */
+    public Result checkPictures(MultipartFile[] multiPartFiles) {
+        for (MultipartFile multipartFile : multiPartFiles) {
+            //check the file
+            if (multipartFile.isEmpty())
+                return Result.failure(ResultCode.EMPTY_UPLOAD_FILE);
+            if (multipartFile.getSize() > Long.parseLong(MyEnvBeanUtil.getPictureMaxSize()))
+                return Result.failure(ResultCode.EXCEED_MAX_PIC_SIZE);
+        }
+        return Result.success();
+    }
+
+
+    public List<String> uploadPictures(MultipartFile[] multiPartFiles) {
+
+        return UploadUtil.uploadPictures(multiPartFiles);
+
+    }
+
     public Result post(Moment moment) {
         Integer uid = moment.getUid();
         User user = userMapper.findUserByUid(uid);
@@ -36,7 +64,9 @@ public class MomentService {
             if (moment.getMid() == null) {
                 //设置发布动态的时间为当前时间
                 moment.setMtime(new Timestamp(System.currentTimeMillis()));
-                momentMapper.saveMoment(moment);
+                log.info("MomentService before saving moment, mid:{}",moment.getMid());
+                System.out.println("momentMapper.saveMoment(moment) = " + momentMapper.saveMoment(moment));
+                log.info("MomentService after saving moment, mid:{}",moment.getMid());
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.EXIST_MID);
@@ -44,6 +74,11 @@ public class MomentService {
         } else {
             return Result.failure(ResultCode.NONEXISTENT_UID);
         }
+    }
+
+    public Result savePicturesUrl(List<String> urlList, Integer mid){
+        pictureMapper.savePicturesUrl(urlList, mid);
+        return Result.success();
     }
 
     public Result delete(Integer mid, Integer duid) {
@@ -110,11 +145,11 @@ public class MomentService {
         }
     }
 
-    public Result repost(Integer mid, Integer ruid){
+    public Result repost(Integer mid, Integer ruid) {
         Moment moment = momentMapper.findOneMomentByMid(mid);
-        if (moment != null){//被转发的动态需要存在
+        if (moment != null) {//被转发的动态需要存在
             User user = userMapper.findUserByUid(ruid);
-            if (user!=null){//执行转发的用户需要存在
+            if (user != null) {//执行转发的用户需要存在
                 Repost repost = new Repost();
                 repost.setMid(mid);
                 repost.setMuid(moment.getUid());
@@ -124,11 +159,11 @@ public class MomentService {
                 repost.setRtime(new Timestamp(System.currentTimeMillis()));
                 repostMapper.repost(repost);
                 return Result.success();
-            }else{
+            } else {
                 return Result.failure(ResultCode.NONEXISTENT_UID);
             }
 
-        }else{
+        } else {
             return Result.failure(ResultCode.NONEXISTENT_MID);
         }
     }

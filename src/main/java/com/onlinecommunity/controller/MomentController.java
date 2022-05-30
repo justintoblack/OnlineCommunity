@@ -5,15 +5,22 @@ import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
 import com.onlinecommunity.service.MomentService;
+import com.onlinecommunity.util.UploadUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Controller
 @ResponseBody
+@Slf4j
 public class MomentController {
 
     @Autowired
@@ -24,9 +31,35 @@ public class MomentController {
      * @return 结果
      */
     @PostMapping("/post_moment")
-    public Result post(@Validated Moment moment) {
-        System.out.println("post_moment!");
-        return momentService.post(moment);
+    public Result post(@Validated Moment moment, @RequestParam("pictures") MultipartFile[] multiPartFiles) {
+
+        //保存该动态中的图片
+        log.info("接收到了{}张图片", multiPartFiles.length);
+        List<String> urlList = null;
+        if (multiPartFiles.length > 0) {
+
+            //检查所有图片是否满足限制
+            Result checkResult = momentService.checkPictures(multiPartFiles);
+            if (!checkResult.getMsg().equals("success"))
+                return checkResult;
+
+            //上传图片
+            urlList = momentService.uploadPictures(multiPartFiles);
+        }
+        //保存该动态中的文字内容
+        log.info("MomentController before:{}", moment.getMid());
+        Result textResult = momentService.post(moment);
+        log.info("MomentController after:{}", moment.getMid());
+
+        if (!textResult.getMsg().equals("success")) {
+            return textResult;
+        }
+        log.info("successfully save moment content text!");
+
+        //将保存好的图片URL存至数据库
+        if (urlList != null)
+            momentService.savePicturesUrl(urlList, moment.getMid());
+        return Result.success();
     }
 
     /**
