@@ -5,42 +5,42 @@
 
 <mapper namespace="com.onlinecommunity.mapper.UserMapper">
 
-    <select id="listAll" resultType="com.onlinecommunity.pojo.User">
+    <select id="getAllUser" resultType="com.onlinecommunity.pojo.User">
         select *
         from online_community.user
     </select>
 
-    <select id="findUserByUid" parameterType="Integer" resultType="com.onlinecommunity.pojo.User">
+    <select id="getUserByUid" parameterType="Integer" resultType="com.onlinecommunity.pojo.User">
         select *
         from online_community.user
         where uid = #{uid}
     </select>
 
-    <select id="findUserByUsername" parameterType="String" resultType="com.onlinecommunity.pojo.User">
+    <select id="getUserByUsername" parameterType="String" resultType="com.onlinecommunity.pojo.User">
         select *
         from online_community.user
         where username = #{username}
     </select>
 
-    <select id="findPasswordByUid" parameterType="Integer" resultType="String">
+    <select id="getPasswordByUid" parameterType="Integer" resultType="String">
         select password
         from online_community.user
         where uid = #{uid}
     </select>
 
-    <select id="findPasswordByUsername" parameterType="String" resultType="String">
+    <select id="getPasswordByUsername" parameterType="String" resultType="String">
         select password
         from online_community.user
         where username = #{username}
     </select>
 
-    <select id="findUsernameByUid" parameterType="Integer" resultType="String">
+    <select id="getUsernameByUid" parameterType="Integer" resultType="String">
         select username
         from online_community.user
         where uid = #{uid}
     </select>
 
-    <select id="findUidByUsername" parameterType="String" resultType="Integer">
+    <select id="getUidByUsername" parameterType="String" resultType="Integer">
         select uid
         from online_community.user
         where username = #{username}
@@ -53,9 +53,18 @@
     </update>
 
     <insert id="saveUser" parameterType="com.onlinecommunity.pojo.User" useGeneratedKeys="true" keyProperty="uid">
-        insert into online_community.user (uid, username, password)
-        values (#{user.uid}, #{user.username}, #{user.password})
+        insert into online_community.user (uid, username, password, phone, email)
+        values (#{user.uid}, #{user.username}, #{user.password}, #{user.phone}, #{user.email})
     </insert>
 
+    <select id="getMaxUid" resultType="Integer">
+        select max(uid)
+        from online_community.user
+    </select>
+
+    <select id="getUserCount" resultType="Integer">
+        select count(uid)
+        from online_community.user
+    </select>
 
 </mapper>

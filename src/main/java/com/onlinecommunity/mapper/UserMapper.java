@@ -11,21 +11,25 @@ import java.util.List;
 public interface UserMapper {
 
 
-    List<User> listAll();
+    List<User> getAllUser();
 
-    User findUserByUid(Integer uid);
+    User getUserByUid(Integer uid);
 
-    User findUserByUsername(String username);
+    User getUserByUsername(String username);
 
     Integer saveUser(@Param("user") User user);
 
-    String findUsernameByUid(Integer uid);
+    String getUsernameByUid(Integer uid);
 
-    String findPasswordByUid(Integer uid);
+    String getPasswordByUid(Integer uid);
 
-    String findPasswordByUsername(String username);
+    String getPasswordByUsername(String username);
 
-    Integer findUidByUsername(String username);
+    Integer getUidByUsername(String username);
 
     void setPassword(@Param("user") User user);
+
+    Integer getMaxUid();
+
+    Integer getUserCount();
 }

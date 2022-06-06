@@ -1,6 +1,7 @@
 package com.onlinecommunity;
 
 import com.onlinecommunity.pojo.User;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 
 @SpringBootTest
+@Slf4j
 public class UserMapperTest {
 
     @Autowired
@@ -20,7 +22,7 @@ public class UserMapperTest {
 
     @Test
     public void testListAll(){
-        List<User> users = userMapper.listAll();
+        List<User> users = userMapper.getAllUser();
         for(User user : users){
             System.out.println(user.toString());
         }
@@ -33,7 +35,17 @@ public class UserMapperTest {
         user.setUid(1);
         user.setPassword("123456--");
         userMapper.setPassword(user);
-        System.out.println(userMapper.findPasswordByUid(user.getUid()));
+        System.out.println(userMapper.getPasswordByUid(user.getUid()));
 
+    }
+
+    @Test
+    public void testFindUser(){
+
+        User user1 = userMapper.getUserByUid(4);
+        System.out.println("findUserByUid User1: "+ user1);
+
+        User user2 = userMapper.getUserByUsername(user1.getUsername());
+        System.out.println("findUserByUsername User2: " + user2);
     }
 }
