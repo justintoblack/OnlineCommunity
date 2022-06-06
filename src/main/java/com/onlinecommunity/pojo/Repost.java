@@ -6,58 +6,60 @@ import java.sql.Timestamp;
  * @create 2022/4/22-23:18
  */
 public class Repost {
-    private Integer rid;
-    private Integer mid;
-    private Integer ruid;
-    private Integer muid;
-    private Timestamp mtime;
-    private Timestamp rtime;
+    private Integer repostId;
+    private Integer momentId;
+    private Integer repostUid;
+    private Integer momentUid;
+    private Timestamp repostTime;
 
-    public Integer getRid() {
-        return rid;
+    public Integer getRepostId() {
+        return repostId;
     }
 
-    public void setRid(Integer rid) {
-        this.rid = rid;
+    public void setRepostId(Integer repostId) {
+        this.repostId = repostId;
     }
 
-    public Integer getMid() {
-        return mid;
+    public Integer getMomentId() {
+        return momentId;
     }
 
-    public void setMid(Integer mid) {
-        this.mid = mid;
+    public void setMomentId(Integer momentId) {
+        this.momentId = momentId;
     }
 
-    public Integer getRuid() {
-        return ruid;
+    public Integer getRepostUid() {
+        return repostUid;
     }
 
-    public void setRuid(Integer ruid) {
-        this.ruid = ruid;
+    public void setRepostUid(Integer repostUid) {
+        this.repostUid = repostUid;
     }
 
-    public Integer getMuid() {
-        return muid;
+    public Integer getMomentUid() {
+        return momentUid;
     }
 
-    public void setMuid(Integer muid) {
-        this.muid = muid;
+    public void setMomentUid(Integer momentUid) {
+        this.momentUid = momentUid;
     }
 
-    public Timestamp getMtime() {
-        return mtime;
+    public Timestamp getRepostTime() {
+        return repostTime;
     }
 
-    public void setMtime(Timestamp mtime) {
-        this.mtime = mtime;
+    public void setRepostTime(Timestamp repostTime) {
+        this.repostTime = repostTime;
     }
 
-    public Timestamp getRtime() {
-        return rtime;
-    }
-
-    public void setRtime(Timestamp rtime) {
-        this.rtime = rtime;
+    @Override
+    public String toString() {
+        return "Repost{" +
+                "repostId=" + repostId +
+                ", momentId=" + momentId +
+                ", repostUid=" + repostUid +
+                ", momentUid=" + momentUid +
+                ", repostTime=" + repostTime +
+                '}';
     }
 }

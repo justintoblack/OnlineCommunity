@@ -2,24 +2,24 @@ package com.onlinecommunity.pojo;
 
 
 public class Picture {
-    private Integer mid;
-    private Integer index;
+    private Integer momentId;
+    private Integer idx;
     private String url;
 
-    public Integer getMid() {
-        return mid;
+    public Integer getMomentId() {
+        return momentId;
     }
 
-    public void setMid(Integer mid) {
-        this.mid = mid;
+    public void setMomentId(Integer momentId) {
+        this.momentId = momentId;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Integer getIdx() {
+        return idx;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public void setIdx(Integer idx) {
+        this.idx = idx;
     }
 
     public String getUrl() {
@@ -28,5 +28,14 @@ public class Picture {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return "Picture{" +
+                "momentId=" + momentId +
+                ", idx=" + idx +
+                ", url='" + url + '\'' +
+                '}';
     }
 }

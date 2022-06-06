@@ -6,60 +6,60 @@ import java.sql.Timestamp;
  * @create 2022/4/22-23:18
  */
 public class Like {
-    private Integer lid;
-    private Integer mid;
-    private Integer luid;
-    private Integer muid;
-    private Timestamp ltime;
+    private Integer likeId;
+    private Integer momentId;
+    private Integer likeUid;
+    private Integer momentUid;
+    private Timestamp likeTime;
 
-    public Integer getLid() {
-        return lid;
+    public Integer getLikeId() {
+        return likeId;
     }
 
-    public void setLid(Integer lid) {
-        this.lid = lid;
+    public void setLikeId(Integer likeId) {
+        this.likeId = likeId;
     }
 
-    public Integer getMid() {
-        return mid;
+    public Integer getMomentId() {
+        return momentId;
     }
 
-    public void setMid(Integer mid) {
-        this.mid = mid;
+    public void setMomentId(Integer momentId) {
+        this.momentId = momentId;
     }
 
-    public Integer getLuid() {
-        return luid;
+    public Integer getLikeUid() {
+        return likeUid;
     }
 
-    public void setLuid(Integer luid) {
-        this.luid = luid;
+    public void setLikeUid(Integer likeUid) {
+        this.likeUid = likeUid;
     }
 
-    public Integer getMuid() {
-        return muid;
+    public Integer getMomentUid() {
+        return momentUid;
     }
 
-    public void setMuid(Integer muid) {
-        this.muid = muid;
+    public void setMomentUid(Integer momentUid) {
+        this.momentUid = momentUid;
     }
 
-    public Timestamp getLtime() {
-        return ltime;
+    public Timestamp getLikeTime() {
+        return likeTime;
     }
 
-    public void setLtime(Timestamp ltime) {
-        this.ltime = ltime;
+    public void setLikeTime(Timestamp likeTime) {
+        this.likeTime = likeTime;
     }
 
     @Override
     public String toString() {
         return "Like{" +
-                "lid=" + lid +
-                ", mid=" + mid +
-                ", luid=" + luid +
-                ", muid=" + muid +
-                ", ltime=" + ltime +
+                "likeId=" + likeId +
+                ", momentId=" + momentId +
+                ", likeUid=" + likeUid +
+                ", momentUid=" + momentUid +
+                ", likeTime=" + likeTime +
                 '}';
     }
 }

@@ -14,6 +14,9 @@ public class User {
     @Size(min = 6, max = 20, message = "密码长度在6到20位")
     private String password;
 
+    private String phone;
+    private String email;
+
     public Integer getUid() {
         return uid;
     }
@@ -38,12 +41,30 @@ public class User {
         this.password = password;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "uid=" + uid +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

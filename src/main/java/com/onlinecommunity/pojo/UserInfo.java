@@ -14,18 +14,22 @@ public class UserInfo {
     private String username;
 
     @Size(min = 1, max = 30, message = "真实姓名长度在1到30位")
-    private String urealname;
+    private String realName;
 
-    private String uavatarurl;
+    private String avatarUrl;
 
     @Size(max = 255, message = "用户简介最长255位")
-    private String uabout;
+    private String about;
 
-    private String ubirthday;
-    private Integer ufollowing = 0;
-    private Integer ufollowers = 0;
-    private Integer umomentcount = 0;
-    private Integer ulikecount = 0;
+    private String phone;
+    private String email;
+
+    private String birthday;
+    private Integer following = 0;
+    private Integer followers = 0;
+    private Integer momentCount = 0;
+    private Integer likeCount = 0;
+    private Integer starCount;
 
     public Integer getUid() {
         return uid;
@@ -43,94 +47,110 @@ public class UserInfo {
         this.username = username;
     }
 
-    public String getUrealname() {
-        return urealname;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setUrealname(String urealname) {
-        this.urealname = urealname;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
-    public String getUavatarurl() {
-        return uavatarurl;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setUavatarurl(String uavatarurl) {
-        this.uavatarurl = uavatarurl;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
-    public String getUabout() {
-        return uabout;
+    public String getAbout() {
+        return about;
     }
 
-    public void setUabout(String uabout) {
-        this.uabout = uabout;
+    public void setAbout(String about) {
+        this.about = about;
     }
 
-    public String getUbirthday() {
-        return ubirthday;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setUbirthday(String ubirthday) {
-        this.ubirthday = ubirthday;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public Integer getUfollowing() {
-        return ufollowing;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUfollowing(Integer ufollowing) {
-        this.ufollowing = ufollowing;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Integer getUfollowers() {
-        return ufollowers;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setUfollowers(Integer ufollowers) {
-        this.ufollowers = ufollowers;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
-    public Integer getUmomentcount() {
-        return umomentcount;
+    public Integer getFollowing() {
+        return following;
     }
 
-    public void setUmomentcount(Integer umomentcount) {
-        this.umomentcount = umomentcount;
+    public void setFollowing(Integer following) {
+        this.following = following;
     }
 
-    public Integer getUlikecount() {
-        return ulikecount;
+    public Integer getFollowers() {
+        return followers;
     }
 
-    public void setUlikecount(Integer ulikecount) {
-        this.ulikecount = ulikecount;
+    public void setFollowers(Integer followers) {
+        this.followers = followers;
     }
 
-    public Integer getUstarcount() {
-        return ustarcount;
+    public Integer getMomentCount() {
+        return momentCount;
     }
 
-    public void setUstarcount(Integer ustarcount) {
-        this.ustarcount = ustarcount;
+    public void setMomentCount(Integer momentCount) {
+        this.momentCount = momentCount;
     }
 
-    private Integer ustarcount;
+    public Integer getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getStarCount() {
+        return starCount;
+    }
+
+    public void setStarCount(Integer starCount) {
+        this.starCount = starCount;
+    }
 
     @Override
     public String toString() {
         return "UserInfo{" +
                 "uid=" + uid +
                 ", username='" + username + '\'' +
-                ", urealname='" + urealname + '\'' +
-                ", uavatarurl='" + uavatarurl + '\'' +
-                ", uabout='" + uabout + '\'' +
-                ", ubirthday='" + ubirthday + '\'' +
-                ", ufollowing=" + ufollowing +
-                ", ufollowers=" + ufollowers +
-                ", umomentcount=" + umomentcount +
-                ", ulikecount=" + ulikecount +
-                ", ustarcount=" + ustarcount +
+                ", realName='" + realName + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
+                ", about='" + about + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", following=" + following +
+                ", followers=" + followers +
+                ", momentCount=" + momentCount +
+                ", likeCount=" + likeCount +
+                ", starCount=" + starCount +
                 '}';
     }
 }

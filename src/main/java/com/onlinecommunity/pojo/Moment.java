@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  * @create 2022/4/22-22:36
  */
 public class Moment {
-    private Integer mid;
+    private Integer momentId;
 
     @NotNull(message = "uid不能为空")
     @Digits(integer = 10, fraction = 0, message = "uid最多10位")
@@ -16,20 +16,22 @@ public class Moment {
     private Integer uid;
 
     @NotBlank(message = "正文内容不能为空")
-    private String mcontent;
-    
-    private String mpicurl;
-    private Timestamp mtime;
-    private Integer mlikecount = 0;
-    private Integer mcommentcount = 0;
-    private Integer mrepostcount = 0;
+    private String content;
 
-    public Integer getMid() {
-        return mid;
+    private Timestamp momentTime;
+    private Boolean isActive = true;
+    private Timestamp deletedAt = null;
+    private Integer pictureCount = 0;
+    private Integer likeCount = 0;
+    private Integer commentCount = 0;
+    private Integer repostCount = 0;
+
+    public Integer getMomentId() {
+        return momentId;
     }
 
-    public void setMid(Integer mid) {
-        this.mid = mid;
+    public void setMomentId(Integer momentId) {
+        this.momentId = momentId;
     }
 
     public Integer getUid() {
@@ -40,65 +42,83 @@ public class Moment {
         this.uid = uid;
     }
 
-    public String getMcontent() {
-        return mcontent;
+    public String getContent() {
+        return content;
     }
 
-    public void setMcontent(String mcontent) {
-        this.mcontent = mcontent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getMpicurl() {
-        return mpicurl;
+    public Timestamp getMomentTime() {
+        return momentTime;
     }
 
-    public void setMpicurl(String mpicurl) {
-        this.mpicurl = mpicurl;
+    public void setMomentTime(Timestamp momentTime) {
+        this.momentTime = momentTime;
     }
 
-    public Timestamp getMtime() {
-        return mtime;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setMtime(Timestamp mtime) {
-        this.mtime = mtime;
+    public void setIsActive(Boolean active) {
+        isActive = active;
     }
 
-    public Integer getMlikecount() {
-        return mlikecount;
+    public Timestamp getDeletedAt() {
+        return deletedAt;
     }
 
-    public void setMlikecount(Integer mlikecount) {
-        this.mlikecount = mlikecount;
+    public void setDeletedAt(Timestamp deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
-    public Integer getMcommentcount() {
-        return mcommentcount;
+    public Integer getPictureCount() {
+        return pictureCount;
     }
 
-    public void setMcommentcount(Integer mcommentcount) {
-        this.mcommentcount = mcommentcount;
+    public void setPictureCount(Integer pictureCount) {
+        this.pictureCount = pictureCount;
     }
 
-    public Integer getMrepostcount() {
-        return mrepostcount;
+    public Integer getLikeCount() {
+        return likeCount;
     }
 
-    public void setMrepostcount(Integer mrepostcount) {
-        this.mrepostcount = mrepostcount;
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public Integer getRepostCount() {
+        return repostCount;
+    }
+
+    public void setRepostCount(Integer repostCount) {
+        this.repostCount = repostCount;
     }
 
     @Override
     public String toString() {
         return "Moment{" +
-                "mid=" + mid +
+                "momentId=" + momentId +
                 ", uid=" + uid +
-                ", mcontent='" + mcontent + '\'' +
-                ", mpicurl='" + mpicurl + '\'' +
-                ", mtime=" + mtime +
-                ", mlikecount=" + mlikecount +
-                ", mcommentcount=" + mcommentcount +
-                ", mrepostcount=" + mrepostcount +
+                ", content='" + content + '\'' +
+                ", momentTime=" + momentTime +
+                ", isActive=" + isActive +
+                ", deletedAt=" + deletedAt +
+                ", pictureCount=" + pictureCount +
+                ", likeCount=" + likeCount +
+                ", commentCount=" + commentCount +
+                ", repostCount=" + repostCount +
                 '}';
     }
 }

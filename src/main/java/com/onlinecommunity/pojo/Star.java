@@ -7,42 +7,50 @@ import java.sql.Timestamp;
  */
 public class Star {
 
-    private Integer sid;
-    private Integer mid;
-    private Integer suid;
-    private Timestamp stime;
+    private Integer starId;
+    private Integer momentId;
+    private Integer starUid;
+    private Timestamp starTime;
 
-    public Integer getSid() {
-        return sid;
+    public Integer getStarId() {
+        return starId;
     }
 
-    public void setSid(Integer sid) {
-        this.sid = sid;
+    public void setStarId(Integer starId) {
+        this.starId = starId;
     }
 
-    public Integer getMid() {
-        return mid;
+    public Integer getMomentId() {
+        return momentId;
     }
 
-    public void setMid(Integer mid) {
-        this.mid = mid;
+    public void setMomentId(Integer momentId) {
+        this.momentId = momentId;
     }
 
-    public Integer getSuid() {
-        return suid;
+    public Integer getStarUid() {
+        return starUid;
     }
 
-    public void setSuid(Integer suid) {
-        this.suid = suid;
+    public void setStarUid(Integer starUid) {
+        this.starUid = starUid;
     }
 
-    public Timestamp getStime() {
-        return stime;
+    public Timestamp getStarTime() {
+        return starTime;
     }
 
-    public void setStime(Timestamp stime) {
-        this.stime = stime;
+    public void setStarTime(Timestamp starTime) {
+        this.starTime = starTime;
     }
 
-
+    @Override
+    public String toString() {
+        return "Star{" +
+                "starId=" + starId +
+                ", momentId=" + momentId +
+                ", starUid=" + starUid +
+                ", starTime=" + starTime +
+                '}';
+    }
 }

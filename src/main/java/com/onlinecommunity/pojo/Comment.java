@@ -7,81 +7,81 @@ import java.sql.Timestamp;
  * @create 2022/4/22-23:17
  */
 public class Comment {
-    private Integer cid;
+    private Integer commentId;
     @NotBlank(message = "评论内容不能为空")
-    private String ccontent;
-    private Integer mid;
-    private Integer cuid;
-    private Integer muid;
-    private Integer clikecount = 0;
-    private Timestamp ctime;
+    private String content;
+    private Integer momentId;
+    private Integer commentUid;
+    private Integer momentUid;
+    private Integer likeCount = 0;
+    private Timestamp commentTime;
 
-    public Integer getCid() {
-        return cid;
+    public Integer getCommentId() {
+        return commentId;
     }
 
-    public void setCid(Integer cid) {
-        this.cid = cid;
+    public void setCommentId(Integer commentId) {
+        this.commentId = commentId;
     }
 
-    public String getCcontent() {
-        return ccontent;
+    public String getContent() {
+        return content;
     }
 
-    public void setCcontent(String ccontent) {
-        this.ccontent = ccontent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Integer getMid() {
-        return mid;
+    public Integer getMomentId() {
+        return momentId;
     }
 
-    public void setMid(Integer mid) {
-        this.mid = mid;
+    public void setMomentId(Integer momentId) {
+        this.momentId = momentId;
     }
 
-    public Integer getCuid() {
-        return cuid;
+    public Integer getCommentUid() {
+        return commentUid;
     }
 
-    public void setCuid(Integer cuid) {
-        this.cuid = cuid;
+    public void setCommentUid(Integer commentUid) {
+        this.commentUid = commentUid;
     }
 
-    public Integer getMuid() {
-        return muid;
+    public Integer getMomentUid() {
+        return momentUid;
     }
 
-    public void setMuid(Integer muid) {
-        this.muid = muid;
+    public void setMomentUid(Integer momentUid) {
+        this.momentUid = momentUid;
     }
 
-    public Integer getClikecount() {
-        return clikecount;
+    public Integer getLikeCount() {
+        return likeCount;
     }
 
-    public void setClikecount(Integer clikecount) {
-        this.clikecount = clikecount;
+    public void setLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
     }
 
-    public Timestamp getCtime() {
-        return ctime;
+    public Timestamp getCommentTime() {
+        return commentTime;
     }
 
-    public void setCtime(Timestamp ctime) {
-        this.ctime = ctime;
+    public void setCommentTime(Timestamp commentTime) {
+        this.commentTime = commentTime;
     }
 
     @Override
     public String toString() {
         return "Comment{" +
-                "cid=" + cid +
-                ", ccontent='" + ccontent + '\'' +
-                ", mid=" + mid +
-                ", cuid=" + cuid +
-                ", muid=" + muid +
-                ", clikecount=" + clikecount +
-                ", ctime=" + ctime +
+                "commentId=" + commentId +
+                ", content='" + content + '\'' +
+                ", momentId=" + momentId +
+                ", commentUid=" + commentUid +
+                ", momentUid=" + momentUid +
+                ", likeCount=" + likeCount +
+                ", commentTime=" + commentTime +
                 '}';
     }
 }
