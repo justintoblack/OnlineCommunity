@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlinecommunity.mapper.UserMapper">
+
+    <select id="getAllUser" resultType="com.onlinecommunity.pojo.User">
+        select *
+        from online_community.user
+    </select>
+
+    <select id="getUserByUid" parameterType="Integer" resultType="com.onlinecommunity.pojo.User">
+        select *
+        from online_community.user
+        where uid = #{uid}
+    </select>
+
+    <select id="getUserByUsername" parameterType="String" resultType="com.onlinecommunity.pojo.User">
+        select *
+        from online_community.user
+        where username = #{username}
+    </select>
+
+    <select id="getPasswordByUid" parameterType="Integer" resultType="String">
+        select password
+        from online_community.user
+        where uid = #{uid}
+    </select>
+
+    <select id="getPasswordByUsername" parameterType="String" resultType="String">
+        select password
+        from online_community.user
+        where username = #{username}
+    </select>
+
+    <select id="getUsernameByUid" parameterType="Integer" resultType="String">
+        select username
+        from online_community.user
+        where uid = #{uid}
+    </select>
+
+    <select id="getUidByUsername" parameterType="String" resultType="Integer">
+        select uid
+        from online_community.user
+        where username = #{username}
+    </select>
+
+    <update id="setPassword" parameterType="com.onlinecommunity.pojo.User">
+        update online_community.user
+        set password=#{user.password}
+        where uid = #{user.uid}
+    </update>
+
+    <insert id="saveUser" parameterType="com.onlinecommunity.pojo.User" useGeneratedKeys="true" keyProperty="uid">
+        insert into online_community.user (uid, username, password, phone, email)
+        values (#{user.uid}, #{user.username}, #{user.password}, #{user.phone}, #{user.email})
+    </insert>
+
+    <select id="getMaxUid" resultType="Integer">
+        select max(uid)
+        from online_community.user
+    </select>
+
+    <select id="getUserCount" resultType="Integer">
+        select count(uid)
+        from online_community.user
+    </select>
+
+</mapper>
