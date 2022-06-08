@@ -13,7 +13,16 @@ import java.util.List;
 @Mapper
 public interface PictureMapper {
 
-    List<String> getPicUrlsByMid(Integer mid);
+    List<String> getPicUrlsByMomentId(Integer momentId);
 
-    Integer savePicturesUrl(@Param("urlList") List<String> urlList, @Param("mid") Integer mid);
+    /**
+     *
+     * @param urlList 图片URL列表
+     * @param momentId 动态ID
+     * @return 插入的条数
+     */
+    Integer insertPicturesUrl(@Param("urlList") List<String> urlList, @Param("momentId") Integer momentId);
+
+    Integer updatePicturesUrl(@Param("urlList") List<String> urlList, @Param("momentId") Integer momentId);
+
 }

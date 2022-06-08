@@ -17,10 +17,10 @@ public class LikeMapperTest {
     @Test
     public void testLike() {
         Like like = new Like();
-        like.setMid(4);
-        like.setLuid(3);
-        like.setMuid(3);
-        like.setLtime(new Timestamp(System.currentTimeMillis()));
-        likeMapper.likeMoment(like);
+        like.setMomentId(4);
+        like.setLikeUid(3);
+        like.setMomentUid(3);
+        like.setLikeTime(new Timestamp(System.currentTimeMillis()));
+        likeMapper.saveLike(like);
     }
 }

@@ -25,7 +25,7 @@ public class UploadUtil {
 
     /**
      * @param multipartFiles 要上传至服务器的图片，已经检验过没有问题(如：超出大小限制)
-     * @return 这些图片保存后对应的URL列表
+     * @return 这些图片成功保存后对应的URL列表
      */
     public static List<String> uploadPictures(MultipartFile[] multipartFiles) {
 
@@ -48,6 +48,7 @@ public class UploadUtil {
 
             // generate new unique filename by UUID
             String fileName = UUID.randomUUID() + fileSuffix;
+            fileName.replace("-", "");
             log.info("new filename by UUID:{}", fileName);
 
             // 图片保存后对应的URL

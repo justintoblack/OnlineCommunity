@@ -10,26 +10,26 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Select("select * from online_community.comment where cuid = #{cuid}")
-    List<Comment> getAllCommentsByCuid(Integer cuid);
+    @Select("select * from online_community.comment where comment_uid = #{commentUid}")
+    List<Comment> getAllCommentsByUid(Integer commentUid);
 
-    @Select("select * from online_community.comment where cid = #{cid}")
-    Comment getOneCommentByCid(Integer cid);
+    @Select("select * from online_community.comment where comment_id = #{commentId}")
+    Comment getOneCommentByCommentId(Integer commentId);
 
-    @Insert("insert into online_community.comment (cid, ccontent, mid, cuid, muid, clikecount) " +
-            "values(#{comment.cid}, #{comment.ccontent},#{comment.mid},#{comment.cuid}, #{comment.muid}, #{comment.clikecount})")
-    @Options(useGeneratedKeys = true, keyProperty = "cid")
+    @Insert("insert into online_community.comment (comment_id, content, moment_id, comment_uid, moment_uid, like_count, comment_time) " +
+            "values(#{comment.commentId}, #{comment.content},#{comment.momentId},#{comment.commentUid}, #{comment.momentUid}, #{comment.likeCount}, #{comment.commentTime})")
+    @Options(useGeneratedKeys = true, keyProperty = "commentId")
     Integer comment(@Param("comment") Comment comment);
 
-    @Delete("delete from online_community.comment where cid=${cid}")
-    Integer deleteCommentByCid(Integer cid);
+    @Delete("delete from online_community.comment where comment_id=${comment_id}")
+    Integer deleteCommentByCid(Integer comment_id);
 
-    @Update("update online_community.comment set ccontent=#{comment.ccontent},mid=#{comment.mid},cuid=#{comment.cuid}, " +
-            "muid=#{comment.muid},clikecount=#{comment.clikecount} " +
-            "where cid = #{comment.cid} ")
+    @Update("update online_community.comment set content=#{comment.content},moment_id=#{comment.momentId},comment_uid=#{comment.commentUid}, " +
+            "moment_uid=#{comment.momentUid},like_count=#{comment.likeCount}, comment_time=#{comment.commentTime} " +
+            "where comment_id = #{comment.commentId} ")
     Integer updateComment(@Param("comment") Comment comment);
 
-    @Update("update online_community.comment set clikecount = #{comment.clikecount} where cid = #{comment.cid}")
+    @Update("update online_community.comment set like_count = #{comment.likecount} where comment_id = #{comment.commentId}")
     void updateCommentLikeCount(@Param("comment") Comment comment);
 
 }

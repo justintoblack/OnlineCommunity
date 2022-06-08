@@ -5,16 +5,36 @@
 <mapper namespace="com.onlinecommunity.mapper.PictureMapper">
 
 
-    <select id="getPicUrlsByMid" parameterType="Integer" resultType="String">
+    <select id="getPicUrlsByMomentId" parameterType="Integer" resultType="String">
         select url
         from online_community.picture
-        where mid = ${mid}
+        where moment_id = ${momentId}
     </select>
 
-    <insert id="savePicturesUrl">
-        insert into online_community.picture (mid, `index`, url) values
+    <insert id="insertPicturesUrl">
+        insert into online_community.picture (moment_Id, `idx`, url) values
         <foreach collection="urlList" item="item" index="index" separator=",">
-            (#{mid}, #{index}, #{item})
+            (#{momentId}, #{index}, #{item})
         </foreach>
     </insert>
+
+    <update id="updatePicturesUrl" parameterType="java.util.List">
+        <foreach collection="urlList" item="item" index="index" separator=",">
+            update online_community.picture
+                <set>
+                    url = item
+                </set>
+            where moment_id = ${momentId} and idx = ${index}
+        </foreach>
+
+    </update>
+
+    <insert id="insertOrUpdatePictureUrl">
+
+        insert into online_community.picture (moment_Id, `idx`, url) values
+        <foreach collection="urlList" item="item" index="index" separator=",">
+            (#{momentId}, #{index}, #{item})
+        </foreach>
+    </insert>
+
 </mapper>

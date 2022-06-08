@@ -26,8 +26,9 @@ public class MomentController {
     @Autowired
     MomentService momentService;
 
+
     /**
-     * @param moment 请求体中的uid, mid, mcontent封装到moment中
+     * @param moment 请求体中的uid, content封装到moment中
      * @return 结果
      */
     @PostMapping("/post_moment")
@@ -37,19 +38,22 @@ public class MomentController {
         log.info("接收到了{}张图片", multiPartFiles.length);
         List<String> urlList = null;
         if (multiPartFiles.length > 0) {
-
             //检查所有图片是否满足限制
+            log.info("checking uploaded pictures...");
             Result checkResult = momentService.checkPictures(multiPartFiles);
             if (!checkResult.getMsg().equals("success"))
                 return checkResult;
-
-            //上传图片
+            log.info("uploading pictures...");
+            //上传图片,成功后得到访问图片的URL列表
             urlList = momentService.uploadPictures(multiPartFiles);
+            log.info("successfully uploaded");
         }
+
+        moment.setPictureCount(multiPartFiles.length);
         //保存该动态中的文字内容
-        log.info("MomentController before:{}", moment.getMid());
+        log.info("MomentController before:{}", moment.getMomentId());
         Result textResult = momentService.post(moment);
-        log.info("MomentController after:{}", moment.getMid());
+        log.info("MomentController after:{}", moment.getMomentId());
 
         if (!textResult.getMsg().equals("success")) {
             return textResult;
@@ -58,9 +62,10 @@ public class MomentController {
 
         //将保存好的图片URL存至数据库
         if (urlList != null)
-            momentService.savePicturesUrl(urlList, moment.getMid());
+            momentService.savePicturesUrl(urlList, moment.getMomentId());
         return Result.success();
     }
+
 
     /**
      * @param mid  要删除的moment id
@@ -71,6 +76,7 @@ public class MomentController {
     public Result delete(Integer mid, Integer duid) {
         return momentService.delete(mid, duid);
     }
+
 
     /**
      * @param mid  要点赞的moment id
@@ -88,10 +94,12 @@ public class MomentController {
         return momentService.like(mid, luid);
     }
 
+
     @PostMapping("/comment_moment")
     public Result comment(Integer mid, Integer cuid, String ccontent) {
         return momentService.comment(mid, cuid, ccontent);
     }
+
 
     @GetMapping("/repost_moment")
     public Result repost(Integer mid, Integer ruid) {

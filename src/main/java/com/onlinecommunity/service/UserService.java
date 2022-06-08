@@ -15,8 +15,8 @@ public class UserService {
 
     /**
      *
-     * @param user
-     * @return
+     * @param user 要注册的封装的User对象
+     * @return Result
      */
     public Result register(User user) {
         if ("".equals(user.getUsername())) {
@@ -26,7 +26,7 @@ public class UserService {
             return Result.failure(ResultCode.NULL_PASSWORD);
         }
 
-        Integer uid = userMapper.findUidByUsername(user.getUsername());
+        Integer uid = userMapper.getUidByUsername(user.getUsername());
         if (uid != null) {
             return Result.failure(ResultCode.EXIST_USERNAME);
         }
@@ -36,13 +36,13 @@ public class UserService {
 
     /**
      *
-     * @param user
-     * @return
+     * @param user 要登录的封装的User对象
+     * @return Result
      */
     public Result login(User user) {
-        Integer uid = userMapper.findUidByUsername(user.getUsername());
+        Integer uid = userMapper.getUidByUsername(user.getUsername());
         if (uid != null) {
-            String existUserPwd = userMapper.findPasswordByUid(uid);
+            String existUserPwd = userMapper.getPasswordByUid(uid);
             if (existUserPwd.equals(user.getPassword())) {
                 return Result.success();
             } else {

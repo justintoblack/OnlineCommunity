@@ -51,22 +51,32 @@ public class MomentService {
     }
 
 
-    public List<String> uploadPictures(MultipartFile[] multiPartFiles) {
+    /**
+     * @param multipartFiles 要上传至服务器的图片，已经检验过没有问题(如：超出大小限制)
+     * @return 这些图片成功保存后对应的URL列表
+     */
+    public List<String> uploadPictures(MultipartFile[] multipartFiles) {
 
-        return UploadUtil.uploadPictures(multiPartFiles);
+        return UploadUtil.uploadPictures(multipartFiles);
 
     }
 
+
+    /**
+     *
+     * @param moment 发布的动态
+     * @return Result
+     */
     public Result post(Moment moment) {
         Integer uid = moment.getUid();
-        User user = userMapper.findUserByUid(uid);
+        User user = userMapper.getUserByUid(uid);
         if (user != null) {
-            if (moment.getMid() == null) {
+            if (moment.getMomentId() == null) {
                 //设置发布动态的时间为当前时间
-                moment.setMtime(new Timestamp(System.currentTimeMillis()));
-                log.info("MomentService before saving moment, mid:{}",moment.getMid());
+                moment.setMomentTime(new Timestamp(System.currentTimeMillis()));
+                log.info("MomentService before saving moment, mid:{}", moment.getMomentId());
                 System.out.println("momentMapper.saveMoment(moment) = " + momentMapper.saveMoment(moment));
-                log.info("MomentService after saving moment, mid:{}",moment.getMid());
+                log.info("MomentService after saving moment, mid:{}", moment.getMomentId());
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.EXIST_MID);
@@ -76,16 +86,32 @@ public class MomentService {
         }
     }
 
-    public Result savePicturesUrl(List<String> urlList, Integer mid){
-        pictureMapper.savePicturesUrl(urlList, mid);
+    /**
+     *
+     * @param urlList 图片URL列表
+     * @param momentId 这些图片对应的动态ID
+     * @return Result.success()
+     */
+    public Result savePicturesUrl(List<String> urlList, Integer momentId) {
+        if  (momentMapper.getOneMomentByMomentId(momentId) == null)
+            pictureMapper.insertPicturesUrl(urlList, momentId);
+        else
+            pictureMapper.updatePicturesUrl(urlList, momentId);
         return Result.success();
     }
 
-    public Result delete(Integer mid, Integer duid) {
-        Moment moment = momentMapper.findOneMomentByMid(mid);
+
+    /**
+     *
+     * @param momentId 要删除的动态ID
+     * @param deleteUid 执行删除操作的用户ID
+     * @return Result
+     */
+    public Result delete(Integer momentId, Integer deleteUid) {
+        Moment moment = momentMapper.getOneMomentByMomentId(momentId);
         if (moment != null) {
-            if (moment.getUid().equals(duid)) {
-                momentMapper.deleteMomentByMid(mid);
+            if (moment.getUid().equals(deleteUid)) {
+                momentMapper.deleteMomentByMomentId(momentId);
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_MOMENT);
@@ -96,21 +122,28 @@ public class MomentService {
 
     }
 
-    public Result like(Integer mid, Integer luid) {
-        Moment moment = momentMapper.findOneMomentByMid(mid);
+
+    /**
+     *
+     * @param momentId 动态ID
+     * @param likeUid 执行点赞操作的用户ID
+     * @return Result
+     */
+    public Result like(Integer momentId, Integer likeUid) {
+        Moment moment = momentMapper.getOneMomentByMomentId(momentId);
         if (moment != null) {//要点赞的动态需要存在
-            User user = userMapper.findUserByUid(luid);
+            User user = userMapper.getUserByUid(likeUid);
             if (user != null) {//执行点赞的用户需要存在
-                Like like = likeMapper.getOneLikeByLuidMid(luid, mid);
+                Like like = likeMapper.getOneLikeByLikeUidMomentId(likeUid, momentId);
                 if (like == null) {//该用户没有点赞过该动态
                     like = new Like();
-                    like.setLuid(luid);
-                    like.setMid(moment.getMid());
-                    like.setMuid(moment.getUid());
+                    like.setLikeUid(likeUid);
+                    like.setMomentId(moment.getMomentId());
+                    like.setMomentUid(moment.getUid());
                     //设置点赞的时间为当前时间
-                    like.setLtime(new Timestamp(System.currentTimeMillis()));
+                    like.setLikeTime(new Timestamp(System.currentTimeMillis()));
                     log.info(String.valueOf(like));
-                    likeMapper.likeMoment(like);
+                    likeMapper.saveLike(like);
                     return Result.success();
                 } else {
                     return Result.failure(ResultCode.REPEATED_LIKE);
@@ -123,18 +156,26 @@ public class MomentService {
         }
     }
 
-    public Result comment(Integer mid, Integer cuid, String ccontent) {
-        Moment moment = momentMapper.findOneMomentByMid(mid);
+
+    /**
+     *
+     * @param momentId 评论的动态ID
+     * @param commentUid 执行评论操作的用户ID
+     * @param content 评论内容
+     * @return Result
+     */
+    public Result comment(Integer momentId, Integer commentUid, String content) {
+        Moment moment = momentMapper.getOneMomentByMomentId(momentId);
         if (moment != null) {//要评论的动态需要存在
-            User user = userMapper.findUserByUid(cuid);
+            User user = userMapper.getUserByUid(commentUid);
             if (user != null) {//执行评论的用户需要存在
                 Comment comment = new Comment();
-                comment.setMid(mid);
-                comment.setCcontent(ccontent);
-                comment.setCuid(cuid);
-                comment.setMuid(moment.getUid());
+                comment.setMomentId(momentId);
+                comment.setContent(content);
+                comment.setCommentUid(commentUid);
+                comment.setMomentUid(moment.getUid());
                 //设置评论时间为当前时间
-                comment.setCtime(new Timestamp(System.currentTimeMillis()));
+                comment.setCommentTime(new Timestamp(System.currentTimeMillis()));
                 commentMapper.comment(comment);
                 return Result.success();
             } else {
@@ -145,19 +186,25 @@ public class MomentService {
         }
     }
 
-    public Result repost(Integer mid, Integer ruid) {
-        Moment moment = momentMapper.findOneMomentByMid(mid);
+
+    /**
+     *
+     * @param momentId 要转发的动态ID
+     * @param repostUid 执行转发操作的用户ID
+     * @return Result
+     */
+    public Result repost(Integer momentId, Integer repostUid) {
+        Moment moment = momentMapper.getOneMomentByMomentId(momentId);
         if (moment != null) {//被转发的动态需要存在
-            User user = userMapper.findUserByUid(ruid);
+            User user = userMapper.getUserByUid(repostUid);
             if (user != null) {//执行转发的用户需要存在
                 Repost repost = new Repost();
-                repost.setMid(mid);
-                repost.setMuid(moment.getUid());
-                repost.setRuid(ruid);
-                repost.setMtime(moment.getMtime());
+                repost.setMomentId(momentId);
+                repost.setMomentUid(moment.getUid());
+                repost.setRepostUid(repostUid);
                 //设置转发时间为当前时间
-                repost.setRtime(new Timestamp(System.currentTimeMillis()));
-                repostMapper.repost(repost);
+                repost.setRepostTime(new Timestamp(System.currentTimeMillis()));
+                repostMapper.saveRepost(repost);
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.NONEXISTENT_UID);

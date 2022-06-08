@@ -1,5 +1,6 @@
 package com.onlinecommunity;
 
+import com.onlinecommunity.mapper.MomentMapper;
 import com.onlinecommunity.mapper.PictureMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -20,16 +21,28 @@ public class PictureMapperTest {
     @Autowired
     PictureMapper pictureMapper;
 
+    @Autowired
+    MomentMapper momentMapper;
+
     List<String> urlList;
 
     @Test
-    public void testMapper(){
+    public void testSavePictureUrl(){
         urlList = new ArrayList<>();
         urlList.add("/pic/1/xx1.jpg");
         urlList.add("/pic/1/xx2.jpg");
         urlList.add("/pic/1/xx22.jpg");
         urlList.add("/pic/1/xx225.jpg");
+        urlList.add("/pic/1/xx22235.jpg");
 
-        log.info("save : {}",pictureMapper.savePicturesUrl(urlList, 2));
+        Integer testMomentId = 5;
+
+        if (momentMapper.getOneMomentByMomentId(testMomentId) == null)
+            log.info("insert : {}",pictureMapper.insertPicturesUrl(urlList, testMomentId));
+        else
+            log.info("update : {}",pictureMapper.updatePicturesUrl(urlList, testMomentId));
     }
+
+
+
 }

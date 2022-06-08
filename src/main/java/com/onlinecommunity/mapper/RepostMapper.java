@@ -9,18 +9,19 @@ import java.util.List;
 @Mapper
 public interface RepostMapper {
 
-    @Select("select * from online_community.repost where ruid=${ruid}")
-    List<Repost> getAllRespostsByRuid(Integer ruid);
+    @Select("select * from online_community.repost where repost_uid=${repostUid}")
+    List<Repost> getAllRepostsByUid(Integer repostUid);
 
-    @Select("select * from online_community.repost where rid=${rid}")
-    Repost getOneRepostByRid(Integer rid);
+    @Select("select * from online_community.repost where repost_id=${repostId}")
+    Repost getOneRepostByRepostId(Integer repostId);
 
-    @Insert("insert into online_community.repost (rid, mid, ruid, muid) values (#{repost.rid}, #{repost.mid}, #{repost.ruid}, #{repost.muid})")
-    @Options(useGeneratedKeys = true, keyProperty = "rid")
-    Integer repost(@Param("repost") Repost repost);
+    @Insert("insert into online_community.repost (repost_id, moment_id, repost_uid, moment_uid, repost_time) " +
+            "values (#{repost.repostId}, #{repost.momentId}, #{repost.repostUid}, #{repost.momentUid}, #{repost.repostTime})")
+    @Options(useGeneratedKeys = true, keyProperty = "repostId")
+    Integer saveRepost(@Param("repost") Repost repost);
 
-    @Delete("delete from online_community.repost where rid = #{rid}")
-    Integer deleteRepostByRid(Integer rid);
+    @Delete("delete from online_community.repost where repost_id = #{repostId}")
+    Integer deleteRepostByRepostId(Integer repostId);
 
 
 }
