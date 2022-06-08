@@ -5,24 +5,15 @@ package com.onlinecommunity.pojo;
  */
 public class Page {
 
-    private Integer nextMomentId;
-    private Integer previousMomentId;
-    private Integer pageSize;
+    private Integer lastId;
+    private Integer pageSize = 10;
 
-    public Integer getNextMomentId() {
-        return nextMomentId;
+    public Integer getLastId() {
+        return lastId;
     }
 
-    public void setNextMomentId(Integer nextMomentId) {
-        this.nextMomentId = nextMomentId;
-    }
-
-    public Integer getPreviousMomentId() {
-        return previousMomentId;
-    }
-
-    public void setPreviousMomentId(Integer previousMomentId) {
-        this.previousMomentId = previousMomentId;
+    public void setLastId(Integer lastMomentId) {
+        this.lastId = lastMomentId;
     }
 
     public Integer getPageSize() {
@@ -36,8 +27,7 @@ public class Page {
     @Override
     public String toString() {
         return "Page{" +
-                "nextMomentId=" + nextMomentId +
-                ", previousMomentId=" + previousMomentId +
+                "lastId=" + lastId +
                 ", pageSize=" + pageSize +
                 '}';
     }

@@ -14,7 +14,21 @@ public interface MomentMapper {
 
     List<Moment> getAllMomentsByUid(Integer uid);
 
-    List<Moment> getActiveMomentsByPage(@Param("page") Page page);
+    /**
+     *
+     * @param page 分页对象，lastId, pageSize
+     * @param uid 用户ID
+     * @return 返回用户自己的动态列表
+     */
+    List<Moment> getActiveSelfMomentsByPage(@Param("page") Page page, @Param("uid") Integer uid);
+
+    /**
+     *
+     * @param page 分页对象，lastId, pageSize
+     * @param uid 用户ID
+     * @return 返回用户主页的动态列表，即包含用户关注的人与用户自己的动态
+     */
+    List<Moment> getActiveHomeMomentsByPage(@Param("page") Page page, @Param("uid") Integer uid);
 
     Moment getOneMomentByMomentId(Integer momentId);
 

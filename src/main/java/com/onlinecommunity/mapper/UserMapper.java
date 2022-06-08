@@ -32,4 +32,5 @@ public interface UserMapper {
     Integer getMaxUid();
 
     Integer getUserCount();
+
 }

@@ -12,7 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -63,7 +66,6 @@ public class MomentService {
 
 
     /**
-     *
      * @param moment 发布的动态
      * @return Result
      */
@@ -87,13 +89,12 @@ public class MomentService {
     }
 
     /**
-     *
-     * @param urlList 图片URL列表
+     * @param urlList  图片URL列表
      * @param momentId 这些图片对应的动态ID
      * @return Result.success()
      */
     public Result savePicturesUrl(List<String> urlList, Integer momentId) {
-        if  (momentMapper.getOneMomentByMomentId(momentId) == null)
+        if (momentMapper.getOneMomentByMomentId(momentId) == null)
             pictureMapper.insertPicturesUrl(urlList, momentId);
         else
             pictureMapper.updatePicturesUrl(urlList, momentId);
@@ -102,8 +103,52 @@ public class MomentService {
 
 
     /**
-     *
-     * @param momentId 要删除的动态ID
+     * @param page 分页对应对象，属性包含上一页最后一条动态的ID：lastId，以及页面大小pageSize
+     * @param uid  用户ID
+     * @return Result, 获得的动态列表在Result里的data中
+     */
+    public Result getSelfMomentList(Page page, Integer uid) {
+        List<Moment> momentList = momentMapper.getActiveSelfMomentsByPage(page, uid);
+        Result result = Result.success();
+        Map<String, Object> resultMap = getMomentResultMap(momentList);
+        result.setData(resultMap);
+        return result;
+    }
+
+
+    /**
+     * @param page 分页对应对象，属性包含上一页最后一条动态的ID：lastId，以及页面大小pageSize
+     * @param uid  用户ID
+     * @return 主页动态列表，以及用户名列表，现在是分开的，后续可以考虑改进
+     */
+    public Result getHomeMomentList(Page page, Integer uid) {
+        List<Moment> momentList = momentMapper.getActiveHomeMomentsByPage(page, uid);
+        Result result = Result.success();
+        Map<String, Object> resultMap = getMomentResultMap(momentList);
+        result.setData(resultMap);
+        return result;
+    }
+
+    private Map<String, Object> getMomentResultMap(List<Moment> momentList) {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("momentList", momentList);
+        List<String> usernameList = getUsernameList(momentList);
+        resultMap.put("usernameList", usernameList);
+        return resultMap;
+    }
+
+    private List<String> getUsernameList(List<Moment> momentList) {
+        List<String> usernameList = new LinkedList<>();
+        String username;
+        for (Moment moment : momentList) {
+            username = userMapper.getUsernameByUid(moment.getUid());
+            usernameList.add(username);
+        }
+        return usernameList;
+    }
+
+    /**
+     * @param momentId  要删除的动态ID
      * @param deleteUid 执行删除操作的用户ID
      * @return Result
      */
@@ -124,9 +169,8 @@ public class MomentService {
 
 
     /**
-     *
      * @param momentId 动态ID
-     * @param likeUid 执行点赞操作的用户ID
+     * @param likeUid  执行点赞操作的用户ID
      * @return Result
      */
     public Result like(Integer momentId, Integer likeUid) {
@@ -158,10 +202,9 @@ public class MomentService {
 
 
     /**
-     *
-     * @param momentId 评论的动态ID
+     * @param momentId   评论的动态ID
      * @param commentUid 执行评论操作的用户ID
-     * @param content 评论内容
+     * @param content    评论内容
      * @return Result
      */
     public Result comment(Integer momentId, Integer commentUid, String content) {
@@ -188,8 +231,7 @@ public class MomentService {
 
 
     /**
-     *
-     * @param momentId 要转发的动态ID
+     * @param momentId  要转发的动态ID
      * @param repostUid 执行转发操作的用户ID
      * @return Result
      */

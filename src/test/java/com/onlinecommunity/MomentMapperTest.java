@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -57,10 +56,11 @@ public class MomentMapperTest {
     @Test
     public void testGetActiveMomentsByPage() {
         Page page = new Page();
-        page.setNextMomentId(11);
-        page.setPageSize(5);
+        page.setLastId(22);
+        page.setPageSize(1);
+        Integer testUid = 3;
         List<Moment> momentList;
-        momentList = momentMapper.getActiveMomentsByPage(page);
+        momentList = momentMapper.getActiveSelfMomentsByPage(page, testUid);
         System.out.println("page = " + page);
         System.out.println("momentList = " + momentList);
         if (momentList != null) {
@@ -89,6 +89,20 @@ public class MomentMapperTest {
 
     }
 
+
+    @Test
+    public void getActiveHomeMomentsByPage(){
+        Integer testUid = 3;
+        Integer lastId = 22;
+        System.out.println("测试的用户ID = " + testUid);
+        System.out.println("测试的lastId = " + lastId);
+        Page page = new Page();
+        page.setLastId(lastId);
+        System.out.println("一页限制动态数pageSize = " + page.getPageSize());
+        List<Moment> momentList = momentMapper.getActiveHomeMomentsByPage(page, testUid);
+        System.out.println("找到该用户主页满足条件动态数" + momentList.size());
+        momentList.forEach(System.out::println);
+    }
 
     @Test
     public void testSaveMoment() {

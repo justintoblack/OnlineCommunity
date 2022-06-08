@@ -2,6 +2,7 @@ package com.onlinecommunity.controller;
 
 
 import com.onlinecommunity.pojo.Moment;
+import com.onlinecommunity.pojo.Page;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
 import com.onlinecommunity.service.MomentService;
@@ -66,6 +67,33 @@ public class MomentController {
         return Result.success();
     }
 
+
+    /**
+     *
+     * @param page 需要传入参数：上一页最后一条动态ID：lastId
+     * @param uid   用户ID
+     * @return  Result，用户自己的动态列表保存在Result里的data中
+     */
+    @GetMapping("/get_self_moment_list")
+    public Result getSelfMomentList(Page page, @RequestParam("uid")Integer uid){
+        System.out.println("Controller : page = " + page);
+        System.out.println("uid = " + uid);
+        return momentService.getSelfMomentList(page, uid);
+    }
+
+
+    /**
+     *
+     * @param page 需要传入参数：上一页最后一条动态ID：lastId
+     * @param uid   用户ID
+     * @return  Result，主页动态列表保存在Result里的data中
+     */
+    @GetMapping("/get_home_moment_list")
+    public Result getHomeMomentList(Page page, @RequestParam("uid")Integer uid){
+        System.out.println("Controller : page = " + page);
+        System.out.println("uid = " + uid);
+        return momentService.getHomeMomentList(page, uid);
+    }
 
     /**
      * @param mid  要删除的moment id

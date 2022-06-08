@@ -17,7 +17,8 @@
         <result column="repost_count" property="repostCount"/>
     </resultMap>
     <select id="listAllMoments" resultMap="MomentResultMap">
-        select * from online_community.moment
+        select *
+        from online_community.moment
     </select>
 
     <select id="getAllMomentsByUid" parameterType="Integer" resultMap="MomentResultMap">
@@ -33,7 +34,7 @@
     </select>
 
     <insert id="saveMoment" parameterType="com.onlinecommunity.pojo.Moment" useGeneratedKeys="true"
-            keyProperty="momentId" >
+            keyProperty="momentId">
         insert into online_community.moment(moment_id, uid, content, moment_time, is_active, deleted_at, picture_count,
                                             like_count, comment_count, repost_count)
         values (#{moment.momentId}, #{moment.uid}, #{moment.content}, #{moment.momentTime}, #{moment.isActive},
@@ -50,7 +51,8 @@
     <select id="getActiveMomentCountByUid" parameterType="Integer" resultType="Integer">
         select count(moment_id)
         from online_community.moment
-        where uid = #{uid} and is_active = 1
+        where uid = #{uid}
+          and is_active = 1
     </select>
 
     <select id="getAllMomentCount" resultType="Integer">
@@ -63,24 +65,32 @@
         from online_community.moment
         where uid = #{uid}
     </select>
-    <select id="getActiveMomentsByPage" parameterType="com.onlinecommunity.pojo.Page"
-            resultMap="MomentResultMap">
-        select * from online_community.moment
-        WHERE
-        <if test="#{page.nextMomentId} != null">
-            moment_id <![CDATA[<]]> #{page.nextMomentId} AND
-        </if>
-        is_active = 1
-        ORDER BY moment_id DESC
-        <choose>
-            <when test="#{page.pageSize} != null">
-                LIMIT #{page.pageSize}
-            </when>
-            <otherwise>
-                LIMIT 9
-            </otherwise>
-        </choose>
 
+    <select id="getActiveSelfMomentsByPage" resultMap="MomentResultMap">
+        select *
+        from online_community.moment
+        WHERE
+        <if test="#{page.lastId} != null">
+            moment_id <![CDATA[<]]> #{page.lastId} AND
+        </if>
+        uid = #{uid} AND is_active = 1
+        ORDER BY moment_id DESC
+    </select>
+
+    <select id="getActiveHomeMomentsByPage" resultMap="MomentResultMap">
+        select *
+        from online_community.moment as m
+        WHERE
+        <if test="#{page.lastId} != null">
+            moment_id <![CDATA[<]]> #{page.lastId} AND
+        </if>
+        is_active = 1 AND (
+            m.uid = #{uid} or m.uid in (
+                select following_uid
+                from online_community.following as f
+                where f.uid = #{uid})
+            )
+        ORDER BY moment_id DESC
     </select>
 
 </mapper>
