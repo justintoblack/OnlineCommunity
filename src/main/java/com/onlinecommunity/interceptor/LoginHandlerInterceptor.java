@@ -1,5 +1,6 @@
 package com.onlinecommunity.interceptor;
 
+import com.onlinecommunity.util.JwtUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -13,7 +14,19 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //String token
-        return HandlerInterceptor.super.preHandle(request, response, handler);
+        String token = request.getHeader("token");
+        if (JwtUtil.verify(token))
+        {
+            return true;
+        }
+
+        request.setAttribute("msg","登陆出错");
+        request.getRemoteHost();
+
+        request.getRequestDispatcher("/login").forward(request,response);
+
+        return false;
+
     }
 
     @Override

@@ -21,5 +21,8 @@ public class ImageAccessConfig implements WebMvcConfigurer {
         System.out.println("accessPath = " + accessPath);
         System.out.println("location = " + location);
         registry.addResourceHandler(accessPath).addResourceLocations(location);
+
     }
+
+
 }

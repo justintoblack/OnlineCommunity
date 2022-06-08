@@ -4,14 +4,19 @@ import com.onlinecommunity.mapper.UserMapper;
 import com.onlinecommunity.pojo.User;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
+import com.onlinecommunity.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 public class UserService {
 
     @Autowired
     UserMapper userMapper;
+
+
 
     /**
      *
@@ -44,7 +49,8 @@ public class UserService {
         if (uid != null) {
             String existUserPwd = userMapper.getPasswordByUid(uid);
             if (existUserPwd.equals(user.getPassword())) {
-                return Result.success();
+                String token = JwtUtil.sign(user.getUsername());
+                return Result.success(token);
             } else {
                 return Result.failure(ResultCode.WRONG_PASSWORD);
             }

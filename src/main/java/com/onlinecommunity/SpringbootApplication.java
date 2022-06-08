@@ -6,11 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
 @SpringBootApplication
-public class JavaeeApplication {
+public class SpringbootApplication {
 
     public static void main(String[] args) {
 
-        SpringApplication.run(JavaeeApplication.class, args);
+        SpringApplication.run(SpringbootApplication.class, args);
         log.info("项目启动成功。。。");
     }
 
