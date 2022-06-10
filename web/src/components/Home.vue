@@ -22,11 +22,12 @@
         ></v-textarea>
         <div class="right_btn">
           <v-btn class="margin_right">上传图片</v-btn>
-          <v-btn class="margin_right">上传视频</v-btn>
+          <!-- <v-btn class="margin_right">上传视频</v-btn> -->
           <v-btn>发布</v-btn>
         </div>
       </v-container>
     </div>
+    <div></div>
 
     <v-divider></v-divider>
     <v-container>
@@ -202,6 +203,7 @@
 export default {
   data() {
     return {
+      inputText: "好的",
       items: [],
     };
   },

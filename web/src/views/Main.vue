@@ -10,7 +10,9 @@
     </v-app-bar>
     <v-main>
       <div class="hori">
+        <!-- 导航栏 -->
         <div class="height100"><Nav :change.sync="curView"></Nav></div>
+        <!-- 主视图 -->
         <div class="width100"><router-view /></div>
       </div>
     </v-main>
