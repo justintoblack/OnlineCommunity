@@ -93,11 +93,13 @@ public class MomentMapperTest {
     @Test
     public void getActiveHomeMomentsByPage(){
         Integer testUid = 3;
-        Integer lastId = 22;
+        Integer lastId = null;
         System.out.println("测试的用户ID = " + testUid);
         System.out.println("测试的lastId = " + lastId);
         Page page = new Page();
-        page.setLastId(lastId);
+        if (lastId != null)
+            page.setLastId(lastId);
+        System.out.println("page.getLastId() = " + page.getLastId());
         System.out.println("一页限制动态数pageSize = " + page.getPageSize());
         List<Moment> momentList = momentMapper.getActiveHomeMomentsByPage(page, testUid);
         System.out.println("找到该用户主页满足条件动态数" + momentList.size());

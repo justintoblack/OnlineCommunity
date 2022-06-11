@@ -5,7 +5,7 @@ package com.onlinecommunity.pojo;
  */
 public class Page {
 
-    private Integer lastId;
+    private Integer lastId = Integer.MAX_VALUE;
     private Integer pageSize = 10;
 
     public Integer getLastId() {
