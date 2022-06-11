@@ -114,10 +114,10 @@ public class MomentController {
     @GetMapping("/like_moment")
     public Result like(Integer mid, Integer luid) {
         if (mid == null) {
-            return Result.failure(ResultCode.NULL_UID);
+            return Result.failure(ResultCode.NULL_MID);
         }
         if (luid == null) {
-            return Result.failure(ResultCode.NULL_MID);
+            return Result.failure(ResultCode.NULL_UID);
         }
         return momentService.like(mid, luid);
     }

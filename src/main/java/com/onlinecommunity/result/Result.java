@@ -65,6 +65,15 @@ public class Result implements Serializable {
         this.code = resultCode.getCode();
         this.msg = resultCode.getMessage();
     }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }
 
 

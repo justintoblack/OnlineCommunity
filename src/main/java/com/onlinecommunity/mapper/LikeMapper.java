@@ -9,10 +9,12 @@ import java.util.List;
 @Mapper
 public interface LikeMapper {
 
-    @Select("select * from online_community.like where like_uid = #{likeUid}")
+    @Select("select like_id as likeId, moment_id as momentId, like_uid as likeUid, moment_uid as momentUid, like_time as likeTime " +
+            "from online_community.like where like_uid = #{likeUid}")
     List<Like> getAllLikesByUid(Integer likeUid);
 
-    @Select("select * from online_community.like where like_id = #{likeId}")
+    @Select("select like_id as likeId, moment_id as momentId, like_uid as likeUid, moment_uid as momentUid, like_time as likeTime " +
+            "from online_community.like where like_id = #{likeId}")
     Like getOneLikeByLikeId(Integer likeId);
 
     @Insert("insert into online_community.like (like_id, moment_id, like_uid, moment_uid, like_time) " +
@@ -23,6 +25,7 @@ public interface LikeMapper {
     @Delete("delete from online_community.like where like_id = #{like.likeId}  ")
     Integer deleteLikeByLikeId(@Param("like") Like like);
 
-    @Select("select * from online_community.like where like_uid=#{likeUid} and moment_id = #{momentId}")
+    @Select("select like_id as likeId, moment_id as momentId, like_uid as likeUid, moment_uid as momentUid, like_time as likeTime " +
+            "  from online_community.like where like_uid=#{likeUid} and moment_id = #{momentId}")
     Like getOneLikeByLikeUidMomentId(@Param("likeUid") Integer likeUid, @Param("momentId") Integer momentId);
 }

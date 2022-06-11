@@ -179,6 +179,7 @@ public class MomentService {
             User user = userMapper.getUserByUid(likeUid);
             if (user != null) {//执行点赞的用户需要存在
                 Like like = likeMapper.getOneLikeByLikeUidMomentId(likeUid, momentId);
+                System.out.println("likeMapper.getOneLikeByLikeUidMomentId(likeUid, momentId):" + like);
                 if (like == null) {//该用户没有点赞过该动态
                     like = new Like();
                     like.setLikeUid(likeUid);
@@ -187,12 +188,16 @@ public class MomentService {
                     //设置点赞的时间为当前时间
                     like.setLikeTime(new Timestamp(System.currentTimeMillis()));
                     log.info(String.valueOf(like));
+                    log.info("save like..");
                     likeMapper.saveLike(like);
+                    log.info("successfully saved.");
                     return Result.success();
                 } else {
+                    log.info("Repeated like!");
                     return Result.failure(ResultCode.REPEATED_LIKE);
                 }
             } else {
+                log.info("Non existent uid!");
                 return Result.failure(ResultCode.NONEXISTENT_UID);
             }
         } else {
