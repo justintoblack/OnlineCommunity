@@ -10,13 +10,20 @@ CREATE TABLE IF NOT EXISTS `user`
     `email`    VARCHAR(50)
 ) ENGINE = InnoDB;
 
+CREATE TABLE IF NOT EXISTS `following`
+(
+    `uid`           INT UNSIGNED,
+    `following_uid` INT UNSIGNED,
+    primary key (`uid`, `following_uid`)
+) ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS `moment`
 (
     `moment_id`     INT UNSIGNED                 NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `uid`           INT UNSIGNED                 NOT NULL,
     `content`       varchar(255) CHARSET utf8mb4 NOT NULL,
     `moment_time`   DATETIME                     NOT NULL DEFAULT NOW(),
-    `is_active`     tinyint(1),
+    `is_active`     tinyint,
     `deleted_at`    DATETIME,
     `picture_count` INT,
     `like_count`    INT,
@@ -30,8 +37,8 @@ ALTER TABLE `moment`
 CREATE TABLE IF NOT EXISTS `picture`
 (
     `moment_id` INT UNSIGNED NOT NULL,
-    `idx` INT          NOT NULL,
-    `url` VARCHAR(255),
+    `idx`       INT          NOT NULL,
+    `url`       VARCHAR(255),
     PRIMARY KEY (`moment_id`, `idx`),
     CONSTRAINT `fk_picture_moment` FOREIGN KEY (`moment_id`) REFERENCES `moment` (moment_id)
 ) ENGINE = InnoDB;
