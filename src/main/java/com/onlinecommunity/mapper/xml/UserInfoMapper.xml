@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.onlinecommunity.mapper.UserInfoMapper">
+
+    <select id="getAllUserInfo" resultType="com.onlinecommunity.pojo.UserInfo">
+        select *
+        from online_community.user_info
+    </select>
+
+    <select id="getUserInfoByUid" parameterType="Integer" resultType="com.onlinecommunity.pojo.UserInfo">
+        select *
+        from online_community.user_info
+        where uid = #{uid}
+    </select>
+
+    <select id="getUserInfoByUsername" parameterType="String" resultType="com.onlinecommunity.pojo.UserInfo">
+        select *
+        from online_community.user_info
+        where username = #{username}
+    </select>
+
+
+    <select id="getUsernameByUid" parameterType="Integer" resultType="String">
+        select username
+        from online_community.user_info
+        where uid = #{uid}
+    </select>
+
+    <select id="getUidByUsername" parameterType="String" resultType="Integer">
+        select uid
+        from online_community.user_info
+        where username = #{username}
+    </select>
+
+
+
+    <insert id="saveUserInfo" parameterType="com.onlinecommunity.pojo.UserInfo" useGeneratedKeys="true" keyProperty="uid">
+        insert into online_community.user_info (uid, username, real_name, avatar_url, about, phone, email, birthday)
+        values (#{userInfo.uid}, #{userInfo.username}, #{userInfo.realName}, #{userInfo.avatarUrl}, #{userInfo.about}, #{userInfo.phone}, #{userInfo.email}, #{userInfo.birthday})
+    </insert>
+
+    <update id="updateUserInfo" parameterType="com.onlinecommunity.pojo.UserInfo">
+            update online_community.user_info
+            <set>
+                username = #{userInfo.username}, real_name = #{userInfo.realName}, avatar_url = #{userInfo.avatarUrl}, about = #{userInfo.about}, phone = #{userInfo.phone}, email = #{userInfo.email}, birthday = #{userInfo.birthday}
+            </set>
+            where uid = #{userInfo.uid}
+    </update>
+
+
+    <select id="getUserInfoCount" resultType="Integer">
+        select count(uid)
+        from online_community.user_info
+    </select>
+
+</mapper>

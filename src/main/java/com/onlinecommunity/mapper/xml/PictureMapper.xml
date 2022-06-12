@@ -19,10 +19,10 @@
     </insert>
 
     <update id="updatePicturesUrl" parameterType="java.util.List">
-        <foreach collection="urlList" item="item" index="index" separator=",">
+        <foreach collection="urlList" item="item" index="index" separator=";">
             update online_community.picture
                 <set>
-                    url = item
+                    url = #{item}
                 </set>
             where moment_id = ${momentId} and idx = ${index}
         </foreach>

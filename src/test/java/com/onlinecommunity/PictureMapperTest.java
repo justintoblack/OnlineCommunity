@@ -29,6 +29,10 @@ public class PictureMapperTest {
     @Test
     public void testSavePictureUrl(){
         urlList = new ArrayList<>();
+
+
+
+
         urlList.add("/pic/1/xx1.jpg");
         urlList.add("/pic/1/xx2.jpg");
         urlList.add("/pic/1/xx22.jpg");

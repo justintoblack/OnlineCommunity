@@ -3,6 +3,7 @@ package com.onlinecommunity.controller;
 
 import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Page;
+import com.onlinecommunity.pojo.UserInfo;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
 import com.onlinecommunity.service.MomentService;
@@ -66,6 +67,9 @@ public class MomentController {
             momentService.savePicturesUrl(urlList, moment.getMomentId());
         return Result.success();
     }
+
+
+
 
 
     /**
