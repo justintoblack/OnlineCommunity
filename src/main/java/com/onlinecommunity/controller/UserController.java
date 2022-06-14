@@ -100,5 +100,50 @@ public class UserController {
 
     }
 
+    /**
+     *
+     * @param uid   用户ID
+     * @param followingUid   关注用户ID
+     * @return  Result，结果
+     */
+    @PostMapping("/add_following")
+    public Result addFollowing(@RequestParam("uid") Integer uid, @RequestParam("followingUid") Integer followingUid){
+
+        return userService.addFollowing(uid, followingUid);
+    }
+
+    /**
+     *
+     * @param uid   用户ID
+     * @param followingUid   取关用户ID
+     * @return  Result，结果
+     */
+    @PostMapping("/delete_following")
+    public Result deleteFollowing(@RequestParam("uid") Integer uid, @RequestParam("followingUid") Integer followingUid){
+
+        return userService.deleteFollowing(uid, followingUid);
+    }
+
+    /**
+     *
+     * @param uid   用户ID
+     * @return  Result，结果
+     */
+    @GetMapping("/get_followings_list")
+    public Result getAllFollowingByUid(Page page, @RequestParam("uid") Integer uid){
+
+        return userService.getAllFollowingByUid(page, uid);
+    }
+
+    /**
+     *
+     * @param uid   用户ID
+     * @return  Result，结果
+     */
+    @GetMapping("/get_followers_list")
+    public Result getAllFollowersByUid(Page page, @RequestParam("uid") Integer uid){
+
+        return userService.getAllFollowersByUid(page, uid);
+    }
 
 }

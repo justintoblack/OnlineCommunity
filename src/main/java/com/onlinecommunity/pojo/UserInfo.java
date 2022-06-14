@@ -29,7 +29,7 @@ public class UserInfo {
     private Integer followers = 0;
     private Integer momentCount = 0;
     private Integer likeCount = 0;
-    private Integer starCount;
+    private Integer starCount = 0;
 
     public Integer getUid() {
         return uid;

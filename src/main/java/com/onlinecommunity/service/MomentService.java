@@ -1,5 +1,7 @@
 package com.onlinecommunity.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.onlinecommunity.mapper.*;
 import com.onlinecommunity.pojo.*;
 import com.onlinecommunity.result.Result;
@@ -20,6 +22,10 @@ import java.util.Map;
 @Service
 @Slf4j
 public class MomentService {
+
+    @Autowired
+    UserService userService;
+
     @Autowired
     UserMapper userMapper;
 
@@ -37,6 +43,12 @@ public class MomentService {
 
     @Autowired
     PictureMapper pictureMapper;
+
+    @Autowired
+    FollowingMapper followingMapper;
+
+    @Autowired
+    UserInfoMapper userInfoMapper;
 
     /**
      * @param multiPartFiles 待检查图片
@@ -79,6 +91,11 @@ public class MomentService {
                 log.info("MomentService before saving moment, mid:{}", moment.getMomentId());
                 System.out.println("momentMapper.saveMoment(moment) = " + momentMapper.saveMoment(moment));
                 log.info("MomentService after saving moment, mid:{}", moment.getMomentId());
+
+                Result result = userService.getSelfInfo(moment.getUid());
+                UserInfo userInfo = (UserInfo)result.getData();
+                userInfo.setMomentCount(userInfo.getMomentCount() + 1);
+                userInfoMapper.updateUserInfo(userInfo);
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.EXIST_MID);
@@ -157,6 +174,11 @@ public class MomentService {
         if (moment != null) {
             if (moment.getUid().equals(deleteUid)) {
                 momentMapper.deleteMomentByMomentId(momentId);
+
+                Result result = userService.getSelfInfo(moment.getUid());
+                UserInfo userInfo = (UserInfo)result.getData();
+                userInfo.setMomentCount(userInfo.getMomentCount() - 1);
+                userInfoMapper.updateUserInfo(userInfo);
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_MOMENT);
@@ -191,6 +213,11 @@ public class MomentService {
                     log.info("save like..");
                     likeMapper.saveLike(like);
                     log.info("successfully saved.");
+
+                    Result result = userService.getSelfInfo(moment.getUid());
+                    UserInfo userInfo = (UserInfo)result.getData();
+                    userInfo.setLikeCount(userInfo.getLikeCount() + 1);
+                    userInfoMapper.updateUserInfo(userInfo);
                     return Result.success();
                 } else {
                     log.info("Repeated like!");
@@ -260,5 +287,31 @@ public class MomentService {
         } else {
             return Result.failure(ResultCode.NONEXISTENT_MID);
         }
+    }
+
+
+    public Result searchUserInfo(Page page, String str) {
+
+
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(str);
+        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(userInfoBySearch,3);
+        log.info(String.valueOf(pageInfo));
+        Result result = Result.success();
+        result.setData(pageInfo);
+
+        return result;
+    }
+
+    public Result searchMoment(Page page, String str) {
+
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<Moment> momentBySearch = momentMapper.getMomentBySearch(str);
+        PageInfo<Moment> pageInfo = new PageInfo<Moment>(momentBySearch,3);
+        log.info(String.valueOf(pageInfo));
+        Result result = Result.success();
+        result.setData(pageInfo);
+
+        return result;
     }
 }

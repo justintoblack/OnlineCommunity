@@ -4,6 +4,7 @@ package com.onlinecommunity.mapper;
 import com.onlinecommunity.pojo.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface UserInfoMapper {
     Integer getUserInfoCount();
 
     Integer updateUserInfo(@Param("userInfo") UserInfo userInfo);
+
+    @Select("SELECT * FROM online_community.user_info where INSTR(username, #{str})>0")
+    List<UserInfo> getUserInfoBySearch(String str);
 }

@@ -4,6 +4,7 @@ import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -38,6 +39,8 @@ public interface MomentMapper {
 
     Integer getActiveMomentCountByUid(Integer uid);
 
+    @Select("SELECT * FROM online_community.moment where INSTR(moment.content, #{str})>0")
+    List<Moment> getMomentBySearch(String str);
     /**
      *
      * @param uid 用户ID

@@ -17,6 +17,8 @@ public enum ResultCode {
     NONEXISTENT_UID(200, "不存在的用户ID"),
     NONEXISTENT_MID(200, "不存在的动态ID"),
     WRONG_PASSWORD(200,"密码错误"),
+    WRONG_ADDFOLLOWING(200,"关注失败"),
+    WRONG_DELETEFOLLOWING(200,"取关失败"),
     CANNOT_DELETE_OTHERS_MOMENT(200, "无法删除其他人的动态"),
     REPEATED_LIKE(200, "已经点过赞"),
     EXIST_MID(200, "存在的动态ID"),

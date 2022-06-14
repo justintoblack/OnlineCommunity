@@ -2,6 +2,7 @@ package com.onlinecommunity.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.onlinecommunity.mapper.FollowingMapper;
 import com.onlinecommunity.mapper.UserInfoMapper;
 import com.onlinecommunity.mapper.UserMapper;
 import com.onlinecommunity.pojo.Page;
@@ -29,7 +30,8 @@ public class UserService {
     @Autowired
     UserInfoMapper userInfoMapper;
 
-
+    @Autowired
+    FollowingMapper followingMapper;
 
     /**
      *
@@ -48,6 +50,7 @@ public class UserService {
         if (uid != null) {
             return Result.failure(ResultCode.EXIST_USERNAME);
         }
+        userMapper.saveUser(user);
         UserInfo userInfo = new UserInfo();
         userInfo.setUsername(user.getUsername());
         userInfo.setRealName(user.getUsername());
@@ -55,7 +58,7 @@ public class UserService {
         userInfo.setEmail(user.getEmail());
         userInfo.setAvatarUrl("/pic/image.jpg");
         userInfoMapper.saveUserInfo(userInfo);
-        userMapper.saveUser(user);
+
         return Result.success();
     }
 
@@ -150,5 +153,66 @@ public class UserService {
         result.setData(pageInfo);
         return result;
 
+    }
+
+    public Result addFollowing(Integer uid, Integer followingUid) {
+
+        Integer integer = followingMapper.saveFollowing(uid, followingUid);
+        if (integer <= 0) return Result.failure(ResultCode.WRONG_ADDFOLLOWING);
+
+
+        Result uresult = getSelfInfo(uid);
+        UserInfo uuserInfo = (UserInfo)uresult.getData();
+        uuserInfo.setFollowing(uuserInfo.getFollowing() + 1);
+        Result fresult = getSelfInfo(followingUid);
+        UserInfo fuserInfo = (UserInfo) fresult.getData();
+        fuserInfo.setFollowers(fuserInfo.getFollowers() + 1);
+
+        userInfoMapper.updateUserInfo(uuserInfo);
+        userInfoMapper.updateUserInfo(fuserInfo);
+
+        return Result.success();
+    }
+
+    public Result deleteFollowing(Integer uid, Integer followingUid) {
+
+        Integer integer = followingMapper.deleteFollowing(uid, followingUid);
+        if (integer <= 0) return Result.failure(ResultCode.WRONG_DELETEFOLLOWING);
+
+        Result uresult = getSelfInfo(uid);
+        UserInfo uuserInfo = (UserInfo)uresult.getData();
+        uuserInfo.setFollowing(uuserInfo.getFollowing() - 1);
+        Result fresult = getSelfInfo(followingUid);
+        UserInfo fuserInfo = (UserInfo) fresult.getData();
+        fuserInfo.setFollowers(fuserInfo.getFollowers() - 1);
+
+        userInfoMapper.updateUserInfo(uuserInfo);
+        userInfoMapper.updateUserInfo(fuserInfo);
+        return  Result.success();
+
+    }
+
+    public Result getAllFollowingByUid(Page page, Integer uid) {
+
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
+        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowingByUid,3);
+        log.info(String.valueOf(pageInfo));
+        Result result = Result.success();
+        result.setData(pageInfo);
+
+        return result;
+    }
+
+    public Result getAllFollowersByUid(Page page, Integer uid) {
+
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<UserInfo> allFollowersByUid = followingMapper.getAllFollowersByUid(uid);
+        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowersByUid,3);
+        log.info(String.valueOf(pageInfo));
+        Result result = Result.success();
+        result.setData(pageInfo);
+
+        return result;
     }
 }
