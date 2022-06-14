@@ -1,7 +1,10 @@
 package com.onlinecommunity.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.onlinecommunity.mapper.UserInfoMapper;
 import com.onlinecommunity.mapper.UserMapper;
+import com.onlinecommunity.pojo.Page;
 import com.onlinecommunity.pojo.User;
 import com.onlinecommunity.pojo.UserInfo;
 import com.onlinecommunity.result.Result;
@@ -135,5 +138,17 @@ public class UserService {
             userInfoMapper.updateUserInfo(userInfo);
         }
         return Result.success();
+    }
+
+    public Result getAllUserInfo(Page page) {
+
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<UserInfo> allUserInfo = userInfoMapper.getAllUserInfo();
+        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allUserInfo,3);
+        log.info(String.valueOf(pageInfo));
+        Result result = Result.success();
+        result.setData(pageInfo);
+        return result;
+
     }
 }

@@ -1,5 +1,6 @@
 package com.onlinecommunity.controller;
 
+import com.onlinecommunity.pojo.Page;
 import com.onlinecommunity.pojo.User;
 import com.onlinecommunity.pojo.UserInfo;
 import com.onlinecommunity.result.Result;
@@ -46,6 +47,15 @@ public class UserController {
     }
 
     /**
+     * 获取全部用户基本信息
+     */
+    @GetMapping("/get_all_info")
+    public Result getAllUserInfo(Page page){
+
+        return userService.getAllUserInfo(page);
+    }
+
+    /**
      * 修改用户基本信息
      */
     @PostMapping("/modify_self_info")
@@ -67,7 +77,7 @@ public class UserController {
      * 修改用户头像
      */
     @PostMapping("/modify_avatarUrl")
-    public Result setAvatarUrl(Integer uid, @RequestParam("pictures") MultipartFile[] multiPartFiles){
+    public Result setAvatarUrl(@RequestParam("uid") Integer uid, @RequestParam("pictures") MultipartFile[] multiPartFiles){
 
 
         List<String> urlList = null;

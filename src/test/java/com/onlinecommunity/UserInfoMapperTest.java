@@ -1,14 +1,20 @@
 package com.onlinecommunity;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.onlinecommunity.mapper.UserInfoMapper;
 import com.onlinecommunity.mapper.UserMapper;
+import com.onlinecommunity.pojo.Page;
 import com.onlinecommunity.pojo.User;
 import com.onlinecommunity.pojo.UserInfo;
+import com.onlinecommunity.result.Result;
+import com.onlinecommunity.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.awt.print.Book;
 import java.util.List;
 
 /**
@@ -22,12 +28,16 @@ public class UserInfoMapperTest {
     @Autowired
     UserInfoMapper userInfoMapper;
 
+    @Autowired
+    UserService userService;
+
     @Test
     public void testListAll(){
+        PageHelper.startPage(2,2);
         List<UserInfo> users = userInfoMapper.getAllUserInfo();
-        for(UserInfo user : users){
-            System.out.println(user.toString());
-        }
+        PageInfo<UserInfo> pageInfo=new PageInfo<UserInfo>(users,3);
+        System.out.println(pageInfo);
+
     }
 
 

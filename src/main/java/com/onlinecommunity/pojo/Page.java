@@ -7,6 +7,7 @@ public class Page {
 
     private Integer lastId = Integer.MAX_VALUE;
     private Integer pageSize = 10;
+    private Integer currentPage;
 
     public Integer getLastId() {
         return lastId;
@@ -14,6 +15,14 @@ public class Page {
 
     public void setLastId(Integer lastMomentId) {
         this.lastId = lastMomentId;
+    }
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
     }
 
     public Integer getPageSize() {
@@ -29,6 +38,8 @@ public class Page {
         return "Page{" +
                 "lastId=" + lastId +
                 ", pageSize=" + pageSize +
+                ", currentPage=" + currentPage +
                 '}';
     }
 }
+
