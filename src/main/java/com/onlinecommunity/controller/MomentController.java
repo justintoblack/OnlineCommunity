@@ -143,6 +143,42 @@ public class MomentController {
 
     }
 
+    /**
+     *
+     * @param page 需要传入参数：请求页面页数
+     * @param uid   用户ID
+     * @return  Result，用户喜爱的列表
+     */
+    @GetMapping("/get_like_list")
+    public Result getLikeList(Page page, @RequestParam("uid")Integer uid){
+
+        return momentService.getLikeList(page, uid);
+    }
+
+    /**
+     *
+     * @param page 需要传入参数：请求页面页数
+     * @param uid   用户ID
+     * @return  Result，用户收藏的列表
+     */
+    @GetMapping("/get_star_list")
+    public Result getStarList(Page page, @RequestParam("uid")Integer uid){
+
+        return momentService.getStarList(page, uid);
+    }
+
+    /**
+     *
+     * @param page 需要传入参数：请求页面页数
+     * @param uid   用户ID
+     * @return  Result，用户收藏的列表
+     */
+    @GetMapping("/get_repost_list")
+    public Result getRepostList(Page page, @RequestParam("uid")Integer uid){
+
+        return momentService.getRepostList(page, uid);
+    }
+
     @GetMapping("/search_userInfo")
     public Result searchUserInfo(@RequestParam("uid") Integer uid, Page page, String str){
 

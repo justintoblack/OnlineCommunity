@@ -351,4 +351,30 @@ public class MomentService {
     }
 
 
+    public Result getLikeList(Page page, Integer uid) {
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<Moment> allLikesByUid = likeMapper.getAllLikesByUid(uid);
+        PageInfo<Moment> pageInfo = new PageInfo<>(allLikesByUid, 3);
+        Result result = Result.success();
+        result.setData(pageInfo);
+        return result;
+    }
+
+    public Result getStarList(Page page, Integer uid) {
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<Moment> allStarsByUid = starMapper.getAllStarsByUid(uid);
+        PageInfo<Moment> pageInfo = new PageInfo<>(allStarsByUid, 3);
+        Result result = Result.success();
+        result.setData(pageInfo);
+        return result;
+    }
+
+    public Result getRepostList(Page page, Integer uid) {
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<Moment> allRepostsByUid = repostMapper.getAllRepostsByUid(uid);
+        PageInfo<Moment> pageInfo = new PageInfo<>(allRepostsByUid, 3);
+        Result result = Result.success();
+        result.setData(pageInfo);
+        return result;
+    }
 }

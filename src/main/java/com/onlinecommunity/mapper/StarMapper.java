@@ -4,6 +4,7 @@ package com.onlinecommunity.mapper;
 
 
 
+import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Star;
 import org.apache.ibatis.annotations.*;
 
@@ -12,9 +13,10 @@ import java.util.List;
 @Mapper
 public interface StarMapper {
 
-    @Select("select star_id , moment_id , star_uid , moment_uid , star_time  " +
-            "from online_community.star where star_uid = #{starUid}")
-    List<Star> getAllStarsByUid(Integer starUid);
+    @Select("select * from online_community.moment as a left join online_community.star as b " +
+            "on a.moment_id = b.moment_id " +
+            "where b.star_uid = #{starUid}")
+    List<Moment> getAllStarsByUid(Integer starUid);
 
     @Select("select star_id , moment_id , star_uid , moment_uid , star_time " +
             "from online_community.star where star_id = #{starId}")

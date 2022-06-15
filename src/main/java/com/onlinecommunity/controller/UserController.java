@@ -108,26 +108,19 @@ public class UserController {
     /**
      *
      * @param uid   用户ID
-     * @param followingUid   关注用户ID
+     * @param followUserInfo  关注或取关的用户信息
      * @return  Result，结果
      */
-    @PostMapping("/add_following")
-    public Result addFollowing(@RequestParam("uid") Integer uid, @RequestParam("followingUid") Integer followingUid){
+    @PostMapping("/follow")
+    public Result addFollowing(@RequestParam("uid") Integer uid, @RequestParam("followingUserInfo") UserInfo followUserInfo){
 
-        return userService.addFollowing(uid, followingUid);
+        if (followUserInfo.getIsFollowing() == false)
+
+            return userService.addFollowing(uid, followUserInfo.getUid());
+        else
+            return userService.deleteFollowing(uid, followUserInfo.getUid());
     }
 
-    /**
-     *
-     * @param uid   用户ID
-     * @param followingUid   取关用户ID
-     * @return  Result，结果
-     */
-    @PostMapping("/delete_following")
-    public Result deleteFollowing(@RequestParam("uid") Integer uid, @RequestParam("followingUid") Integer followingUid){
-
-        return userService.deleteFollowing(uid, followingUid);
-    }
 
     /**
      *

@@ -1,6 +1,7 @@
 package com.onlinecommunity.mapper;
 
 
+import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Repost;
 import org.apache.ibatis.annotations.*;
 
@@ -9,8 +10,10 @@ import java.util.List;
 @Mapper
 public interface RepostMapper {
 
-    @Select("select * from online_community.repost where repost_uid=${repostUid}")
-    List<Repost> getAllRepostsByUid(Integer repostUid);
+    @Select("select * from online_community.moment as a left join online_community.repost as b " +
+            "on a.moment_id = b.moment_id " +
+            "where b.repost_uid = #{repostUid}")
+    List<Moment> getAllRepostsByUid(Integer repostUid);
 
     @Select("select * from online_community.repost where repost_id=${repostId}")
     Repost getOneRepostByRepostId(Integer repostId);

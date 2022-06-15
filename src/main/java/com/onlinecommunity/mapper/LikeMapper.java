@@ -2,6 +2,7 @@ package com.onlinecommunity.mapper;
 
 
 import com.onlinecommunity.pojo.Like;
+import com.onlinecommunity.pojo.Moment;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -9,9 +10,10 @@ import java.util.List;
 @Mapper
 public interface LikeMapper {
 
-    @Select("select like_id as likeId, moment_id as momentId, like_uid as likeUid, moment_uid as momentUid, like_time as likeTime " +
-            "from online_community.like where like_uid = #{likeUid}")
-    List<Like> getAllLikesByUid(Integer likeUid);
+    @Select("select * from online_community.moment as a left join online_community.`like` as b " +
+            "on a.moment_id = b.moment_id " +
+            "where b.like_uid = #{likeUid}")
+    List<Moment> getAllLikesByUid(Integer likeUid);
 
     @Select("select like_id as likeId, moment_id as momentId, like_uid as likeUid, moment_uid as momentUid, like_time as likeTime " +
             "from online_community.like where like_id = #{likeId}")
