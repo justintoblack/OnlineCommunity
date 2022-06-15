@@ -138,9 +138,9 @@ public class MomentController {
     }
 
     @GetMapping("/search_userInfo")
-    public Result searchUserInfo(Page page, String str){
+    public Result searchUserInfo(@RequestParam("uid") Integer uid, Page page, String str){
 
-        return momentService.searchUserInfo(page, str);
+        return momentService.searchUserInfo(uid, page, str);
     }
 
     @GetMapping("/search_moment")

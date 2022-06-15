@@ -24,8 +24,12 @@ public class UserInfo {
     private String phone;
     private String email;
 
+
+
+    private boolean isFollowing;
+
     private String birthday;
-    private Integer following = 0;
+    private Integer followings = 0;
     private Integer followers = 0;
     private Integer momentCount = 0;
     private Integer likeCount = 0;
@@ -87,6 +91,14 @@ public class UserInfo {
         this.email = email;
     }
 
+    public boolean getIsFollowing() {
+        return isFollowing;
+    }
+
+    public void setIsFollowing(boolean following) {
+        isFollowing = following;
+    }
+
     public String getBirthday() {
         return birthday;
     }
@@ -95,12 +107,12 @@ public class UserInfo {
         this.birthday = birthday;
     }
 
-    public Integer getFollowing() {
-        return following;
+    public Integer getFollowings() {
+        return followings;
     }
 
-    public void setFollowing(Integer following) {
-        this.following = following;
+    public void setFollowings(Integer following) {
+        this.followings = following;
     }
 
     public Integer getFollowers() {
@@ -145,12 +157,14 @@ public class UserInfo {
                 ", about='" + about + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", isFollowing=" + isFollowing +
                 ", birthday='" + birthday + '\'' +
-                ", following=" + following +
+                ", following=" + followings +
                 ", followers=" + followers +
                 ", momentCount=" + momentCount +
                 ", likeCount=" + likeCount +
                 ", starCount=" + starCount +
                 '}';
     }
+
 }

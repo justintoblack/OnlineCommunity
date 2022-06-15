@@ -39,7 +39,7 @@ public interface MomentMapper {
 
     Integer getActiveMomentCountByUid(Integer uid);
 
-    @Select("SELECT * FROM online_community.moment where INSTR(moment.content, #{str})>0")
+    @Select("SELECT * FROM online_community.moment where INSTR(moment.content, #{str})>0 ")
     List<Moment> getMomentBySearch(String str);
     /**
      *

@@ -23,6 +23,6 @@ public interface UserInfoMapper {
 
     Integer updateUserInfo(@Param("userInfo") UserInfo userInfo);
 
-    @Select("SELECT * FROM online_community.user_info where INSTR(username, #{str})>0")
-    List<UserInfo> getUserInfoBySearch(String str);
+    @Select("SELECT * FROM online_community.user_info where INSTR(username, #{str})>0 and uid != #{uid}")
+    List<UserInfo> getUserInfoBySearch(@Param("uid") Integer uid, @Param("str") String str);
 }

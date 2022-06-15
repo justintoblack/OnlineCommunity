@@ -4,8 +4,11 @@ import com.onlinecommunity.pojo.Page;
 import com.onlinecommunity.pojo.User;
 import com.onlinecommunity.pojo.UserInfo;
 import com.onlinecommunity.result.Result;
+import com.onlinecommunity.result.ResultCode;
 import com.onlinecommunity.service.MomentService;
 import com.onlinecommunity.service.UserService;
+import com.onlinecommunity.util.MyEnvBeanUtil;
+import com.onlinecommunity.util.UploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,9 +27,6 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    MomentService momentService;
-
     @PostMapping("/register")
     public Result register(@Validated User user) {
         return userService.register(user);
@@ -38,12 +38,13 @@ public class UserController {
 
 
     }
-    /**
+    /**@param uid   当前登录用户ID
+     * @param infoUid   查看信息用户ID
      * 获取用户基本信息
      */
     @GetMapping("/get_self_info")
-    public Result getSelfInfo(Integer uid){
-        return userService.getSelfInfo(uid);
+    public Result getSelfInfo(@RequestParam("uid") Integer uid,@RequestParam("infoUid") Integer infoUid){
+        return userService.getSelfInfo(uid, infoUid);
     }
 
     /**
@@ -86,12 +87,16 @@ public class UserController {
         if (multiPartFiles.length != 0) {
             //检查所有图片是否满足限制
             log.info("checking uploaded pictures...");
-            Result checkResult = momentService.checkPictures(multiPartFiles);
-            if (!checkResult.getMsg().equals("success"))
-                return checkResult;
+            for (MultipartFile multipartFile : multiPartFiles) {
+                //check the file
+                if (multipartFile.isEmpty())
+                    return Result.failure(ResultCode.EMPTY_UPLOAD_FILE);
+                if (multipartFile.getSize() > Long.parseLong(MyEnvBeanUtil.getPictureMaxSize()))
+                    return Result.failure(ResultCode.EXCEED_MAX_PIC_SIZE);
+            }
             log.info("uploading pictures...");
             //上传图片,成功后得到访问图片的URL列表
-            urlList = momentService.uploadPictures(multiPartFiles);
+            urlList = UploadUtil.uploadPictures(multiPartFiles);
             log.info("successfully uploaded");
         }
 

@@ -38,14 +38,14 @@
 
 
     <insert id="saveUserInfo" parameterType="com.onlinecommunity.pojo.UserInfo" useGeneratedKeys="true" keyProperty="uid">
-        insert into online_community.user_info (uid, username, real_name, avatar_url, about, phone, email, birthday, followings, followers, moment_count, like_count, star_count)
-        values (#{userInfo.uid}, #{userInfo.username}, #{userInfo.realName}, #{userInfo.avatarUrl}, #{userInfo.about}, #{userInfo.phone}, #{userInfo.email}, #{userInfo.birthday}, #{userInfo.following}, #{userInfo.followers}, #{userInfo.momentCount}, #{userInfo.likeCount}, #{userInfo.starCount})
+        insert into online_community.user_info (uid, username, real_name, avatar_url, about, phone, email, birthday, is_following, followings, followers, moment_count, like_count, star_count)
+        values (#{userInfo.uid}, #{userInfo.username}, #{userInfo.realName}, #{userInfo.avatarUrl}, #{userInfo.about}, #{userInfo.phone}, #{userInfo.email}, #{userInfo.birthday}, #{userInfo.isFollowing}, #{userInfo.followings}, #{userInfo.followers}, #{userInfo.momentCount}, #{userInfo.likeCount}, #{userInfo.starCount})
     </insert>
 
     <update id="updateUserInfo" parameterType="com.onlinecommunity.pojo.UserInfo">
             update online_community.user_info
             <set>
-                username = #{userInfo.username}, real_name = #{userInfo.realName}, avatar_url = #{userInfo.avatarUrl}, about = #{userInfo.about}, phone = #{userInfo.phone}, email = #{userInfo.email}, birthday = #{userInfo.birthday}, followings = #{userInfo.following}, followers = #{userInfo.followers}, moment_count = #{userInfo.momentCount}, like_count = #{userInfo.likeCount}, star_count = #{userInfo.starCount}
+                username = #{userInfo.username}, real_name = #{userInfo.realName}, avatar_url = #{userInfo.avatarUrl}, about = #{userInfo.about}, phone = #{userInfo.phone}, email = #{userInfo.email}, birthday = #{userInfo.birthday}, is_following = #{userInfo.isFollowing}, followings = #{userInfo.followings}, followers = #{userInfo.followers}, moment_count = #{userInfo.momentCount}, like_count = #{userInfo.likeCount}, star_count = #{userInfo.starCount}
             </set>
             where uid = #{userInfo.uid}
     </update>

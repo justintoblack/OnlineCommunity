@@ -107,6 +107,7 @@ CREATE TABLE IF NOT EXISTS `user_info`
     `phone`        VARCHAR(30),
     `email`        VARCHAR(50),
     `birthday`     DATE,
+    `is_following` Boolean,
     `followings`    INT,
     `followers`    INT,
     `moment_count` INT,

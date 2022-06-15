@@ -15,10 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -57,6 +58,7 @@ public class UserService {
         userInfo.setPhone(user.getPhone());
         userInfo.setEmail(user.getEmail());
         userInfo.setAvatarUrl("/pic/image.jpg");
+        userInfo.setIsFollowing(false);
         userInfoMapper.saveUserInfo(userInfo);
 
         return Result.success();
@@ -73,6 +75,13 @@ public class UserService {
             String existUserPwd = userMapper.getPasswordByUid(uid);
             if (existUserPwd.equals(user.getPassword())) {
                 String token = JwtUtil.sign(user.getUsername());
+                Jedis jedis = new Jedis("127.0.0.1", 6379);
+                List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
+                for (UserInfo userInfo : allFollowingByUid)
+                {
+                    jedis.sadd(uid.toString(),userInfo.getUid().toString());
+                }
+                jedis.close();
                 return Result.success(token);
             } else {
                 return Result.failure(ResultCode.WRONG_PASSWORD);
@@ -91,10 +100,18 @@ public class UserService {
     }
 
 
-    public Result getSelfInfo(Integer uid) {
+    public Result getSelfInfo(Integer uid, Integer infoUid) {
 
-        UserInfo userInfoByUid = userInfoMapper.getUserInfoByUid(uid);
+        UserInfo userInfoByUid = userInfoMapper.getUserInfoByUid(infoUid);
         if (userInfoByUid != null) {
+            if (uid != infoUid)
+            {
+                Jedis jedis = new Jedis("127.0.0.1", 6379);
+                Set<String> smembers = jedis.smembers(uid.toString());
+                if (smembers.contains(userInfoByUid.getUid().toString()))
+                    userInfoByUid.setIsFollowing(true);
+                jedis.close();
+            }
             Result result = Result.success();
             result.setData(userInfoByUid);
             return result;
@@ -131,8 +148,8 @@ public class UserService {
 
     public Result setAvatarUrl(Integer uid, List<String> urlList) {
 
-        Result result = getSelfInfo(uid);
-        UserInfo userInfo = (UserInfo) result.getData();
+
+        UserInfo userInfo = userInfoMapper.getUserInfoByUid(uid);
         log.info(String.valueOf(userInfo));
         log.info(String.valueOf(urlList));
         if (urlList != null) {
@@ -160,14 +177,14 @@ public class UserService {
         Integer integer = followingMapper.saveFollowing(uid, followingUid);
         if (integer <= 0) return Result.failure(ResultCode.WRONG_ADDFOLLOWING);
 
-
-        Result uresult = getSelfInfo(uid);
-        UserInfo uuserInfo = (UserInfo)uresult.getData();
-        uuserInfo.setFollowing(uuserInfo.getFollowing() + 1);
-        Result fresult = getSelfInfo(followingUid);
-        UserInfo fuserInfo = (UserInfo) fresult.getData();
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.sadd(uid.toString(),followingUid.toString());
+        UserInfo uuserInfo = userInfoMapper.getUserInfoByUid(uid);
+        uuserInfo.setFollowings(uuserInfo.getFollowings() + 1);
+        UserInfo fuserInfo = userInfoMapper.getUserInfoByUid(followingUid);
         fuserInfo.setFollowers(fuserInfo.getFollowers() + 1);
 
+        jedis.close();
         userInfoMapper.updateUserInfo(uuserInfo);
         userInfoMapper.updateUserInfo(fuserInfo);
 
@@ -179,12 +196,16 @@ public class UserService {
         Integer integer = followingMapper.deleteFollowing(uid, followingUid);
         if (integer <= 0) return Result.failure(ResultCode.WRONG_DELETEFOLLOWING);
 
-        Result uresult = getSelfInfo(uid);
-        UserInfo uuserInfo = (UserInfo)uresult.getData();
-        uuserInfo.setFollowing(uuserInfo.getFollowing() - 1);
-        Result fresult = getSelfInfo(followingUid);
-        UserInfo fuserInfo = (UserInfo) fresult.getData();
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.srem(uid.toString(),followingUid.toString());
+        UserInfo uuserInfo = userInfoMapper.getUserInfoByUid(uid);
+        uuserInfo.setFollowings(uuserInfo.getFollowings() - 1);
+        UserInfo fuserInfo = userInfoMapper.getUserInfoByUid(followingUid);
         fuserInfo.setFollowers(fuserInfo.getFollowers() - 1);
+
+        jedis.close();
+        userInfoMapper.updateUserInfo(uuserInfo);
+        userInfoMapper.updateUserInfo(fuserInfo);
 
         userInfoMapper.updateUserInfo(uuserInfo);
         userInfoMapper.updateUserInfo(fuserInfo);

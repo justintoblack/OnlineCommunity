@@ -12,19 +12,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
 public class MomentService {
 
-    @Autowired
-    UserService userService;
+
 
     @Autowired
     UserMapper userMapper;
@@ -92,8 +89,7 @@ public class MomentService {
                 System.out.println("momentMapper.saveMoment(moment) = " + momentMapper.saveMoment(moment));
                 log.info("MomentService after saving moment, mid:{}", moment.getMomentId());
 
-                Result result = userService.getSelfInfo(moment.getUid());
-                UserInfo userInfo = (UserInfo)result.getData();
+                UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
                 userInfo.setMomentCount(userInfo.getMomentCount() + 1);
                 userInfoMapper.updateUserInfo(userInfo);
                 return Result.success();
@@ -175,8 +171,7 @@ public class MomentService {
             if (moment.getUid().equals(deleteUid)) {
                 momentMapper.deleteMomentByMomentId(momentId);
 
-                Result result = userService.getSelfInfo(moment.getUid());
-                UserInfo userInfo = (UserInfo)result.getData();
+                UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
                 userInfo.setMomentCount(userInfo.getMomentCount() - 1);
                 userInfoMapper.updateUserInfo(userInfo);
                 return Result.success();
@@ -214,8 +209,7 @@ public class MomentService {
                     likeMapper.saveLike(like);
                     log.info("successfully saved.");
 
-                    Result result = userService.getSelfInfo(moment.getUid());
-                    UserInfo userInfo = (UserInfo)result.getData();
+                    UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
                     userInfo.setLikeCount(userInfo.getLikeCount() + 1);
                     userInfoMapper.updateUserInfo(userInfo);
                     return Result.success();
@@ -290,11 +284,18 @@ public class MomentService {
     }
 
 
-    public Result searchUserInfo(Page page, String str) {
+    public Result searchUserInfo(Integer uid, Page page, String str) {
 
 
         PageHelper.startPage(page.getCurrentPage(),10);
-        List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(str);
+        List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(uid,str);
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembers = jedis.smembers(uid.toString());
+        for (UserInfo  userInfo : userInfoBySearch)
+        {
+            if (smembers.contains(userInfo.getUid().toString()))
+                userInfo.setIsFollowing(true);
+        }
         PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(userInfoBySearch,3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
