@@ -47,6 +47,9 @@ public class MomentService {
     @Autowired
     UserInfoMapper userInfoMapper;
 
+    @Autowired
+    StarMapper starMapper;
+
     /**
      * @param multiPartFiles 待检查图片
      * @return 如果检查没问题返回Result.success()，否则返回对应的错误(如：ResultCode.EXCEED_MAX_PIC_SIZE)
@@ -283,6 +286,37 @@ public class MomentService {
         }
     }
 
+    /**
+     * @param momentId  要收藏的动态ID
+     * @param starUid 执行收藏操作的用户ID
+     * @return Result
+     */
+    public Result star(Integer momentId, Integer starUid) {
+        Moment moment = momentMapper.getOneMomentByMomentId(momentId);
+        if (moment != null) {//被收藏的动态需要存在
+            User user = userMapper.getUserByUid(starUid);
+            if (user != null) {//执行收藏的用户需要存在
+                Star star = new Star();
+                star.setMomentId(momentId);
+                star.setMomentUid(moment.getUid());
+                star.setStarUid(starUid);
+                //设置收藏时间为当前时间
+                star.setStarTime(new Timestamp(System.currentTimeMillis()));
+                starMapper.saveStar(star);
+
+                UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
+                userInfo.setStarCount(userInfo.getStarCount() + 1);
+                userInfoMapper.updateUserInfo(userInfo);
+                return Result.success();
+            } else {
+                return Result.failure(ResultCode.NONEXISTENT_UID);
+            }
+
+        } else {
+            return Result.failure(ResultCode.NONEXISTENT_MID);
+        }
+    }
+
 
     public Result searchUserInfo(Integer uid, Page page, String str) {
 
@@ -315,4 +349,6 @@ public class MomentService {
 
         return result;
     }
+
+
 }

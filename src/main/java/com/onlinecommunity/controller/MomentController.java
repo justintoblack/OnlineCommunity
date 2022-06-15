@@ -137,6 +137,12 @@ public class MomentController {
 
     }
 
+    @GetMapping("/star_moment")
+    public Result star(Integer mid, Integer suid) {
+        return momentService.star(mid, suid);
+
+    }
+
     @GetMapping("/search_userInfo")
     public Result searchUserInfo(@RequestParam("uid") Integer uid, Page page, String str){
 

@@ -11,6 +11,15 @@ public class Star {
     private Integer momentId;
     private Integer starUid;
     private Timestamp starTime;
+    private Integer momentUid;
+
+    public Integer getMomentUid() {
+        return momentUid;
+    }
+
+    public void setMomentUid(Integer momentUid) {
+        this.momentUid = momentUid;
+    }
 
     public Integer getStarId() {
         return starId;
@@ -51,6 +60,8 @@ public class Star {
                 ", momentId=" + momentId +
                 ", starUid=" + starUid +
                 ", starTime=" + starTime +
+                ", momentUid=" + momentUid +
                 '}';
     }
+
 }

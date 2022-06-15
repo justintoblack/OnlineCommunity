@@ -90,6 +90,7 @@ CREATE TABLE IF NOT EXISTS `star`
     `star_id`   INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `moment_id` INT UNSIGNED NOT NULL,
     `star_uid`  INT UNSIGNED NOT NULL,
+    `moment_uid`   INT UNSIGNED  NOT NULL,
     `star_time` DATETIME     NOT NULL DEFAULT NOW()
 ) ENGINE = InnoDB;
 ALTER TABLE `star`
