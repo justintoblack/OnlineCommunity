@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper
 public interface UserInfoMapper {
 
-    List<UserInfo> getAllUserInfo();
+    List<UserInfo> getAllUserInfo(@Param("uid") Integer uid);
 
     UserInfo getUserInfoByUid(Integer uid);
 

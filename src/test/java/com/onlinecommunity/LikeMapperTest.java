@@ -45,6 +45,6 @@ public class LikeMapperTest {
     public void testLikeService(){
         Integer testUid = 3;
         Integer testMomentId = 16;
-        System.out.println(momentService.like(testMomentId, testUid));
+        System.out.println(momentService.likeMoment(testMomentId, testUid));
     }
 }

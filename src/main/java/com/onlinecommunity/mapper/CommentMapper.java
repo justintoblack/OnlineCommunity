@@ -10,8 +10,8 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
 
-    @Select("select * from online_community.comment where comment_uid = #{commentUid}")
-    List<Comment> getAllCommentsByUid(Integer commentUid);
+    @Select("select * from online_community.comment where moment_id = #{momentId}")
+    List<Comment> getAllCommentsByMid(Integer momentId);
 
     @Select("select * from online_community.comment where comment_id = #{commentId}")
     Comment getOneCommentByCommentId(Integer commentId);

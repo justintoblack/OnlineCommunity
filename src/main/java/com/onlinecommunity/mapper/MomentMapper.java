@@ -35,6 +35,8 @@ public interface MomentMapper {
 
     Integer saveMoment(@Param("moment") Moment moment);
 
+    Integer updateMoment(@Param("moment") Moment moment);
+
     Integer deleteMomentByMomentId(Integer momentId);
 
     Integer getActiveMomentCountByUid(Integer uid);

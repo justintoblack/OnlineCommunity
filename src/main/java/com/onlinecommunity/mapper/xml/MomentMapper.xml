@@ -42,6 +42,16 @@
                 #{moment.likeCount}, #{moment.commentCount}, #{moment.repostCount})
     </insert>
 
+    <update id="updateMoment" parameterType="com.onlinecommunity.pojo.Moment" >
+        update online_community.moment
+        <set>
+            uid = #{moment.uid}, content = #{moment.content}, moment_time = #{moment.momentTime}, is_active = #{moment.isActive},
+            deleted_at = #{moment.deletedAt}, picture_count = #{moment.pictureCount},
+            like_count = #{moment.likeCount}, comment_count = #{moment.commentCount}, repost_count = #{moment.repostCount}
+        </set>
+        where moment_id = #{moment.momentId}
+    </update>
+
     <delete id="deleteMomentByMomentId" parameterType="Integer">
         delete
         from online_community.moment

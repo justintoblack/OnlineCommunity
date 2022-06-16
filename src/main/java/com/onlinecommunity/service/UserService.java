@@ -92,7 +92,11 @@ public class UserService {
     }
 
     public Result setPassWord(User user){
-        if ("".equals(user.getPassword())) {
+        if ("".equals(user.getUsername())) {
+            return Result.failure(ResultCode.NULL_USERNAME);
+        }
+        if ("".equals((user.getPassword())))
+        {
             return Result.failure(ResultCode.NULL_USERNAME);
         }
         userMapper.setPassword(user);
@@ -152,27 +156,44 @@ public class UserService {
         UserInfo userInfo = userInfoMapper.getUserInfoByUid(uid);
         log.info(String.valueOf(userInfo));
         log.info(String.valueOf(urlList));
+        if (userInfo == null) return Result.failure(ResultCode.NONEXISTENT_UID);
+
         if (urlList != null) {
             log.info(String.valueOf(urlList.get(0)));
             userInfo.setAvatarUrl(urlList.get(0));
             userInfoMapper.updateUserInfo(userInfo);
-        }
-        return Result.success();
+            return Result.success();
+        } else return Result.failure(ResultCode.EMPTY_UPLOAD_FILE);
+
     }
 
-    public Result getAllUserInfo(Page page) {
+    public Result getAllUserInfo(Page page, Integer uid) {
 
         PageHelper.startPage(page.getCurrentPage(),10);
-        List<UserInfo> allUserInfo = userInfoMapper.getAllUserInfo();
-        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allUserInfo,3);
-        log.info(String.valueOf(pageInfo));
-        Result result = Result.success();
-        result.setData(pageInfo);
-        return result;
+        List<UserInfo> allUserInfo = userInfoMapper.getAllUserInfo(uid);
+        if (allUserInfo != null) {
+            Jedis jedis = new Jedis("127.0.0.1", 6379);
+            Set<String> smembers = jedis.smembers(uid.toString());
+            for (UserInfo  userInfo : allUserInfo)
+            {
+                if (smembers.contains(userInfo.getUid().toString()))
+                    userInfo.setIsFollowing(true);
+            }
+            PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allUserInfo, 3);
+            log.info(String.valueOf(pageInfo));
+            Result result = Result.success();
+            result.setData(pageInfo);
+            return result;
+        } else
+            return Result.failure(ResultCode.NONEXISTENT_UID);
 
     }
 
     public Result addFollowing(Integer uid, Integer followingUid) {
+
+        User user = userMapper.getUserByUid(uid);
+        User followingUser = userMapper.getUserByUid(followingUid);
+        if ((user == null) || (followingUser == null)) return Result.failure(ResultCode.NONEXISTENT_UID);
 
         Integer integer = followingMapper.saveFollowing(uid, followingUid);
         if (integer <= 0) return Result.failure(ResultCode.WRONG_ADDFOLLOWING);
@@ -193,6 +214,10 @@ public class UserService {
 
     public Result deleteFollowing(Integer uid, Integer followingUid) {
 
+        User user = userMapper.getUserByUid(uid);
+        User followingUser = userMapper.getUserByUid(followingUid);
+        if ((user == null) || (followingUser == null)) return Result.failure(ResultCode.NONEXISTENT_UID);
+
         Integer integer = followingMapper.deleteFollowing(uid, followingUid);
         if (integer <= 0) return Result.failure(ResultCode.WRONG_DELETEFOLLOWING);
 
@@ -207,17 +232,20 @@ public class UserService {
         userInfoMapper.updateUserInfo(uuserInfo);
         userInfoMapper.updateUserInfo(fuserInfo);
 
-        userInfoMapper.updateUserInfo(uuserInfo);
-        userInfoMapper.updateUserInfo(fuserInfo);
+
         return  Result.success();
 
     }
 
     public Result getAllFollowingByUid(Page page, Integer uid) {
 
+        User userByUid = userMapper.getUserByUid(uid);
+
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
+
         PageHelper.startPage(page.getCurrentPage(),10);
         List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
-        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowingByUid,3);
+        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowingByUid, 3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
         result.setData(pageInfo);
@@ -227,9 +255,13 @@ public class UserService {
 
     public Result getAllFollowersByUid(Page page, Integer uid) {
 
+        User userByUid = userMapper.getUserByUid(uid);
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
+
         PageHelper.startPage(page.getCurrentPage(),10);
         List<UserInfo> allFollowersByUid = followingMapper.getAllFollowersByUid(uid);
-        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowersByUid,3);
+
+        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowersByUid, 3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
         result.setData(pageInfo);

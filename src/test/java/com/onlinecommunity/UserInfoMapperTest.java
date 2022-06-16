@@ -34,7 +34,7 @@ public class UserInfoMapperTest {
     @Test
     public void testListAll(){
         PageHelper.startPage(2,2);
-        List<UserInfo> users = userInfoMapper.getAllUserInfo();
+        List<UserInfo> users = userInfoMapper.getAllUserInfo(1);
         PageInfo<UserInfo> pageInfo=new PageInfo<UserInfo>(users,3);
         System.out.println(pageInfo);
 

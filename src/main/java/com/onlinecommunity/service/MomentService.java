@@ -193,7 +193,7 @@ public class MomentService {
      * @param likeUid  执行点赞操作的用户ID
      * @return Result
      */
-    public Result like(Integer momentId, Integer likeUid) {
+    public Result likeMoment(Integer momentId, Integer likeUid) {
         Moment moment = momentMapper.getOneMomentByMomentId(momentId);
         if (moment != null) {//要点赞的动态需要存在
             User user = userMapper.getUserByUid(likeUid);
@@ -212,6 +212,9 @@ public class MomentService {
                     likeMapper.saveLike(like);
                     log.info("successfully saved.");
 
+                    moment.setLikeCount(moment.getLikeCount() + 1);
+                    momentMapper.updateMoment(moment);
+
                     UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
                     userInfo.setLikeCount(userInfo.getLikeCount() + 1);
                     userInfoMapper.updateUserInfo(userInfo);
@@ -227,6 +230,18 @@ public class MomentService {
         } else {
             return Result.failure(ResultCode.NONEXISTENT_MID);
         }
+    }
+
+    public Result likeComment(Integer cid) {
+
+        Comment oneCommentByCommentId = commentMapper.getOneCommentByCommentId(cid);
+
+        if (oneCommentByCommentId == null) return Result.failure(ResultCode.NONEXISTENT_CID);
+
+        oneCommentByCommentId.setLikeCount(oneCommentByCommentId.getLikeCount() + 1);
+        commentMapper.updateComment(oneCommentByCommentId);
+
+        return Result.success();
     }
 
 
@@ -249,6 +264,10 @@ public class MomentService {
                 //设置评论时间为当前时间
                 comment.setCommentTime(new Timestamp(System.currentTimeMillis()));
                 commentMapper.comment(comment);
+
+                moment.setCommentCount(moment.getCommentCount() + 1);
+                momentMapper.updateMoment(moment);
+
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.NONEXISTENT_UID);
@@ -276,6 +295,10 @@ public class MomentService {
                 //设置转发时间为当前时间
                 repost.setRepostTime(new Timestamp(System.currentTimeMillis()));
                 repostMapper.saveRepost(repost);
+
+                moment.setRepostCount(moment.getRepostCount() + 1);
+                momentMapper.updateMoment(moment);
+
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.NONEXISTENT_UID);
@@ -320,6 +343,9 @@ public class MomentService {
 
     public Result searchUserInfo(Integer uid, Page page, String str) {
 
+        User userByUid = userMapper.getUserByUid(uid);
+
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
         PageHelper.startPage(page.getCurrentPage(),10);
         List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(uid,str);
@@ -352,6 +378,11 @@ public class MomentService {
 
 
     public Result getLikeList(Page page, Integer uid) {
+
+        User userByUid = userMapper.getUserByUid(uid);
+
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
+
         PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> allLikesByUid = likeMapper.getAllLikesByUid(uid);
         PageInfo<Moment> pageInfo = new PageInfo<>(allLikesByUid, 3);
@@ -361,6 +392,11 @@ public class MomentService {
     }
 
     public Result getStarList(Page page, Integer uid) {
+
+        User userByUid = userMapper.getUserByUid(uid);
+
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
+
         PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> allStarsByUid = starMapper.getAllStarsByUid(uid);
         PageInfo<Moment> pageInfo = new PageInfo<>(allStarsByUid, 3);
@@ -370,6 +406,11 @@ public class MomentService {
     }
 
     public Result getRepostList(Page page, Integer uid) {
+
+        User userByUid = userMapper.getUserByUid(uid);
+
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
+
         PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> allRepostsByUid = repostMapper.getAllRepostsByUid(uid);
         PageInfo<Moment> pageInfo = new PageInfo<>(allRepostsByUid, 3);
@@ -377,4 +418,20 @@ public class MomentService {
         result.setData(pageInfo);
         return result;
     }
+
+    public Result getCommentList(Page page, Integer mid) {
+
+        Moment oneMomentByMomentId = momentMapper.getOneMomentByMomentId(mid);
+
+        if (oneMomentByMomentId == null) return Result.failure(ResultCode.NONEXISTENT_MID);
+
+        PageHelper.startPage(page.getCurrentPage(),10);
+        List<Comment> allCommentsByMid = commentMapper.getAllCommentsByMid(mid);
+        PageInfo<Comment> pageInfo = new PageInfo<>(allCommentsByMid, 3);
+        Result result = Result.success();
+        result.setData(pageInfo);
+        return result;
+    }
+
+
 }

@@ -114,14 +114,27 @@ public class MomentController {
      * @return 点赞结果
      */
     @GetMapping("/like_moment")
-    public Result like(Integer mid, Integer luid) {
+    public Result likeMoment(Integer mid, Integer luid) {
         if (mid == null) {
             return Result.failure(ResultCode.NULL_MID);
         }
         if (luid == null) {
             return Result.failure(ResultCode.NULL_UID);
         }
-        return momentService.like(mid, luid);
+        return momentService.likeMoment(mid, luid);
+    }
+
+    /**
+     * @param cid  要点赞的comment id
+     * @return 点赞结果
+     */
+    @GetMapping("/like_comment")
+    public Result likeComment(Integer cid) {
+        if (cid == null) {
+            return Result.failure(ResultCode.NULL_CID);
+        }
+
+        return momentService.likeComment(cid);
     }
 
 
@@ -133,12 +146,24 @@ public class MomentController {
 
     @GetMapping("/repost_moment")
     public Result repost(Integer mid, Integer ruid) {
+        if (mid == null) {
+            return Result.failure(ResultCode.NULL_MID);
+        }
+        if (ruid == null) {
+            return Result.failure(ResultCode.NULL_UID);
+        }
         return momentService.repost(mid, ruid);
 
     }
 
     @GetMapping("/star_moment")
     public Result star(Integer mid, Integer suid) {
+        if (mid == null) {
+            return Result.failure(ResultCode.NULL_MID);
+        }
+        if (suid == null) {
+            return Result.failure(ResultCode.NULL_UID);
+        }
         return momentService.star(mid, suid);
 
     }
@@ -158,6 +183,18 @@ public class MomentController {
     /**
      *
      * @param page 需要传入参数：请求页面页数
+     * @param mid   微博ID
+     * @return  Result，微博评论的列表
+     */
+    @GetMapping("/get_comment_list")
+    public Result getCommentList(Page page, @RequestParam("mid")Integer mid){
+
+        return momentService.getCommentList(page, mid);
+    }
+
+    /**
+     *
+     * @param page 需要传入参数：请求页面页数
      * @param uid   用户ID
      * @return  Result，用户收藏的列表
      */
@@ -171,7 +208,7 @@ public class MomentController {
      *
      * @param page 需要传入参数：请求页面页数
      * @param uid   用户ID
-     * @return  Result，用户收藏的列表
+     * @return  Result，用户转发的列表
      */
     @GetMapping("/get_repost_list")
     public Result getRepostList(Page page, @RequestParam("uid")Integer uid){

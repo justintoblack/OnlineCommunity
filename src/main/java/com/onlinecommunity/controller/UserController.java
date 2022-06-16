@@ -5,7 +5,6 @@ import com.onlinecommunity.pojo.User;
 import com.onlinecommunity.pojo.UserInfo;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
-import com.onlinecommunity.service.MomentService;
 import com.onlinecommunity.service.UserService;
 import com.onlinecommunity.util.MyEnvBeanUtil;
 import com.onlinecommunity.util.UploadUtil;
@@ -51,9 +50,9 @@ public class UserController {
      * 获取全部用户基本信息
      */
     @GetMapping("/get_all_info")
-    public Result getAllUserInfo(Page page){
+    public Result getAllUserInfo(Page page,@RequestParam("uid") Integer uid){
 
-        return userService.getAllUserInfo(page);
+        return userService.getAllUserInfo(page, uid);
     }
 
     /**
@@ -112,7 +111,7 @@ public class UserController {
      * @return  Result，结果
      */
     @PostMapping("/follow")
-    public Result addFollowing(@RequestParam("uid") Integer uid, @RequestParam("followingUserInfo") UserInfo followUserInfo){
+    public Result addFollowing(@RequestParam("uid") Integer uid, @RequestBody UserInfo followUserInfo){
 
         if (followUserInfo.getIsFollowing() == false)
 

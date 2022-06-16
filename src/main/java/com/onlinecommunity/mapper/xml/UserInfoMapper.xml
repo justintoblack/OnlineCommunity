@@ -7,7 +7,7 @@
 
     <select id="getAllUserInfo" resultType="com.onlinecommunity.pojo.UserInfo">
         select *
-        from online_community.user_info
+        from online_community.user_info where uid != #{uid}
     </select>
 
     <select id="getUserInfoByUid" parameterType="Integer" resultType="com.onlinecommunity.pojo.UserInfo">
