@@ -27,10 +27,10 @@ public interface StarMapper {
     @Options(useGeneratedKeys = true, keyProperty = "starId")
     Integer saveStar(@Param("star") Star star);
 
-    @Delete("delete from online_community.star where star_id = #{star.starId}  ")
-    Integer deleteStarByStarId(@Param("star") Star star);
+    @Delete("delete from online_community.star where star_id = #{starId}  ")
+    Integer deleteStarByStarId(Integer starId);
 
-    @Select("select star_id , moment_id , star_uid , moment_uid , star_time " +
+    @Select("select * " +
             "  from online_community.star where star_uid=#{starUid} and moment_id = #{momentId}")
     Star getOneStarByStarUidMomentId(@Param("starUid") Integer starUid, @Param("momentId") Integer momentId);
 }

@@ -2,7 +2,6 @@ package com.onlinecommunity.mapper;
 
 
 import com.onlinecommunity.pojo.Comment;
-import com.onlinecommunity.pojo.Like;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -15,6 +14,10 @@ public interface CommentMapper {
 
     @Select("select * from online_community.comment where comment_id = #{commentId}")
     Comment getOneCommentByCommentId(Integer commentId);
+
+    @Select("select * " +
+            "  from online_community.comment where comment_uid=#{commentUid} and moment_id = #{momentId}")
+    Comment getOneCommentByCommentUidMomentId(@Param("commentUid") Integer commentUid, @Param("momentId") Integer momentId);
 
     @Insert("insert into online_community.comment (comment_id, content, moment_id, comment_uid, moment_uid, like_count, comment_time) " +
             "values(#{comment.commentId}, #{comment.content},#{comment.momentId},#{comment.commentUid}, #{comment.momentUid}, #{comment.likeCount}, #{comment.commentTime})")

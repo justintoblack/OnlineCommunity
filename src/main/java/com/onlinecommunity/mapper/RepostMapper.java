@@ -1,6 +1,7 @@
 package com.onlinecommunity.mapper;
 
 
+
 import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Repost;
 import org.apache.ibatis.annotations.*;
@@ -17,6 +18,10 @@ public interface RepostMapper {
 
     @Select("select * from online_community.repost where repost_id=${repostId}")
     Repost getOneRepostByRepostId(Integer repostId);
+
+    @Select("select * " +
+            "  from online_community.repost where repost_uid=#{repostUid} and moment_id = #{momentId}")
+    Repost getOneRepostByRepostUidMomentId(@Param("repostUid") Integer repostUid, @Param("momentId") Integer momentId);
 
     @Insert("insert into online_community.repost (repost_id, moment_id, repost_uid, moment_uid, repost_time) " +
             "values (#{repost.repostId}, #{repost.momentId}, #{repost.repostUid}, #{repost.momentUid}, #{repost.repostTime})")

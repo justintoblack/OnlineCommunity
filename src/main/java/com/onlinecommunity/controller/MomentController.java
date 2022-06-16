@@ -103,10 +103,58 @@ public class MomentController {
      * @return 删除结果
      */
     @PostMapping("/delete_moment")
-    public Result delete(Integer mid, Integer duid) {
-        return momentService.delete(mid, duid);
+    public Result deleteMoment(Integer mid, Integer duid) {
+        return momentService.deleteMoment(mid, duid);
     }
 
+    /**
+     * @param lid  要删除的likeMoment id
+     * @param duid 执行删除操作的用户id
+     * @return 删除结果
+     */
+    @PostMapping("/delete_like_moment")
+    public Result deleteLikeMoment(Integer lid, Integer duid) {
+        return momentService.deleteLikeMoment(lid, duid);
+    }
+
+    /**
+     * @param cid  要删除的likeComment id
+     * @return 删除结果
+     */
+    @PostMapping("/delete_like_comment")
+    public Result deleteLikeComment(Integer cid) {
+        return momentService.deleteLikeComment(cid);
+    }
+
+    /**
+     * @param rid  要删除的repostMoment id
+     * @param duid 执行删除操作的用户id
+     * @return 删除结果
+     */
+    @PostMapping("/delete_repost_moment")
+    public Result deleteRepostMoment(Integer rid, Integer duid) {
+        return momentService.deleteRepostMoment(rid, duid);
+    }
+
+    /**
+     * @param sid  要删除的starMoment id
+     * @param duid 执行删除操作的用户id
+     * @return 删除结果
+     */
+    @PostMapping("/delete_star_moment")
+    public Result deleteStarMoment(Integer sid, Integer duid) {
+        return momentService.deleteStarMoment(sid, duid);
+    }
+
+    /**
+     * @param cid  要删除的commentMoment id
+     * @param duid 执行删除操作的用户id
+     * @return 删除结果
+     */
+    @PostMapping("/delete_comment_moment")
+    public Result deleteCommentMoment(Integer cid, Integer duid) {
+        return momentService.deleteCommentMoment(cid, duid);
+    }
 
     /**
      * @param mid  要点赞的moment id

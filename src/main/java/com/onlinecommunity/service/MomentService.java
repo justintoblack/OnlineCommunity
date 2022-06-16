@@ -163,29 +163,7 @@ public class MomentService {
         return usernameList;
     }
 
-    /**
-     * @param momentId  要删除的动态ID
-     * @param deleteUid 执行删除操作的用户ID
-     * @return Result
-     */
-    public Result delete(Integer momentId, Integer deleteUid) {
-        Moment moment = momentMapper.getOneMomentByMomentId(momentId);
-        if (moment != null) {
-            if (moment.getUid().equals(deleteUid)) {
-                momentMapper.deleteMomentByMomentId(momentId);
 
-                UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
-                userInfo.setMomentCount(userInfo.getMomentCount() - 1);
-                userInfoMapper.updateUserInfo(userInfo);
-                return Result.success();
-            } else {
-                return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_MOMENT);
-            }
-        } else {
-            return Result.failure(ResultCode.NONEXISTENT_MID);
-        }
-
-    }
 
 
     /**
@@ -319,18 +297,23 @@ public class MomentService {
         if (moment != null) {//被收藏的动态需要存在
             User user = userMapper.getUserByUid(starUid);
             if (user != null) {//执行收藏的用户需要存在
-                Star star = new Star();
-                star.setMomentId(momentId);
-                star.setMomentUid(moment.getUid());
-                star.setStarUid(starUid);
-                //设置收藏时间为当前时间
-                star.setStarTime(new Timestamp(System.currentTimeMillis()));
-                starMapper.saveStar(star);
+                Star star = starMapper.getOneStarByStarUidMomentId(starUid, momentId);
+                if (star == null) {
+                    star = new Star();
+                    star.setMomentId(momentId);
+                    star.setMomentUid(moment.getUid());
+                    star.setStarUid(starUid);
+                    //设置收藏时间为当前时间
+                    star.setStarTime(new Timestamp(System.currentTimeMillis()));
+                    starMapper.saveStar(star);
 
-                UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
-                userInfo.setStarCount(userInfo.getStarCount() + 1);
-                userInfoMapper.updateUserInfo(userInfo);
-                return Result.success();
+                    UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
+                    userInfo.setStarCount(userInfo.getStarCount() + 1);
+                    userInfoMapper.updateUserInfo(userInfo);
+                    return Result.success();
+                } else {
+                    return  Result.failure(ResultCode.REPEATED_STAR);
+                }
             } else {
                 return Result.failure(ResultCode.NONEXISTENT_UID);
             }
@@ -433,5 +416,129 @@ public class MomentService {
         return result;
     }
 
+    /**
+     * @param momentId  要删除的动态ID
+     * @param deleteUid 执行删除操作的用户ID
+     * @return Result
+     */
+    public Result deleteMoment(Integer momentId, Integer deleteUid) {
+        Moment moment = momentMapper.getOneMomentByMomentId(momentId);
+        if (moment != null) {
+            if (moment.getUid().equals(deleteUid)) {
+                momentMapper.deleteMomentByMomentId(momentId);
 
+                UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
+                userInfo.setMomentCount(userInfo.getMomentCount() - 1);
+                userInfoMapper.updateUserInfo(userInfo);
+                return Result.success();
+            } else {
+                return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_MOMENT);
+            }
+        } else {
+            return Result.failure(ResultCode.NONEXISTENT_MID);
+        }
+
+    }
+
+    public Result deleteLikeMoment(Integer lid, Integer deleteUid) {
+
+        Like like = likeMapper.getOneLikeByLikeId(lid);
+        if (like != null) {
+            if (like.getLikeUid().equals(deleteUid)) {
+                likeMapper.deleteLikeByLikeId(lid);
+
+                Moment moment = momentMapper.getOneMomentByMomentId(like.getMomentId());
+                if (moment != null) {
+                    moment.setLikeCount(moment.getLikeCount() - 1);
+                    momentMapper.updateMoment(moment);
+                } else return  Result.failure(ResultCode.NULL_MID);
+
+                UserInfo userInfo = userInfoMapper.getUserInfoByUid(like.getLikeUid());
+                userInfo.setLikeCount(userInfo.getLikeCount() - 1);
+                userInfoMapper.updateUserInfo(userInfo);
+                return Result.success();
+            } else {
+                return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_LIKEMOMENT);
+            }
+        } else {
+            return Result.failure(ResultCode.NONEXISTENT_LID);
+        }
+
+    }
+
+    public Result deleteLikeComment(Integer cid) {
+        Comment oneCommentByCommentId = commentMapper.getOneCommentByCommentId(cid);
+
+        if (oneCommentByCommentId == null) return Result.failure(ResultCode.NONEXISTENT_CID);
+
+        oneCommentByCommentId.setLikeCount(oneCommentByCommentId.getLikeCount() - 1);
+        commentMapper.updateComment(oneCommentByCommentId);
+
+        return Result.success();
+    }
+
+    public Result deleteRepostMoment(Integer rid, Integer deleteUid) {
+
+        Repost repost = repostMapper.getOneRepostByRepostId(rid);
+        if (repost != null) {
+            if (repost.getRepostUid().equals(deleteUid)) {
+
+                repostMapper.deleteRepostByRepostId(rid);
+
+                Moment moment = momentMapper.getOneMomentByMomentId(repost.getMomentId());
+                if (moment != null) {
+                    moment.setRepostCount(moment.getRepostCount() - 1);
+                    momentMapper.updateMoment(moment);
+                } else return Result.failure(ResultCode.NULL_MID);
+
+                return Result.success();
+            } else {
+                return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_REPOSTMOMENT);
+            }
+        } else {
+            return Result.failure(ResultCode.NONEXISTENT_RID);
+        }
+    }
+
+    public Result deleteStarMoment(Integer sid, Integer deleteUid) {
+
+        Star star = starMapper.getOneStarByStarId(sid);
+        if (star != null) {
+            if (star.getStarUid().equals(deleteUid)) {
+                starMapper.deleteStarByStarId(sid);
+
+                UserInfo userInfo = userInfoMapper.getUserInfoByUid(star.getStarUid());
+                userInfo.setStarCount(userInfo.getStarCount() - 1);
+                userInfoMapper.updateUserInfo(userInfo);
+                return Result.success();
+            } else {
+                return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_STARMOMENT);
+            }
+        } else {
+            return Result.failure(ResultCode.NONEXISTENT_SID);
+        }
+    }
+
+    public Result deleteCommentMoment(Integer cid, Integer deleteUid) {
+
+        Comment comment = commentMapper.getOneCommentByCommentId(cid);
+        if (comment != null) {
+            if (comment.getCommentUid().equals(deleteUid)) {
+
+                commentMapper.deleteCommentByCid(cid);
+
+                Moment moment = momentMapper.getOneMomentByMomentId(comment.getMomentId());
+                if (moment != null) {
+                    moment.setCommentCount(moment.getCommentCount() - 1);
+                    momentMapper.updateMoment(moment);
+                } else return Result.failure(ResultCode.NULL_MID);
+
+                return Result.success();
+            } else {
+                return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_COMMENTMOMENT);
+            }
+        } else {
+            return Result.failure(ResultCode.NONEXISTENT_CID);
+        }
+    }
 }

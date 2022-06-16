@@ -24,8 +24,8 @@ public interface LikeMapper {
     @Options(useGeneratedKeys = true, keyProperty = "likeId")
     Integer saveLike(@Param("like") Like like);
 
-    @Delete("delete from online_community.like where like_id = #{like.likeId}  ")
-    Integer deleteLikeByLikeId(@Param("like") Like like);
+    @Delete("delete from online_community.like where like_id = #{likeId}  ")
+    Integer deleteLikeByLikeId(Integer likeId);
 
     @Select("select like_id as likeId, moment_id as momentId, like_uid as likeUid, moment_uid as momentUid, like_time as likeTime " +
             "  from online_community.like where like_uid=#{likeUid} and moment_id = #{momentId}")
