@@ -26,6 +26,7 @@ public class MomentController {
 
     /**
      * @param moment 请求体中的uid, content封装到moment中
+     * @param multiPartFiles 上传的图片 需要上传参数(pictures)
      * @return 结果
      */
     @PostMapping("/post_moment")
@@ -97,7 +98,7 @@ public class MomentController {
 
     /**
      * @param mid  要删除的moment id
-     * @param duid 执行删除操作的用户id
+     * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_moment")
@@ -107,7 +108,7 @@ public class MomentController {
 
     /**
      * @param lid  要删除的likeMoment id
-     * @param duid 执行删除操作的用户id
+     * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_like_moment")
@@ -126,7 +127,7 @@ public class MomentController {
 
     /**
      * @param rid  要删除的repostMoment id
-     * @param duid 执行删除操作的用户id
+     * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_repost_moment")
@@ -136,7 +137,7 @@ public class MomentController {
 
     /**
      * @param sid  要删除的starMoment id
-     * @param duid 执行删除操作的用户id
+     * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_star_moment")
@@ -146,7 +147,7 @@ public class MomentController {
 
     /**
      * @param cid  要删除的commentMoment id
-     * @param duid 执行删除操作的用户id
+     * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_comment_moment")
@@ -156,7 +157,7 @@ public class MomentController {
 
     /**
      * @param mid  要点赞的moment id
-     * @param luid 执行点赞操作的用户id
+     * @param luid 执行点赞操作的用户id 需要传入当前用户ID uid
      * @return 点赞结果
      */
     @GetMapping("/like_moment")
@@ -183,13 +184,22 @@ public class MomentController {
         return momentService.likeComment(cid);
     }
 
-
+    /**
+     * @param mid 评论事件id
+     * @param cuid  评论的人的id 需要传入当前用户ID uid
+     * @param ccontent 评论内容
+     * @return 结果
+     */
     @PostMapping("/comment_moment")
     public Result comment(Integer mid, @RequestParam("uid") Integer cuid, String ccontent) {
         return momentService.comment(mid, cuid, ccontent);
     }
 
-
+    /**
+     * @param mid 转发事件id
+     * @param ruid  转发的人的id 需要传入当前用户ID uid
+     * @return 结果
+     */
     @GetMapping("/repost_moment")
     public Result repost(Integer mid, @RequestParam("uid") Integer ruid) {
         if (mid == null) {
@@ -202,6 +212,11 @@ public class MomentController {
 
     }
 
+    /**
+     * @param mid 收藏事件id
+     * @param suid  收藏的人的id 需要传入当前用户ID uid
+     * @return 结果
+     */
     @GetMapping("/star_moment")
     public Result star(Integer mid, @RequestParam("uid") Integer suid) {
         if (mid == null) {
@@ -216,8 +231,8 @@ public class MomentController {
 
     /**
      *
-     * @param page 需要传入参数：请求页面页数
-     * @param uid   用户ID
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param uid   用户ID 需要传入当前用户ID uid
      * @return  Result，用户喜爱的列表
      */
     @GetMapping("/get_like_list")
@@ -228,8 +243,8 @@ public class MomentController {
 
     /**
      *
-     * @param page 需要传入参数：请求页面页数
-     * @param mid   微博ID
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param mid   评论的微博ID
      * @return  Result，微博评论的列表
      */
     @GetMapping("/get_comment_list")
@@ -240,8 +255,8 @@ public class MomentController {
 
     /**
      *
-     * @param page 需要传入参数：请求页面页数
-     * @param uid   用户ID
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param uid   用户ID 需要传入当前用户ID uid
      * @return  Result，用户收藏的列表
      */
     @GetMapping("/get_star_list")
@@ -253,7 +268,7 @@ public class MomentController {
     /**
      *
      * @param page 需要传入参数：请求页面页数
-     * @param uid   用户ID
+     * @param uid   用户ID 需要传入当前用户ID uid
      * @return  Result，用户转发的列表
      */
     @GetMapping("/get_repost_list")
@@ -262,12 +277,23 @@ public class MomentController {
         return momentService.getRepostList(page, uid);
     }
 
+    /**
+     * @param uid 当前用户id 需要传入当前用户ID uid
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param str 根据信息查询用户内容
+     * @return 结果
+     */
     @GetMapping("/search_userInfo")
     public Result searchUserInfo(@RequestParam("uid") Integer uid, Page page, String str){
 
         return momentService.searchUserInfo(uid, page, str);
     }
 
+    /**
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param str 根据信息查询事件内容
+     * @return 结果
+     */
     @GetMapping("/search_moment")
     public Result searchMoment(Page page, String str){
 

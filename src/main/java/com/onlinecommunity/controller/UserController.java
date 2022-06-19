@@ -26,19 +26,27 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    /**
+     * 注册
+     * @param user 需要上传参数 (username用户名,password密码,phone电话,email邮箱)
+     */
     @PostMapping("/register")
     public Result register(@Validated User user) {
         return userService.register(user);
     }
 
+    /**
+     * 登录
+     * @param user 需要上传参数 (username用户名,password密码)
+     */
     @PostMapping("/login")
     public Result login(@Validated User user) {
         return userService.login(user);
 
 
     }
-    /**@param uid   当前登录用户ID
-     * @param infoUid   查看信息用户ID
+    /**@param uid   当前登录用户ID 需要传入当前用户ID uid
+     * @param infoUid   查看信息用户ID 需要传入查看的用户ID infoUid
      * 获取用户基本信息
      */
     @GetMapping("/get_self_info")
@@ -48,6 +56,8 @@ public class UserController {
 
     /**
      * 获取全部用户基本信息
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param uid 当前用户id 需要传入当前用户ID uid
      */
     @GetMapping("/get_all_info")
     public Result getAllUserInfo(Page page,@RequestParam("uid") Integer uid){
@@ -57,6 +67,8 @@ public class UserController {
 
     /**
      * 修改用户基本信息
+     * @param uid 当前用户id 需要传入当前用户ID uid
+     * @param userInfo 需要上传参数 (username用户名,realName真实名字,phone电话,email邮箱,birthday生日,about简介)
      */
     @PostMapping("/modify_self_info")
     public Result modifySelfInfo(@RequestParam("uid") Integer uid,@Validated UserInfo userInfo){
@@ -66,6 +78,8 @@ public class UserController {
 
     /**
      * 修改用户密码
+     * @param uid 当前用户id 需要传入当前用户ID uid
+     * @param password 更改的密码 需要传入当前用户密码 password
      */
     @PostMapping("/modify_password")
     public Result setPassWord(@RequestParam("uid") Integer uid, @RequestParam("password") String password){
@@ -75,6 +89,8 @@ public class UserController {
 
     /**
      * 修改用户头像
+     * @param uid 当前用户id 需要传入当前用户ID uid
+     * @param multiPartFiles 上传的图片 需要上传参数(pictures)
      */
     @PostMapping("/modify_avatarUrl")
     public Result setAvatarUrl(@RequestParam("uid") Integer uid, @RequestParam("pictures") MultipartFile[] multiPartFiles){
@@ -106,8 +122,8 @@ public class UserController {
 
     /**
      *
-     * @param uid   用户ID
-     * @param followUserInfo  关注或取关的用户信息
+     * @param uid   当前用户ID 需要传入当前用户ID uid
+     * @param followUserInfo  关注或取关的用户信息 需要传入参数(取关或关注的用户uid,isFollowing)
      * @return  Result，结果
      */
     @PostMapping("/follow")
@@ -122,9 +138,9 @@ public class UserController {
 
 
     /**
-     *
-     * @param uid   用户ID
-     * @return  Result，结果
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param uid   用户ID 需要传入当前用户ID uid
+     * @return  Result，当前用户的关注
      */
     @GetMapping("/get_followings_list")
     public Result getAllFollowingByUid(Page page, @RequestParam("uid") Integer uid){
@@ -133,9 +149,9 @@ public class UserController {
     }
 
     /**
-     *
-     * @param uid   用户ID
-     * @return  Result，结果
+     * @param page 需要传入参数：请求页面页数(currentPage)
+     * @param uid   用户ID 需要传入当前用户ID uid
+     * @return  Result，当前用户的粉丝
      */
     @GetMapping("/get_followers_list")
     public Result getAllFollowersByUid(Page page, @RequestParam("uid") Integer uid){
