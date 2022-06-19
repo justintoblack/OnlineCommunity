@@ -25,7 +25,7 @@ public class MomentController {
 
 
     /**
-     * @param moment 请求体中的uid, content封装到moment中
+     * @param moment 请求体中的uid, content封装到moment中 需要传入参数(发布者uid,微博内容content)
      * @param multiPartFiles 上传的图片 需要上传参数(pictures)
      * @return 结果
      */
@@ -72,7 +72,7 @@ public class MomentController {
     /**
      *
      * @param page 需要传入参数：上一页最后一条动态ID：lastId
-     * @param uid   用户ID
+     * @param uid   用户ID 需要传入参数 当前用户ID uid
      * @return  Result，用户自己的动态列表保存在Result里的data中
      */
     @GetMapping("/get_self_moment_list")
@@ -86,7 +86,7 @@ public class MomentController {
     /**
      *
      * @param page 需要传入参数：上一页最后一条动态ID：lastId
-     * @param uid   用户ID
+     * @param uid   用户ID 需要传入参数 当前用户ID uid
      * @return  Result，主页动态列表保存在Result里的data中
      */
     @GetMapping("/get_home_moment_list")
@@ -97,7 +97,7 @@ public class MomentController {
     }
 
     /**
-     * @param mid  要删除的moment id
+     * @param mid  要删除的moment id 需要传入参数 mid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
@@ -107,7 +107,7 @@ public class MomentController {
     }
 
     /**
-     * @param lid  要删除的likeMoment id
+     * @param lid  要删除的likeMoment id 需要传入参数 lid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
@@ -117,7 +117,7 @@ public class MomentController {
     }
 
     /**
-     * @param cid  要删除的likeComment id
+     * @param cid  要删除的likeComment id 需要传入参数 cid
      * @return 删除结果
      */
     @PostMapping("/delete_like_comment")
@@ -126,7 +126,7 @@ public class MomentController {
     }
 
     /**
-     * @param rid  要删除的repostMoment id
+     * @param rid  要删除的repostMoment id 需要传入参数 rid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
@@ -136,7 +136,7 @@ public class MomentController {
     }
 
     /**
-     * @param sid  要删除的starMoment id
+     * @param sid  要删除的starMoment id 需要传入参数 sid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
@@ -146,7 +146,7 @@ public class MomentController {
     }
 
     /**
-     * @param cid  要删除的commentMoment id
+     * @param cid  要删除的commentMoment id 需要传入参数 cid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
@@ -156,7 +156,7 @@ public class MomentController {
     }
 
     /**
-     * @param mid  要点赞的moment id
+     * @param mid  要点赞的moment id 需要传入参数 mid
      * @param luid 执行点赞操作的用户id 需要传入当前用户ID uid
      * @return 点赞结果
      */
@@ -172,7 +172,7 @@ public class MomentController {
     }
 
     /**
-     * @param cid  要点赞的comment id
+     * @param cid  要点赞的comment id 需要传入参数 cid
      * @return 点赞结果
      */
     @GetMapping("/like_comment")
@@ -185,9 +185,9 @@ public class MomentController {
     }
 
     /**
-     * @param mid 评论事件id
+     * @param mid 评论事件id 需要传入参数 mid
      * @param cuid  评论的人的id 需要传入当前用户ID uid
-     * @param ccontent 评论内容
+     * @param ccontent 评论内容 需要传入参数 ccontent
      * @return 结果
      */
     @PostMapping("/comment_moment")
@@ -196,7 +196,7 @@ public class MomentController {
     }
 
     /**
-     * @param mid 转发事件id
+     * @param mid 转发事件id 需要传入参数 mid
      * @param ruid  转发的人的id 需要传入当前用户ID uid
      * @return 结果
      */
@@ -213,7 +213,7 @@ public class MomentController {
     }
 
     /**
-     * @param mid 收藏事件id
+     * @param mid 收藏事件id 需要传入参数 mid
      * @param suid  收藏的人的id 需要传入当前用户ID uid
      * @return 结果
      */
@@ -244,7 +244,7 @@ public class MomentController {
     /**
      *
      * @param page 需要传入参数：请求页面页数(currentPage)
-     * @param mid   评论的微博ID
+     * @param mid   评论的微博ID 需要传入参数 mid
      * @return  Result，微博评论的列表
      */
     @GetMapping("/get_comment_list")
@@ -280,7 +280,7 @@ public class MomentController {
     /**
      * @param uid 当前用户id 需要传入当前用户ID uid
      * @param page 需要传入参数：请求页面页数(currentPage)
-     * @param str 根据信息查询用户内容
+     * @param str 根据信息查询用户内容 需要传入参数 查询内容
      * @return 结果
      */
     @GetMapping("/search_userInfo")
@@ -291,7 +291,7 @@ public class MomentController {
 
     /**
      * @param page 需要传入参数：请求页面页数(currentPage)
-     * @param str 根据信息查询事件内容
+     * @param str 根据信息查询事件内容 需要传入参数 查询内容
      * @return 结果
      */
     @GetMapping("/search_moment")
