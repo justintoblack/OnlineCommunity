@@ -3,11 +3,9 @@ package com.onlinecommunity.controller;
 
 import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Page;
-import com.onlinecommunity.pojo.UserInfo;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
 import com.onlinecommunity.service.MomentService;
-import com.onlinecommunity.util.UploadUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -103,7 +101,7 @@ public class MomentController {
      * @return 删除结果
      */
     @PostMapping("/delete_moment")
-    public Result deleteMoment(Integer mid, Integer duid) {
+    public Result deleteMoment(Integer mid, @RequestParam("uid") Integer duid) {
         return momentService.deleteMoment(mid, duid);
     }
 
@@ -113,7 +111,7 @@ public class MomentController {
      * @return 删除结果
      */
     @PostMapping("/delete_like_moment")
-    public Result deleteLikeMoment(Integer lid, Integer duid) {
+    public Result deleteLikeMoment(Integer lid, @RequestParam("uid") Integer duid) {
         return momentService.deleteLikeMoment(lid, duid);
     }
 
@@ -132,7 +130,7 @@ public class MomentController {
      * @return 删除结果
      */
     @PostMapping("/delete_repost_moment")
-    public Result deleteRepostMoment(Integer rid, Integer duid) {
+    public Result deleteRepostMoment(Integer rid, @RequestParam("uid") Integer duid) {
         return momentService.deleteRepostMoment(rid, duid);
     }
 
@@ -142,7 +140,7 @@ public class MomentController {
      * @return 删除结果
      */
     @PostMapping("/delete_star_moment")
-    public Result deleteStarMoment(Integer sid, Integer duid) {
+    public Result deleteStarMoment(Integer sid, @RequestParam("uid") Integer duid) {
         return momentService.deleteStarMoment(sid, duid);
     }
 
@@ -152,7 +150,7 @@ public class MomentController {
      * @return 删除结果
      */
     @PostMapping("/delete_comment_moment")
-    public Result deleteCommentMoment(Integer cid, Integer duid) {
+    public Result deleteCommentMoment(Integer cid, @RequestParam("uid") Integer duid) {
         return momentService.deleteCommentMoment(cid, duid);
     }
 
@@ -162,7 +160,7 @@ public class MomentController {
      * @return 点赞结果
      */
     @GetMapping("/like_moment")
-    public Result likeMoment(Integer mid, Integer luid) {
+    public Result likeMoment(Integer mid, @RequestParam("uid") Integer luid) {
         if (mid == null) {
             return Result.failure(ResultCode.NULL_MID);
         }
@@ -187,13 +185,13 @@ public class MomentController {
 
 
     @PostMapping("/comment_moment")
-    public Result comment(Integer mid, Integer cuid, String ccontent) {
+    public Result comment(Integer mid, @RequestParam("uid") Integer cuid, String ccontent) {
         return momentService.comment(mid, cuid, ccontent);
     }
 
 
     @GetMapping("/repost_moment")
-    public Result repost(Integer mid, Integer ruid) {
+    public Result repost(Integer mid, @RequestParam("uid") Integer ruid) {
         if (mid == null) {
             return Result.failure(ResultCode.NULL_MID);
         }
@@ -205,7 +203,7 @@ public class MomentController {
     }
 
     @GetMapping("/star_moment")
-    public Result star(Integer mid, Integer suid) {
+    public Result star(Integer mid, @RequestParam("uid") Integer suid) {
         if (mid == null) {
             return Result.failure(ResultCode.NULL_MID);
         }

@@ -14,7 +14,6 @@ import com.onlinecommunity.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
@@ -75,6 +74,11 @@ public class UserService {
             String existUserPwd = userMapper.getPasswordByUid(uid);
             if (existUserPwd.equals(user.getPassword())) {
                 String token = JwtUtil.sign(user.getUsername());
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("uid",uid.toString());
+                map.put("token",token);
+
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
                 List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
                 for (UserInfo userInfo : allFollowingByUid)
@@ -82,7 +86,9 @@ public class UserService {
                     jedis.sadd(uid.toString(),userInfo.getUid().toString());
                 }
                 jedis.close();
-                return Result.success(token);
+                Result result = Result.success();
+                result.setData(map);
+                return result;
             } else {
                 return Result.failure(ResultCode.WRONG_PASSWORD);
             }
@@ -91,15 +97,16 @@ public class UserService {
         }
     }
 
-    public Result setPassWord(User user){
-        if ("".equals(user.getUsername())) {
-            return Result.failure(ResultCode.NULL_USERNAME);
-        }
-        if ("".equals((user.getPassword())))
+    public Result setPassWord(Integer uid, String password){
+        User userByUid = userMapper.getUserByUid(uid);
+        if (userByUid == null)
+            return Result.failure(ResultCode.NULL_UID);
+        if ("".equals(password))
         {
-            return Result.failure(ResultCode.NULL_USERNAME);
+            return Result.failure(ResultCode.NULL_PASSWORD);
         }
-        userMapper.setPassword(user);
+        userByUid.setPassword(password);
+        userMapper.setPassword(userByUid);
         return Result.success();
     }
 
@@ -125,7 +132,7 @@ public class UserService {
         }
     }
 
-    public Result modifySelfInfo(UserInfo userInfo) {
+    public Result modifySelfInfo(Integer uid, UserInfo userInfo) {
         if ("".equals(userInfo.getUsername())) {
             return Result.failure(ResultCode.NULL_USERNAME);
         }
@@ -144,6 +151,7 @@ public class UserService {
         if ("".equals(userInfo.getAbout())) {
             return Result.failure(ResultCode.NULL_ABOUT);
         }
+        userInfo.setUid(uid);
         userInfoMapper.updateUserInfo(userInfo);
         return Result.success();
 

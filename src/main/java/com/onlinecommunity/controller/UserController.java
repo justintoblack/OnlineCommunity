@@ -59,18 +59,18 @@ public class UserController {
      * 修改用户基本信息
      */
     @PostMapping("/modify_self_info")
-    public Result modifySelfInfo(@Validated UserInfo userInfo){
+    public Result modifySelfInfo(@RequestParam("uid") Integer uid,@Validated UserInfo userInfo){
 
-        return userService.modifySelfInfo(userInfo);
+        return userService.modifySelfInfo(uid, userInfo);
     }
 
     /**
      * 修改用户密码
      */
     @PostMapping("/modify_password")
-    public Result setPassWord(@Validated User user){
+    public Result setPassWord(@RequestParam("uid") Integer uid, @RequestParam("password") String password){
 
-        return userService.setPassWord(user);
+        return userService.setPassWord(uid,password);
     }
 
     /**
