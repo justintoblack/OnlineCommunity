@@ -42,7 +42,7 @@ public class UserMapperTest {
     @Test
     public void testFindUser(){
 
-        User user1 = userMapper.getUserByUid(4);
+        User user1 = userMapper.getUserByUid(1);
         System.out.println("findUserByUid User1: "+ user1);
 
         User user2 = userMapper.getUserByUsername(user1.getUsername());

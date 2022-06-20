@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
+//@Configuration
 @Slf4j
 public class AdminWebConfig implements WebMvcConfigurer {
 
@@ -17,7 +17,7 @@ public class AdminWebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(new LoginHandlerInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/","/login","/register");
+                .excludePathPatterns("/","/login","/register","/static/**","/pic/**");
 
     }
 

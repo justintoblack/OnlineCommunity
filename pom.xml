@@ -103,7 +103,6 @@
         </dependency>
 
 
-        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -177,28 +176,26 @@
                 <filtering>false</filtering>
             </resource>
 
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <!-- 根据目录下的文件配置需要扫描的文件类型 -->
-                    <include>**/*.yml</include>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <includes>-->
+<!--                    &lt;!&ndash; 根据目录下的文件配置需要扫描的文件类型 &ndash;&gt;-->
+<!--                    <include>**/*.yml</include>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    <include>**/*.xml</include>-->
+<!--                </includes>-->
+<!--                <filtering>false</filtering>-->
+<!--            </resource>-->
 
 
-
-
-                        <resource>
-                            <directory>src/main/resources</directory>
-                            <includes>
-                                <include>**/*.properties</include>
-                                <include>**/*.xml</include>
-                            </includes>
-                            <filtering>false</filtering>
-                        </resource>
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    <include>**/*.xml</include>-->
+<!--                </includes>-->
+<!--                <filtering>false</filtering>-->
+<!--            </resource>-->
         </resources>
 
     </build>

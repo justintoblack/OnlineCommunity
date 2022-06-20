@@ -91,8 +91,10 @@ public class MomentService {
                 log.info("MomentService before saving moment, mid:{}", moment.getMomentId());
                 System.out.println("momentMapper.saveMoment(moment) = " + momentMapper.saveMoment(moment));
                 log.info("MomentService after saving moment, mid:{}", moment.getMomentId());
-
+                log.info("MoemntService::post():moment.getUid()={}", moment.getUid());
                 UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
+                log.info("MoemntService::post():userinfo={}", userInfo);
+                assert(userInfo != null);
                 userInfo.setMomentCount(userInfo.getMomentCount() + 1);
                 userInfoMapper.updateUserInfo(userInfo);
                 return Result.success();

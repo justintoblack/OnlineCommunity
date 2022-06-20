@@ -53,7 +53,9 @@ public class MomentController {
         Result textResult = momentService.post(moment);
         log.info("MomentController after:{}", moment.getMomentId());
 
-        if (!textResult.getMsg().equals("success")) {
+        if (!"success".equals(textResult.getMsg())) {
+        //if (!textResult.getMsg().equals("success")) {
+            log.info("text result not success");
             return textResult;
         }
         log.info("successfully save moment content text!");
