@@ -21,6 +21,42 @@ public class Moment {
     private Timestamp momentTime;
     private Boolean isActive = true;
     private Timestamp deletedAt = null;
+    private Boolean isStar = false;
+    private Boolean isLike = false;
+    private Boolean isRepost = false;
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Boolean getStar() {
+        return isStar;
+    }
+
+    public void setStar(Boolean star) {
+        isStar = star;
+    }
+
+    public Boolean getLike() {
+        return isLike;
+    }
+
+    public void setLike(Boolean like) {
+        isLike = like;
+    }
+
+    public Boolean getRepost() {
+        return isRepost;
+    }
+
+    public void setRepost(Boolean repost) {
+        isRepost = repost;
+    }
+
     private Integer pictureCount = 0;
     private Integer likeCount = 0;
     private Integer commentCount = 0;
@@ -106,6 +142,7 @@ public class Moment {
         this.repostCount = repostCount;
     }
 
+
     @Override
     public String toString() {
         return "Moment{" +
@@ -115,6 +152,9 @@ public class Moment {
                 ", momentTime=" + momentTime +
                 ", isActive=" + isActive +
                 ", deletedAt=" + deletedAt +
+                ", isStar=" + isStar +
+                ", isLike=" + isLike +
+                ", isRepost=" + isRepost +
                 ", pictureCount=" + pictureCount +
                 ", likeCount=" + likeCount +
                 ", commentCount=" + commentCount +

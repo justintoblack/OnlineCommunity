@@ -297,9 +297,9 @@ public class MomentController {
      * @return 结果
      */
     @GetMapping("/search_moment")
-    public Result searchMoment(Page page, String str){
+    public Result searchMoment(@RequestParam("uid") Integer uid, Page page, String str){
 
-        return momentService.searchMoment(page, str);
+        return momentService.searchMoment(uid, page, str);
     }
 
 }

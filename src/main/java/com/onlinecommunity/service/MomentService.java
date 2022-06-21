@@ -127,6 +127,23 @@ public class MomentService {
      */
     public Result getSelfMomentList(Page page, Integer uid) {
         List<Moment> momentList = momentMapper.getActiveSelfMomentsByPage(page, uid);
+
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
+        Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
+        Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
+        for (Moment moment : momentList)
+        {
+            if (smembersStar.contains(moment.getMomentId().toString()))
+                moment.setStar(true);
+            if (smembersLike.contains(moment.getMomentId().toString()))
+                moment.setLike(true);
+            if (smembersRepost.contains(moment.getMomentId().toString()))
+                moment.setRepost(true);
+        }
+
+        jedis.close();
+
         Result result = Result.success();
         Map<String, Object> resultMap = getMomentResultMap(momentList);
         result.setData(resultMap);
@@ -141,6 +158,22 @@ public class MomentService {
      */
     public Result getHomeMomentList(Page page, Integer uid) {
         List<Moment> momentList = momentMapper.getActiveHomeMomentsByPage(page, uid);
+
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
+        Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
+        Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
+        for (Moment moment : momentList)
+        {
+            if (smembersStar.contains(moment.getMomentId().toString()))
+                moment.setStar(true);
+            if (smembersLike.contains(moment.getMomentId().toString()))
+                moment.setLike(true);
+            if (smembersRepost.contains(moment.getMomentId().toString()))
+                moment.setRepost(true);
+        }
+
+        jedis.close();
         Result result = Result.success();
         Map<String, Object> resultMap = getMomentResultMap(momentList);
         result.setData(resultMap);
@@ -191,6 +224,10 @@ public class MomentService {
                     log.info("save like..");
                     likeMapper.saveLike(like);
                     log.info("successfully saved.");
+
+                    Jedis jedis = new Jedis("127.0.0.1", 6379);
+                    jedis.sadd(likeUid.toString() + "like", momentId.toString());
+                    jedis.close();
 
                     moment.setLikeCount(moment.getLikeCount() + 1);
                     momentMapper.updateMoment(moment);
@@ -276,6 +313,10 @@ public class MomentService {
                 repost.setRepostTime(new Timestamp(System.currentTimeMillis()));
                 repostMapper.saveRepost(repost);
 
+                Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.sadd(repostUid.toString() + "repost", momentId.toString());
+                jedis.close();
+
                 moment.setRepostCount(moment.getRepostCount() + 1);
                 momentMapper.updateMoment(moment);
 
@@ -309,6 +350,10 @@ public class MomentService {
                     star.setStarTime(new Timestamp(System.currentTimeMillis()));
                     starMapper.saveStar(star);
 
+                    Jedis jedis = new Jedis("127.0.0.1", 6379);
+                    jedis.sadd(starUid.toString() + "star", momentId.toString());
+                    jedis.close();
+
                     UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
                     userInfo.setStarCount(userInfo.getStarCount() + 1);
                     userInfoMapper.updateUserInfo(userInfo);
@@ -335,12 +380,14 @@ public class MomentService {
         PageHelper.startPage(page.getCurrentPage(),10);
         List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(uid,str);
         Jedis jedis = new Jedis("127.0.0.1", 6379);
-        Set<String> smembers = jedis.smembers(uid.toString());
+        Set<String> smembers = jedis.smembers(uid.toString() + "follow");
         for (UserInfo  userInfo : userInfoBySearch)
         {
             if (smembers.contains(userInfo.getUid().toString()))
                 userInfo.setIsFollowing(true);
         }
+
+        jedis.close();
         PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(userInfoBySearch,3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
@@ -349,10 +396,30 @@ public class MomentService {
         return result;
     }
 
-    public Result searchMoment(Page page, String str) {
+    public Result searchMoment(Integer uid, Page page, String str) {
+
+        User userByUid = userMapper.getUserByUid(uid);
+
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
         PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> momentBySearch = momentMapper.getMomentBySearch(str);
+
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
+        Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
+        Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
+        for (Moment moment : momentBySearch)
+        {
+            if (smembersStar.contains(moment.getMomentId().toString()))
+                moment.setStar(true);
+            if (smembersLike.contains(moment.getMomentId().toString()))
+                moment.setLike(true);
+            if (smembersRepost.contains(moment.getMomentId().toString()))
+                moment.setRepost(true);
+        }
+
+        jedis.close();
         PageInfo<Moment> pageInfo = new PageInfo<Moment>(momentBySearch,3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
@@ -370,6 +437,22 @@ public class MomentService {
 
         PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> allLikesByUid = likeMapper.getAllLikesByUid(uid);
+
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
+        Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
+        Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
+        for (Moment moment : allLikesByUid)
+        {
+            if (smembersStar.contains(moment.getMomentId().toString()))
+                moment.setStar(true);
+            if (smembersLike.contains(moment.getMomentId().toString()))
+                moment.setLike(true);
+            if (smembersRepost.contains(moment.getMomentId().toString()))
+                moment.setRepost(true);
+        }
+
+        jedis.close();
         PageInfo<Moment> pageInfo = new PageInfo<>(allLikesByUid, 3);
         Result result = Result.success();
         result.setData(pageInfo);
@@ -384,6 +467,23 @@ public class MomentService {
 
         PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> allStarsByUid = starMapper.getAllStarsByUid(uid);
+
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
+        Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
+        Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
+        for (Moment moment : allStarsByUid)
+        {
+            if (smembersStar.contains(moment.getMomentId().toString()))
+                moment.setStar(true);
+            if (smembersLike.contains(moment.getMomentId().toString()))
+                moment.setLike(true);
+            if (smembersRepost.contains(moment.getMomentId().toString()))
+                moment.setRepost(true);
+        }
+
+        jedis.close();
+
         PageInfo<Moment> pageInfo = new PageInfo<>(allStarsByUid, 3);
         Result result = Result.success();
         result.setData(pageInfo);
@@ -398,6 +498,22 @@ public class MomentService {
 
         PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> allRepostsByUid = repostMapper.getAllRepostsByUid(uid);
+
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
+        Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
+        Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
+        for (Moment moment : allRepostsByUid)
+        {
+            if (smembersStar.contains(moment.getMomentId().toString()))
+                moment.setStar(true);
+            if (smembersLike.contains(moment.getMomentId().toString()))
+                moment.setLike(true);
+            if (smembersRepost.contains(moment.getMomentId().toString()))
+                moment.setRepost(true);
+        }
+
+        jedis.close();
         PageInfo<Moment> pageInfo = new PageInfo<>(allRepostsByUid, 3);
         Result result = Result.success();
         result.setData(pageInfo);
@@ -455,6 +571,9 @@ public class MomentService {
                     momentMapper.updateMoment(moment);
                 } else return  Result.failure(ResultCode.NULL_MID);
 
+                Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.srem(deleteUid.toString() + "like", lid.toString());
+
                 UserInfo userInfo = userInfoMapper.getUserInfoByUid(like.getLikeUid());
                 userInfo.setLikeCount(userInfo.getLikeCount() - 1);
                 userInfoMapper.updateUserInfo(userInfo);
@@ -493,6 +612,9 @@ public class MomentService {
                     momentMapper.updateMoment(moment);
                 } else return Result.failure(ResultCode.NULL_MID);
 
+                Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.srem(deleteUid.toString() + "repost", rid.toString());
+
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_REPOSTMOMENT);
@@ -512,6 +634,9 @@ public class MomentService {
                 UserInfo userInfo = userInfoMapper.getUserInfoByUid(star.getStarUid());
                 userInfo.setStarCount(userInfo.getStarCount() - 1);
                 userInfoMapper.updateUserInfo(userInfo);
+
+                Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.srem(deleteUid.toString() + "star", sid.toString());
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_STARMOMENT);

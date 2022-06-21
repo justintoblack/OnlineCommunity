@@ -35,10 +35,10 @@
 
     <insert id="saveMoment" parameterType="com.onlinecommunity.pojo.Moment" useGeneratedKeys="true"
             keyProperty="momentId">
-        insert into online_community.moment(moment_id, uid, content, moment_time, is_active, deleted_at, picture_count,
+        insert into online_community.moment(moment_id, uid, content, moment_time, is_active, deleted_at, is_star, is_like, is_repost, picture_count,
                                             like_count, comment_count, repost_count)
         values (#{moment.momentId}, #{moment.uid}, #{moment.content}, #{moment.momentTime}, #{moment.isActive},
-                #{moment.deletedAt}, #{moment.pictureCount},
+                #{moment.deletedAt}, #{moment.isStar}, #{moment.isLike}, #{moment.isRepost}, #{moment.pictureCount},
                 #{moment.likeCount}, #{moment.commentCount}, #{moment.repostCount})
     </insert>
 
@@ -46,7 +46,7 @@
         update online_community.moment
         <set>
             uid = #{moment.uid}, content = #{moment.content}, moment_time = #{moment.momentTime}, is_active = #{moment.isActive},
-            deleted_at = #{moment.deletedAt}, picture_count = #{moment.pictureCount},
+            deleted_at = #{moment.deletedAt}, is_star = #{moment.isStar}, is_like = #{moment.isLike}, is_repost = #{moment.isRepost}, picture_count = #{moment.pictureCount},
             like_count = #{moment.likeCount}, comment_count = #{moment.commentCount}, repost_count = #{moment.repostCount}
         </set>
         where moment_id = #{moment.momentId}

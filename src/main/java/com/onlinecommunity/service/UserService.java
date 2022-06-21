@@ -2,9 +2,8 @@ package com.onlinecommunity.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.onlinecommunity.mapper.FollowingMapper;
-import com.onlinecommunity.mapper.UserInfoMapper;
-import com.onlinecommunity.mapper.UserMapper;
+import com.onlinecommunity.mapper.*;
+import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Page;
 import com.onlinecommunity.pojo.User;
 import com.onlinecommunity.pojo.UserInfo;
@@ -32,6 +31,15 @@ public class UserService {
 
     @Autowired
     FollowingMapper followingMapper;
+
+    @Autowired
+    StarMapper starMapper;
+
+    @Autowired
+    LikeMapper likeMapper;
+
+    @Autowired
+    RepostMapper repostMapper;
 
     /**
      *
@@ -83,8 +91,28 @@ public class UserService {
                 List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
                 for (UserInfo userInfo : allFollowingByUid)
                 {
-                    jedis.sadd(uid.toString(),userInfo.getUid().toString());
+                    jedis.sadd(uid.toString() + "follow",userInfo.getUid().toString());
                 }
+
+                List<Moment> allStarsByUid = starMapper.getAllStarsByUid(uid);
+                for (Moment moment : allStarsByUid)
+                {
+                    jedis.sadd(uid.toString() + "star", moment.getMomentId().toString());
+                }
+
+                List<Moment> allLikesByUid = likeMapper.getAllLikesByUid(uid);
+                for (Moment moment : allLikesByUid)
+                {
+                    jedis.sadd(uid.toString() + "like", moment.getMomentId().toString());
+                }
+
+                List<Moment> allRepostsByUid = repostMapper.getAllRepostsByUid(uid);
+                for (Moment moment : allRepostsByUid)
+                {
+                    jedis.sadd(uid.toString() + "repost", moment.getMomentId().toString());
+                }
+
+
                 jedis.close();
                 Result result = Result.success();
                 result.setData(map);
@@ -118,7 +146,7 @@ public class UserService {
             if (uid != infoUid)
             {
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
-                Set<String> smembers = jedis.smembers(uid.toString());
+                Set<String> smembers = jedis.smembers(uid.toString() + "follow");
                 if (smembers.contains(userInfoByUid.getUid().toString()))
                     userInfoByUid.setIsFollowing(true);
                 jedis.close();
@@ -188,12 +216,13 @@ public class UserService {
         List<UserInfo> allUserInfo = userInfoMapper.getAllUserInfo(uid);
         if (allUserInfo != null) {
             Jedis jedis = new Jedis("127.0.0.1", 6379);
-            Set<String> smembers = jedis.smembers(uid.toString());
+            Set<String> smembers = jedis.smembers(uid.toString() + "follow");
             for (UserInfo  userInfo : allUserInfo)
             {
                 if (smembers.contains(userInfo.getUid().toString()))
                     userInfo.setIsFollowing(true);
             }
+            jedis.close();
             PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allUserInfo, 3);
             log.info(String.valueOf(pageInfo));
             Result result = Result.success();
@@ -214,7 +243,7 @@ public class UserService {
         if (integer <= 0) return Result.failure(ResultCode.WRONG_ADDFOLLOWING);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
-        jedis.sadd(uid.toString(),followingUid.toString());
+        jedis.sadd(uid.toString() + "follow",followingUid.toString());
         UserInfo uuserInfo = userInfoMapper.getUserInfoByUid(uid);
         uuserInfo.setFollowings(uuserInfo.getFollowings() + 1);
         UserInfo fuserInfo = userInfoMapper.getUserInfoByUid(followingUid);
@@ -237,7 +266,7 @@ public class UserService {
         if (integer <= 0) return Result.failure(ResultCode.WRONG_DELETEFOLLOWING);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
-        jedis.srem(uid.toString(),followingUid.toString());
+        jedis.srem(uid.toString() + "follow", followingUid.toString());
         UserInfo uuserInfo = userInfoMapper.getUserInfoByUid(uid);
         uuserInfo.setFollowings(uuserInfo.getFollowings() - 1);
         UserInfo fuserInfo = userInfoMapper.getUserInfoByUid(followingUid);
@@ -260,6 +289,15 @@ public class UserService {
 
         PageHelper.startPage(page.getCurrentPage(),10);
         List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
+
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembers = jedis.smembers(uid.toString() + "follow");
+        for (UserInfo  userInfo : allFollowingByUid)
+        {
+            if (smembers.contains(userInfo.getUid().toString()))
+                userInfo.setIsFollowing(true);
+        }
+        jedis.close();
         PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowingByUid, 3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
@@ -276,6 +314,14 @@ public class UserService {
         PageHelper.startPage(page.getCurrentPage(),10);
         List<UserInfo> allFollowersByUid = followingMapper.getAllFollowersByUid(uid);
 
+        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Set<String> smembers = jedis.smembers(uid.toString() + "follow");
+        for (UserInfo  userInfo : allFollowersByUid)
+        {
+            if (smembers.contains(userInfo.getUid().toString()))
+                userInfo.setIsFollowing(true);
+        }
+        jedis.close();
         PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(allFollowersByUid, 3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
