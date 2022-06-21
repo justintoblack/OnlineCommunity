@@ -19,6 +19,8 @@ public interface UserMapper {
 
     Integer saveUser(@Param("user") User user);
 
+    Integer updateUser(@Param("user") User user);
+
     String getUsernameByUid(Integer uid);
 
     String getPasswordByUid(Integer uid);

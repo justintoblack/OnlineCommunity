@@ -133,6 +133,8 @@ public class UserService {
     }
 
     public Result modifySelfInfo(Integer uid, UserInfo userInfo) {
+        User userByUid = userMapper.getUserByUid(uid);
+        if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
         if ("".equals(userInfo.getUsername())) {
             return Result.failure(ResultCode.NULL_USERNAME);
         }
@@ -151,6 +153,11 @@ public class UserService {
         if ("".equals(userInfo.getAbout())) {
             return Result.failure(ResultCode.NULL_ABOUT);
         }
+        userByUid.setUsername(userInfo.getUsername());
+        userByUid.setPhone(userInfo.getPhone());
+        userByUid.setEmail(userInfo.getEmail());
+        userMapper.updateUser(userByUid);
+
         userInfo.setUid(uid);
         userInfoMapper.updateUserInfo(userInfo);
         return Result.success();

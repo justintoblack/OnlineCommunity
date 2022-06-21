@@ -57,6 +57,14 @@
         values (#{user.uid}, #{user.username}, #{user.password}, #{user.phone}, #{user.email})
     </insert>
 
+    <update id="updateUser" parameterType="com.onlinecommunity.pojo.User">
+        update online_community.user
+        <set>
+            username = #{user.username}, phone = #{user.phone}, email = #{user.email}
+        </set>
+        where uid = #{user.uid}
+    </update>
+
     <select id="getMaxUid" resultType="Integer">
         select max(uid)
         from online_community.user
