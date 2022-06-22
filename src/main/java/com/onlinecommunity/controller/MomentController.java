@@ -59,7 +59,8 @@ public class MomentController {
             return textResult;
         }
         log.info("successfully save moment content text!");
-        log.info("urlList.size={}",urlList.size());
+        if (urlList != null)
+            log.info("urlList.size={}",urlList.size());
         //将保存好的图片URL存至数据库
         if (urlList != null)
             momentService.savePicturesUrl(urlList, moment.getMomentId());
@@ -109,13 +110,13 @@ public class MomentController {
     }
 
     /**
-     * @param lid  要删除的likeMoment id 需要传入参数 lid
+     * @param momentId  要删除的likeMoment id 需要传入参数 lid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_like_moment")
-    public Result deleteLikeMoment(Integer lid, @RequestParam("uid") Integer duid) {
-        return momentService.deleteLikeMoment(lid, duid);
+    public Result deleteLikeMoment(Integer momentId, @RequestParam("uid") Integer duid) {
+        return momentService.deleteLikeMoment(momentId, duid);
     }
 
     /**

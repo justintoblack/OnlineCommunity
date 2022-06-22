@@ -558,12 +558,16 @@ public class MomentService {
 
     }
 
-    public Result deleteLikeMoment(Integer lid, Integer deleteUid) {
+    public Result deleteLikeMoment(Integer momentId, Integer deleteUid) {
 
-        Like like = likeMapper.getOneLikeByLikeId(lid);
+        Like like = likeMapper.getOneLikeByLikeUidMomentId(deleteUid, momentId);
+        System.out.println("like = " + like);
+        System.out.println("momentId = " + momentId);
+        System.out.println("deleteUid = " + deleteUid);
         if (like != null) {
+            log.info("like not null");
             if (like.getLikeUid().equals(deleteUid)) {
-                likeMapper.deleteLikeByLikeId(lid);
+                likeMapper.deleteLikeByLikeId(like.getLikeId());
 
                 Moment moment = momentMapper.getOneMomentByMomentId(like.getMomentId());
                 if (moment != null) {
@@ -572,7 +576,7 @@ public class MomentService {
                 } else return  Result.failure(ResultCode.NULL_MID);
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
-                jedis.srem(deleteUid.toString() + "like", lid.toString());
+                jedis.srem(deleteUid.toString() + "like", like.getLikeId().toString());
 
                 UserInfo userInfo = userInfoMapper.getUserInfoByUid(like.getLikeUid());
                 userInfo.setLikeCount(userInfo.getLikeCount() - 1);
@@ -582,6 +586,7 @@ public class MomentService {
                 return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_LIKEMOMENT);
             }
         } else {
+            log.info("like null");
             return Result.failure(ResultCode.NONEXISTENT_LID);
         }
 
