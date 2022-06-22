@@ -12,7 +12,7 @@
           @click="toUserInfo()"
         />
       </div>
-      <div class="user_name">menherachan</div>
+      <div  class="user_name">{{username}}</div>
     </v-container>
     <v-divider></v-divider>
 
@@ -31,10 +31,12 @@
   </v-navigation-drawer>
 </template>
 <script>
+import axios from 'axios'
 export default {
   data() {
     return {
       imgUrl: "",
+      username:"",
       items: [
         { title: "  首页", id: 0 },
         { title: "我的关注", id: 1 },
@@ -52,9 +54,23 @@ export default {
     //获取用户信息
     getUserInfo() {
       this.imgUrl = require("../assets/hutao.png");
+      axios.get('/api/get_self_info',{
+        params:{
+          uid : localStorage.uid,
+          infoUid:localStorage.toUid,
+        },
+        headers:{
+          token :localStorage.token
+        }
+      }).then(res=>{
+        console.log('用户信息');
+        console.log(res.data);
+        this.username = res.data.data.username;
+      })
     },
     //跳转
     toUserInfo() {
+      localStorage.toUid = localStorage.uid;
       this.$router.push("/main/user").catch((err) => err);
     },
     //跳转

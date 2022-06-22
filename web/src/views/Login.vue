@@ -52,7 +52,7 @@
     </div>
   </v-app>
 </template>
-<script >
+<script>
 import axios from "axios";
 export default {
   data() {
@@ -86,6 +86,10 @@ export default {
           }
         )
         .then((res) => {
+          console.log(res.data);
+          localStorage.token = res.data.data.token;
+          localStorage.uid = res.data.data.uid;
+          localStorage.toUid = res.data.data.uid;
           if (res.data.msg == "success") this.$router.push("/main/home");
           else alert(res.data.msg);
         });
@@ -106,7 +110,7 @@ export default {
 .bg {
   height: 100%;
   width: 100%;
-  background-image: url("../assets/bg04.png");
+  background-image: url("../assets/bg01.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   /* background-color: #bbdefb; */

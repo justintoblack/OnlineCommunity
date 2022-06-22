@@ -129,7 +129,7 @@ public class UserController {
      * @return  Result，结果
      */
     @PostMapping("/follow")
-    public Result addFollowing(@RequestParam("uid") Integer uid, @RequestBody UserInfo followUserInfo){
+    public Result addFollowing(@RequestParam("cuid") Integer uid,  UserInfo followUserInfo){
 
         if (followUserInfo.getIsFollowing() == false)
 

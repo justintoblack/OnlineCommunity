@@ -53,6 +53,11 @@ export default new Router({
           name: 'star',
           component: () => import('@/components/Star.vue')
         },
+        {
+          path: 'search',
+          name: 'search',
+          component: () => import('@/components/Search.vue')
+        },
       ]
     },
   ]
