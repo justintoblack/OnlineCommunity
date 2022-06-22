@@ -59,7 +59,7 @@ public class MomentController {
             return textResult;
         }
         log.info("successfully save moment content text!");
-
+        log.info("urlList.size={}",urlList.size());
         //将保存好的图片URL存至数据库
         if (urlList != null)
             momentService.savePicturesUrl(urlList, moment.getMomentId());

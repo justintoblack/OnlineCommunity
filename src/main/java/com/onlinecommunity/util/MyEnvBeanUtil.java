@@ -1,8 +1,8 @@
 package com.onlinecommunity.util;
 
-import org.springframework.context.EnvironmentAware;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+        import org.springframework.context.EnvironmentAware;
+        import org.springframework.context.annotation.Configuration;
+        import org.springframework.core.env.Environment;
 
 /**
  * @create 2022/5/19-20:43

@@ -106,8 +106,10 @@ public class UserController {
                 //check the file
                 if (multipartFile.isEmpty())
                     return Result.failure(ResultCode.EMPTY_UPLOAD_FILE);
-                if (multipartFile.getSize() > Long.parseLong(MyEnvBeanUtil.getPictureMaxSize()))
+                if (multipartFile.getSize() > Long.parseLong(MyEnvBeanUtil.getPictureMaxSize())) {
+                    System.out.println("multipartFile.getSize() = " + multipartFile.getSize());
                     return Result.failure(ResultCode.EXCEED_MAX_PIC_SIZE);
+                }
             }
             log.info("uploading pictures...");
             //上传图片,成功后得到访问图片的URL列表

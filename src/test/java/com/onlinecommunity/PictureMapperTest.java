@@ -41,7 +41,7 @@ public class PictureMapperTest {
 
         Integer testMomentId = 5;
 
-        if (momentMapper.getOneMomentByMomentId(testMomentId) == null)
+        if (if pictureMapper.getPicUrlsByMomentId(testMomentId).size() == 0)
             log.info("insert : {}",pictureMapper.insertPicturesUrl(urlList, testMomentId));
         else
             log.info("update : {}",pictureMapper.updatePicturesUrl(urlList, testMomentId));

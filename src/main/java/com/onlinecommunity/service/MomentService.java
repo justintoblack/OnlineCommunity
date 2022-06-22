@@ -112,7 +112,7 @@ public class MomentService {
      * @return Result.success()
      */
     public Result savePicturesUrl(List<String> urlList, Integer momentId) {
-        if (momentMapper.getOneMomentByMomentId(momentId) == null)
+        if (pictureMapper.getPicUrlsByMomentId(momentId).size() == 0)
             pictureMapper.insertPicturesUrl(urlList, momentId);
         else
             pictureMapper.updatePicturesUrl(urlList, momentId);
