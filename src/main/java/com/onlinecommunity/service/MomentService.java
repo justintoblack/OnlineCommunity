@@ -1,5 +1,6 @@
 package com.onlinecommunity.service;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.onlinecommunity.mapper.*;
@@ -14,13 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
 
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.*;
 
 @Service
 @Slf4j
 public class MomentService {
-
 
 
     @Autowired
@@ -65,7 +66,6 @@ public class MomentService {
         return Result.success();
     }
 
-
     /**
      * @param multipartFiles 要上传至服务器的图片，已经检验过没有问题(如：超出大小限制)
      * @return 这些图片成功保存后对应的URL列表
@@ -75,7 +75,6 @@ public class MomentService {
         return UploadUtil.uploadPictures(multipartFiles);
 
     }
-
 
     /**
      * @param moment 发布的动态
@@ -94,7 +93,7 @@ public class MomentService {
                 log.info("MoemntService::post():moment.getUid()={}", moment.getUid());
                 UserInfo userInfo = userInfoMapper.getUserInfoByUid(moment.getUid());
                 log.info("MoemntService::post():userinfo={}", userInfo);
-                assert(userInfo != null);
+                assert (userInfo != null);
                 userInfo.setMomentCount(userInfo.getMomentCount() + 1);
                 userInfoMapper.updateUserInfo(userInfo);
                 return Result.success();
@@ -119,7 +118,6 @@ public class MomentService {
         return Result.success();
     }
 
-
     /**
      * @param page 分页对应对象，属性包含上一页最后一条动态的ID：lastId，以及页面大小pageSize
      * @param uid  用户ID
@@ -129,11 +127,11 @@ public class MomentService {
         List<Moment> momentList = momentMapper.getActiveSelfMomentsByPage(page, uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
-        for (Moment moment : momentList)
-        {
+        for (Moment moment : momentList) {
             if (smembersStar.contains(moment.getMomentId().toString()))
                 moment.setStar(true);
             if (smembersLike.contains(moment.getMomentId().toString()))
@@ -149,7 +147,6 @@ public class MomentService {
         result.setData(resultMap);
         return result;
     }
-
 
     /**
      * @param page 分页对应对象，属性包含上一页最后一条动态的ID：lastId，以及页面大小pageSize
@@ -160,11 +157,11 @@ public class MomentService {
         List<Moment> momentList = momentMapper.getActiveHomeMomentsByPage(page, uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
-        for (Moment moment : momentList)
-        {
+        for (Moment moment : momentList) {
             if (smembersStar.contains(moment.getMomentId().toString()))
                 moment.setStar(true);
             if (smembersLike.contains(moment.getMomentId().toString()))
@@ -180,12 +177,42 @@ public class MomentService {
         return result;
     }
 
+    /**
+     * 对momentList中的每个Moment对象，查询得到该动态用户名、头像地址、图片地址等，包装成ResultMoment，得到ResultMomentList
+     * @param momentList 数据库中的动态列表，还不包含用户名、头像地址、动态的图片地址
+     * @return Map，返回给前端的map，可直接将该map添加到Result的data属性中
+     */
     private Map<String, Object> getMomentResultMap(List<Moment> momentList) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("momentList", momentList);
-        List<String> usernameList = getUsernameList(momentList);
-        resultMap.put("usernameList", usernameList);
+        resultMap.put("momentList", getResultMomentList(momentList));
         return resultMap;
+    }
+
+    /**
+     * @param momentList 数据库中的动态列表，还不包含用户名、头像地址、动态的图片地址
+     * @return ResultMoment列表，包含返回给前端的动态的所有信息
+     */
+    public List<ResultMoment> getResultMomentList(List<Moment> momentList) {
+        List<ResultMoment> resultMomentList = new ArrayList<>();
+        for (Moment moment : momentList) {
+            ResultMoment resultMoment = new ResultMoment(moment);
+
+            UserInfo userInfo = userInfoMapper.getUserInfoByUid(resultMoment.uid);
+            resultMoment.username = userInfo.getUsername();
+            resultMoment.avatarUrl = userInfo.getAvatarUrl();
+            resultMoment.pictureUrlList = getPictureUrlList(resultMoment.momentId);
+
+            resultMomentList.add(resultMoment);
+        }
+        return resultMomentList;
+    }
+
+    /**
+     * @param momentId 动态ID
+     * @return 这条动态所包含的图片的URL列表
+     */
+    private List<String> getPictureUrlList(Integer momentId){
+        return pictureMapper.getPicUrlsByMomentId(momentId);
     }
 
     private List<String> getUsernameList(List<Moment> momentList) {
@@ -197,9 +224,6 @@ public class MomentService {
         }
         return usernameList;
     }
-
-
-
 
     /**
      * @param momentId 动态ID
@@ -261,7 +285,6 @@ public class MomentService {
         return Result.success();
     }
 
-
     /**
      * @param momentId   评论的动态ID
      * @param commentUid 执行评论操作的用户ID
@@ -293,7 +316,6 @@ public class MomentService {
             return Result.failure(ResultCode.NONEXISTENT_MID);
         }
     }
-
 
     /**
      * @param momentId  要转发的动态ID
@@ -331,8 +353,8 @@ public class MomentService {
     }
 
     /**
-     * @param momentId  要收藏的动态ID
-     * @param starUid 执行收藏操作的用户ID
+     * @param momentId 要收藏的动态ID
+     * @param starUid  执行收藏操作的用户ID
      * @return Result
      */
     public Result star(Integer momentId, Integer starUid) {
@@ -359,7 +381,7 @@ public class MomentService {
                     userInfoMapper.updateUserInfo(userInfo);
                     return Result.success();
                 } else {
-                    return  Result.failure(ResultCode.REPEATED_STAR);
+                    return Result.failure(ResultCode.REPEATED_STAR);
                 }
             } else {
                 return Result.failure(ResultCode.NONEXISTENT_UID);
@@ -370,25 +392,23 @@ public class MomentService {
         }
     }
 
-
     public Result searchUserInfo(Integer uid, Page page, String str) {
 
         User userByUid = userMapper.getUserByUid(uid);
 
         if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
-        PageHelper.startPage(page.getCurrentPage(),10);
-        List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(uid,str);
+        PageHelper.startPage(page.getCurrentPage(), 10);
+        List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(uid, str);
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         Set<String> smembers = jedis.smembers(uid.toString() + "follow");
-        for (UserInfo  userInfo : userInfoBySearch)
-        {
+        for (UserInfo userInfo : userInfoBySearch) {
             if (smembers.contains(userInfo.getUid().toString()))
                 userInfo.setIsFollowing(true);
         }
 
         jedis.close();
-        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(userInfoBySearch,3);
+        PageInfo<UserInfo> pageInfo = new PageInfo<UserInfo>(userInfoBySearch, 3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
         result.setData(pageInfo);
@@ -402,15 +422,14 @@ public class MomentService {
 
         if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
-        PageHelper.startPage(page.getCurrentPage(),10);
+        PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> momentBySearch = momentMapper.getMomentBySearch(str);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
-        for (Moment moment : momentBySearch)
-        {
+        for (Moment moment : momentBySearch) {
             if (smembersStar.contains(moment.getMomentId().toString()))
                 moment.setStar(true);
             if (smembersLike.contains(moment.getMomentId().toString()))
@@ -420,7 +439,7 @@ public class MomentService {
         }
 
         jedis.close();
-        PageInfo<Moment> pageInfo = new PageInfo<Moment>(momentBySearch,3);
+        PageInfo<Moment> pageInfo = new PageInfo<Moment>(momentBySearch, 3);
         log.info(String.valueOf(pageInfo));
         Result result = Result.success();
         result.setData(pageInfo);
@@ -428,22 +447,20 @@ public class MomentService {
         return result;
     }
 
-
     public Result getLikeList(Page page, Integer uid) {
 
         User userByUid = userMapper.getUserByUid(uid);
 
         if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
-        PageHelper.startPage(page.getCurrentPage(),10);
+        PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> allLikesByUid = likeMapper.getAllLikesByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
-        for (Moment moment : allLikesByUid)
-        {
+        for (Moment moment : allLikesByUid) {
             if (smembersStar.contains(moment.getMomentId().toString()))
                 moment.setStar(true);
             if (smembersLike.contains(moment.getMomentId().toString()))
@@ -465,15 +482,14 @@ public class MomentService {
 
         if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
-        PageHelper.startPage(page.getCurrentPage(),10);
+        PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> allStarsByUid = starMapper.getAllStarsByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
-        for (Moment moment : allStarsByUid)
-        {
+        for (Moment moment : allStarsByUid) {
             if (smembersStar.contains(moment.getMomentId().toString()))
                 moment.setStar(true);
             if (smembersLike.contains(moment.getMomentId().toString()))
@@ -496,15 +512,14 @@ public class MomentService {
 
         if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
-        PageHelper.startPage(page.getCurrentPage(),10);
+        PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> allRepostsByUid = repostMapper.getAllRepostsByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
-        for (Moment moment : allRepostsByUid)
-        {
+        for (Moment moment : allRepostsByUid) {
             if (smembersStar.contains(moment.getMomentId().toString()))
                 moment.setStar(true);
             if (smembersLike.contains(moment.getMomentId().toString()))
@@ -526,7 +541,7 @@ public class MomentService {
 
         if (oneMomentByMomentId == null) return Result.failure(ResultCode.NONEXISTENT_MID);
 
-        PageHelper.startPage(page.getCurrentPage(),10);
+        PageHelper.startPage(page.getCurrentPage(), 10);
         List<Comment> allCommentsByMid = commentMapper.getAllCommentsByMid(mid);
         PageInfo<Comment> pageInfo = new PageInfo<>(allCommentsByMid, 3);
         Result result = Result.success();
@@ -573,7 +588,7 @@ public class MomentService {
                 if (moment != null) {
                     moment.setLikeCount(moment.getLikeCount() - 1);
                     momentMapper.updateMoment(moment);
-                } else return  Result.failure(ResultCode.NULL_MID);
+                } else return Result.failure(ResultCode.NULL_MID);
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
                 jedis.srem(deleteUid.toString() + "like", like.getLikeId().toString());
@@ -671,6 +686,54 @@ public class MomentService {
             }
         } else {
             return Result.failure(ResultCode.NONEXISTENT_CID);
+        }
+    }
+
+    public class ResultMoment {
+        public Integer momentId;
+        public Integer uid;
+        public String content;
+        //设置从数据库取出时间的格式
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+        public Timestamp momentTime;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+        public Timestamp deletedAt;
+        public Integer pictureCount = 0;
+        public Integer likeCount = 0;
+        public Integer commentCount = 0;
+        public Integer repostCount = 0;
+        public List<String> pictureUrlList;
+        public String username;
+        public String avatarUrl;
+
+        public ResultMoment() {
+
+        }
+
+        public ResultMoment(Moment moment) {
+            this.momentId = moment.getMomentId();
+            this.uid = moment.getUid();
+            this.content = moment.getContent();
+            this.momentTime = moment.getMomentTime();
+            this.deletedAt = moment.getDeletedAt();
+            this.pictureCount = moment.getPictureCount();
+            this.commentCount = moment.getCommentCount();
+            this.repostCount = moment.getRepostCount();
+            this.likeCount = moment.getLikeCount();
+        }
+
+        @Override
+        public String toString() {
+            return "ResultMoment{" +
+                    "momentId=" + momentId +
+                    ", uid=" + uid +
+                    ", content='" + content + '\'' +
+                    ", momentTime=" + momentTime +
+                    ", deletedAt=" + deletedAt +
+                    ", pictureUrlList=" + pictureUrlList +
+                    ", username='" + username + '\'' +
+                    ", avatarUrl='" + avatarUrl + '\'' +
+                    '}';
         }
     }
 }

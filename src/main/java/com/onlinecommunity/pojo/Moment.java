@@ -24,6 +24,10 @@ public class Moment {
     private Boolean isStar = false;
     private Boolean isLike = false;
     private Boolean isRepost = false;
+    private Integer pictureCount = 0;
+    private Integer likeCount = 0;
+    private Integer commentCount = 0;
+    private Integer repostCount = 0;
 
     public Boolean getActive() {
         return isActive;
@@ -56,11 +60,6 @@ public class Moment {
     public void setRepost(Boolean repost) {
         isRepost = repost;
     }
-
-    private Integer pictureCount = 0;
-    private Integer likeCount = 0;
-    private Integer commentCount = 0;
-    private Integer repostCount = 0;
 
     public Integer getMomentId() {
         return momentId;

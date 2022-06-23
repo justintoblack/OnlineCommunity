@@ -4,6 +4,7 @@ import com.onlinecommunity.mapper.MomentMapper;
 import com.onlinecommunity.mapper.UserMapper;
 import com.onlinecommunity.pojo.Moment;
 import com.onlinecommunity.pojo.Page;
+import com.onlinecommunity.service.MomentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +25,9 @@ public class MomentMapperTest {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    MomentService momentService;
 
     @Test
     public void testListAllMoments() {
@@ -150,5 +154,23 @@ public class MomentMapperTest {
         System.out.println("newMoment = " + newMoment);
         System.out.println("momentMapper.getAllMomentCount() = " + momentMapper.getAllMomentCount());
         System.out.println("-------after-------");
+    }
+
+
+    @Test
+    public void getResultMomentListTest(){
+        Page page = new Page();
+        page.setLastId(19);
+        page.setCurrentPage(1);
+        page.setPageSize(7);
+        List<Moment> momentList = momentMapper.getActiveSelfMomentsByPage(page, 4);
+        System.out.println("momentList.size() = " + momentList.size());
+        momentList.forEach(System.out::println);
+        System.out.println("----------------------");
+        List<MomentService.ResultMoment> resultMomentList = momentService.getResultMomentList(momentList);
+        System.out.println("resultMomentList.size = " + resultMomentList.size());
+        for (MomentService.ResultMoment resultMoment : resultMomentList){
+            System.out.println(resultMoment);
+        }
     }
 }
