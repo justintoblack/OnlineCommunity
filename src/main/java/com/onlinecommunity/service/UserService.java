@@ -64,7 +64,7 @@ public class UserService {
         userInfo.setRealName(user.getUsername());
         userInfo.setPhone(user.getPhone());
         userInfo.setEmail(user.getEmail());
-        userInfo.setAvatarUrl("/pic/image.jpg");
+        userInfo.setAvatarUrl("image.jpg");
         userInfo.setIsFollowing(false);
         userInfoMapper.saveUserInfo(userInfo);
 
