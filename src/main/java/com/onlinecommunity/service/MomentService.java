@@ -250,6 +250,7 @@ public class MomentService {
                     log.info("successfully saved.");
 
                     Jedis jedis = new Jedis("127.0.0.1", 6379);
+                    jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                     jedis.sadd(likeUid.toString() + "like", momentId.toString());
                     jedis.close();
 
@@ -336,6 +337,7 @@ public class MomentService {
                 repostMapper.saveRepost(repost);
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                 jedis.sadd(repostUid.toString() + "repost", momentId.toString());
                 jedis.close();
 
@@ -373,6 +375,7 @@ public class MomentService {
                     starMapper.saveStar(star);
 
                     Jedis jedis = new Jedis("127.0.0.1", 6379);
+                    jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                     jedis.sadd(starUid.toString() + "star", momentId.toString());
                     jedis.close();
 
@@ -401,6 +404,7 @@ public class MomentService {
         PageHelper.startPage(page.getCurrentPage(), 10);
         List<UserInfo> userInfoBySearch = userInfoMapper.getUserInfoBySearch(uid, str);
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembers = jedis.smembers(uid.toString() + "follow");
         for (UserInfo userInfo : userInfoBySearch) {
             if (smembers.contains(userInfo.getUid().toString()))
@@ -426,6 +430,7 @@ public class MomentService {
         List<Moment> momentBySearch = momentMapper.getMomentBySearch(str);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
@@ -457,6 +462,7 @@ public class MomentService {
         List<Moment> allLikesByUid = likeMapper.getAllLikesByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
@@ -487,6 +493,7 @@ public class MomentService {
         List<Moment> allStarsByUid = starMapper.getAllStarsByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
@@ -517,6 +524,7 @@ public class MomentService {
         List<Moment> allRepostsByUid = repostMapper.getAllRepostsByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
@@ -592,6 +600,7 @@ public class MomentService {
                 } else return Result.failure(ResultCode.NULL_MID);
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                 jedis.srem(deleteUid.toString() + "like", like.getLikeId().toString());
 
                 UserInfo userInfo = userInfoMapper.getUserInfoByUid(like.getLikeUid());
@@ -634,6 +643,7 @@ public class MomentService {
                 } else return Result.failure(ResultCode.NULL_MID);
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                 jedis.srem(deleteUid.toString() + "repost", rid.toString());
 
                 return Result.success();
@@ -657,6 +667,7 @@ public class MomentService {
                 userInfoMapper.updateUserInfo(userInfo);
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                 jedis.srem(deleteUid.toString() + "star", sid.toString());
                 return Result.success();
             } else {
