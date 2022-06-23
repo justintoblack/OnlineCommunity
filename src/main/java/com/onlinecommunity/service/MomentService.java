@@ -714,6 +714,9 @@ public class MomentService {
         public Integer likeCount = 0;
         public Integer commentCount = 0;
         public Integer repostCount = 0;
+        public Boolean isStar;
+        public Boolean isLike;
+        public Boolean isRepost;
         public List<String> pictureUrlList;
         public String username;
         public String avatarUrl;
@@ -732,6 +735,9 @@ public class MomentService {
             this.commentCount = moment.getCommentCount();
             this.repostCount = moment.getRepostCount();
             this.likeCount = moment.getLikeCount();
+            this.isLike = moment.getLike();
+            this.isStar = moment.getStar();
+            this.isRepost = moment.getRepost();
         }
 
         @Override
@@ -742,6 +748,13 @@ public class MomentService {
                     ", content='" + content + '\'' +
                     ", momentTime=" + momentTime +
                     ", deletedAt=" + deletedAt +
+                    ", pictureCount=" + pictureCount +
+                    ", likeCount=" + likeCount +
+                    ", commentCount=" + commentCount +
+                    ", repostCount=" + repostCount +
+                    ", isStar=" + isStar +
+                    ", isLike=" + isLike +
+                    ", isRepost=" + isRepost +
                     ", pictureUrlList=" + pictureUrlList +
                     ", username='" + username + '\'' +
                     ", avatarUrl='" + avatarUrl + '\'' +

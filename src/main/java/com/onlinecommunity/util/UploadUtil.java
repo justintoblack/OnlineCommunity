@@ -82,7 +82,7 @@ public class UploadUtil {
         }
         try {
             multipartFile.transferTo(file);
-            return MyEnvBeanUtil.getProperty("file.access-path") + file.getName();
+            return file.getName();
         } catch (IOException e) {
             e.printStackTrace();
             return null;
