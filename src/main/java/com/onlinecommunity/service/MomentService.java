@@ -470,7 +470,8 @@ public class MomentService {
         }
 
         jedis.close();
-        PageInfo<Moment> pageInfo = new PageInfo<>(allLikesByUid, 3);
+        List<ResultMoment> resultMomentList = getResultMomentList(allLikesByUid);
+        PageInfo<ResultMoment> pageInfo = new PageInfo<>(resultMomentList, 3);
         Result result = Result.success();
         result.setData(pageInfo);
         return result;
@@ -499,8 +500,8 @@ public class MomentService {
         }
 
         jedis.close();
-
-        PageInfo<Moment> pageInfo = new PageInfo<>(allStarsByUid, 3);
+        List<ResultMoment> resultMomentList = getResultMomentList(allStarsByUid);
+        PageInfo<ResultMoment> pageInfo = new PageInfo<>(resultMomentList, 3);
         Result result = Result.success();
         result.setData(pageInfo);
         return result;
