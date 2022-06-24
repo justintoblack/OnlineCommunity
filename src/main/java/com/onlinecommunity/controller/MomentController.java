@@ -129,13 +129,13 @@ public class MomentController {
     }
 
     /**
-     * @param rid  要删除的repostMoment id 需要传入参数 rid
+     * @param momentId  要删除的repostMoment id 需要传入参数 rid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_repost_moment")
-    public Result deleteRepostMoment(Integer rid, @RequestParam("uid") Integer duid) {
-        return momentService.deleteRepostMoment(rid, duid);
+    public Result deleteRepostMoment(Integer momentId, @RequestParam("uid") Integer duid) {
+        return momentService.deleteRepostMoment(momentId, duid);
     }
 
     /**
@@ -144,18 +144,18 @@ public class MomentController {
      * @return 删除结果
      */
     @PostMapping("/delete_star_moment")
-    public Result deleteStarMoment(Integer sid, @RequestParam("uid") Integer duid) {
-        return momentService.deleteStarMoment(sid, duid);
+    public Result deleteStarMoment(Integer momentId, @RequestParam("uid") Integer duid) {
+        return momentService.deleteStarMoment(momentId, duid);
     }
 
     /**
-     * @param cid  要删除的commentMoment id 需要传入参数 cid
+     * @param momentId  要删除的commentMoment id 需要传入参数 cid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */
     @PostMapping("/delete_comment_moment")
-    public Result deleteCommentMoment(Integer cid, @RequestParam("uid") Integer duid) {
-        return momentService.deleteCommentMoment(cid, duid);
+    public Result deleteCommentMoment(Integer momentId, @RequestParam("uid") Integer duid) {
+        return momentService.deleteCommentMoment(momentId, duid);
     }
 
     /**

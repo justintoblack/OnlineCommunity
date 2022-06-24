@@ -628,13 +628,13 @@ public class MomentService {
         return Result.success();
     }
 
-    public Result deleteRepostMoment(Integer rid, Integer deleteUid) {
+    public Result deleteRepostMoment(Integer mid, Integer deleteUid) {
 
-        Repost repost = repostMapper.getOneRepostByRepostId(rid);
+        Repost repost = repostMapper.getOneRepostByRepostUidMomentId(deleteUid,mid);
         if (repost != null) {
             if (repost.getRepostUid().equals(deleteUid)) {
 
-                repostMapper.deleteRepostByRepostId(rid);
+                repostMapper.deleteRepostByRepostId(repost.getRepostId());
 
                 Moment moment = momentMapper.getOneMomentByMomentId(repost.getMomentId());
                 if (moment != null) {
@@ -644,7 +644,7 @@ public class MomentService {
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
                 jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
-                jedis.srem(deleteUid.toString() + "repost", rid.toString());
+                jedis.srem(deleteUid.toString() + "repost", repost.getRepostId().toString());
 
                 return Result.success();
             } else {
@@ -655,12 +655,12 @@ public class MomentService {
         }
     }
 
-    public Result deleteStarMoment(Integer sid, Integer deleteUid) {
+    public Result deleteStarMoment(Integer mid, Integer deleteUid) {
 
-        Star star = starMapper.getOneStarByStarId(sid);
+        Star star = starMapper.getOneStarByStarUidMomentId(deleteUid,mid);
         if (star != null) {
             if (star.getStarUid().equals(deleteUid)) {
-                starMapper.deleteStarByStarId(sid);
+                starMapper.deleteStarByStarId(star.getStarId());
 
                 UserInfo userInfo = userInfoMapper.getUserInfoByUid(star.getStarUid());
                 userInfo.setStarCount(userInfo.getStarCount() - 1);
@@ -668,7 +668,7 @@ public class MomentService {
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
                 jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
-                jedis.srem(deleteUid.toString() + "star", sid.toString());
+                jedis.srem(deleteUid.toString() + "star", star.getStarId().toString());
                 return Result.success();
             } else {
                 return Result.failure(ResultCode.CANNOT_DELETE_OTHERS_STARMOMENT);
@@ -678,13 +678,13 @@ public class MomentService {
         }
     }
 
-    public Result deleteCommentMoment(Integer cid, Integer deleteUid) {
+    public Result deleteCommentMoment(Integer mid, Integer deleteUid) {
 
-        Comment comment = commentMapper.getOneCommentByCommentId(cid);
+        Comment comment = commentMapper.getOneCommentByCommentUidMomentId(deleteUid,mid);
         if (comment != null) {
             if (comment.getCommentUid().equals(deleteUid)) {
 
-                commentMapper.deleteCommentByCid(cid);
+                commentMapper.deleteCommentByCid(comment.getCommentId());
 
                 Moment moment = momentMapper.getOneMomentByMomentId(comment.getMomentId());
                 if (moment != null) {
