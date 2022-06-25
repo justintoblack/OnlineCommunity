@@ -1,6 +1,7 @@
 package com.onlinecommunity.pojo;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 /**
@@ -14,7 +15,25 @@ public class Comment {
     private Integer commentUid;
     private Integer momentUid;
     private Integer likeCount = 0;
+    private String username;
+    private String avatarUrl;
     private Timestamp commentTime;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
 
     public Integer getCommentId() {
         return commentId;
@@ -81,6 +100,8 @@ public class Comment {
                 ", commentUid=" + commentUid +
                 ", momentUid=" + momentUid +
                 ", likeCount=" + likeCount +
+                ", username='" + username + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
                 ", commentTime=" + commentTime +
                 '}';
     }

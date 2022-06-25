@@ -9,6 +9,7 @@ import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
 import com.onlinecommunity.util.MyEnvBeanUtil;
 import com.onlinecommunity.util.UploadUtil;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -304,11 +305,14 @@ public class MomentService {
         if (moment != null) {//要评论的动态需要存在
             User user = userMapper.getUserByUid(commentUid);
             if (user != null) {//执行评论的用户需要存在
+                UserInfo userInfo = userInfoMapper.getUserInfoByUid(commentUid);
                 Comment comment = new Comment();
                 comment.setMomentId(momentId);
                 comment.setContent(content);
                 comment.setCommentUid(commentUid);
                 comment.setMomentUid(moment.getUid());
+                comment.setUsername(userInfo.getUsername());
+                comment.setAvatarUrl(userInfo.getAvatarUrl());
                 //设置评论时间为当前时间
                 comment.setCommentTime(new Timestamp(System.currentTimeMillis()));
                 commentMapper.comment(comment);
@@ -557,9 +561,17 @@ public class MomentService {
 
         if (oneMomentByMomentId == null) return Result.failure(ResultCode.NONEXISTENT_MID);
 
+        List<ResultComment> resultComments = new ArrayList<>();
+
         PageHelper.startPage(page.getCurrentPage(), 10);
         List<Comment> allCommentsByMid = commentMapper.getAllCommentsByMid(mid);
-        PageInfo<Comment> pageInfo = new PageInfo<>(allCommentsByMid, 3);
+        for (Comment comment : allCommentsByMid) {
+            ResultComment resultComment = new ResultComment(comment);
+            log.info(resultComment.toString());
+            resultComments.add(resultComment);
+        }
+
+        PageInfo<ResultComment> pageInfo = new PageInfo<ResultComment>(resultComments, 3);
         Result result = Result.success();
         result.setData(pageInfo);
         return result;
@@ -766,6 +778,33 @@ public class MomentService {
                     ", username='" + username + '\'' +
                     ", avatarUrl='" + avatarUrl + '\'' +
                     '}';
+        }
+    }
+
+
+    @Data
+    public class ResultComment {
+        private Integer commentId;
+        private String content;
+        private Integer momentId;
+        private Integer commentUid;
+        private Integer momentUid;
+        private Integer likeCount = 0;
+        private String username;
+        private String avatarUrl;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+        private Timestamp commentTime;
+
+        public ResultComment(Comment comment) {
+            this.commentId = comment.getCommentId();
+            this.content = comment.getContent();
+            this.momentId = comment.getMomentId();
+            this.commentUid = comment.getCommentUid();
+            this.momentUid = comment.getMomentUid();
+            this.likeCount = comment.getLikeCount();
+            this.username = comment.getUsername();
+            this.avatarUrl = comment.getAvatarUrl();
+            this.commentTime = comment.getCommentTime();
         }
     }
 }

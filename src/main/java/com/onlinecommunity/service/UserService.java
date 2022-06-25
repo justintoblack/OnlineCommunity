@@ -166,9 +166,16 @@ public class UserService {
     public Result modifySelfInfo(Integer uid, UserInfo userInfo) {
         User userByUid = userMapper.getUserByUid(uid);
         if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
+        UserInfo userInfoByUid = userInfoMapper.getUserInfoByUid(uid);
         if ("".equals(userInfo.getUsername())) {
             return Result.failure(ResultCode.NULL_USERNAME);
         }
+
+        UserInfo userInfoByUsername = userInfoMapper.getUserInfoByUsername(userInfo.getUsername());
+        if (userInfoByUsername != null) {
+            return Result.failure(ResultCode.EXIST_USERNAME);
+        }
+
         if ("".equals(userInfo.getRealName())) {
             return Result.failure(ResultCode.NULL_REALNAME);
         }
@@ -190,6 +197,7 @@ public class UserService {
         userMapper.updateUser(userByUid);
 
         userInfo.setUid(uid);
+        userInfo.setAvatarUrl(userInfoByUid.getAvatarUrl());
         userInfoMapper.updateUserInfo(userInfo);
         return Result.success();
 

@@ -139,7 +139,7 @@ public class MomentController {
     }
 
     /**
-     * @param sid  要删除的starMoment id 需要传入参数 sid
+     * @param momentId  要删除的starMoment id 需要传入参数 sid
      * @param duid 执行删除操作的用户id 需要传入当前用户ID uid
      * @return 删除结果
      */

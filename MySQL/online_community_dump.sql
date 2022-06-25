@@ -54,6 +54,8 @@ CREATE TABLE IF NOT EXISTS `comment`
     `comment_uid`  INT UNSIGNED                 NOT NULL,
     `moment_uid`   INT UNSIGNED                 NOT NULL,
     `like_count`   INT UNSIGNED                 NOT NULL,
+    `username`     VARCHAR(30) CHARSET utf8mb4 NOT NULL,
+    `avatar_url`   VARCHAR(255),
     `comment_time` DATETIME                     NOT NULL DEFAULT NOW()
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
