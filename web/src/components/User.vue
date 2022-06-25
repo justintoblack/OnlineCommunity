@@ -1,5 +1,26 @@
 <template>
    <v-container>
+  <v-row>
+      <v-col cols="2"></v-col>
+      <!-- 头像 -->
+      <v-col cols="6">
+         <v-img
+          :src="imgUrl"
+          min-width="200px"
+          max-width="200px"
+          min-height="200px"
+          max-height="200px"
+          class="img_broder"
+        />
+      </v-col >
+      <!-- 关注 -->
+      <v-col cols="1">
+        <v-btn v-if="showBtn" color="#64B5F6" @click="modifyPhoto()">修改头像</v-btn>
+        <v-btn v-if="!showBtn" :color="(user.isFollowing?'#64B5F6': 'white')" @click="clickFollow()">{{ user.isFollowing?'已关注':'未关注' }}</v-btn>
+      </v-col>
+      <v-col cols="1"></v-col>
+    </v-row>
+
    <v-row>
     <v-col cols="1"></v-col>
     <!-- 用户名 -->
@@ -49,12 +70,47 @@
     </v-col >
     <v-col cols="2"></v-col>
   </v-row>
-
-  <!-- 进入自身用户界面才显示 -->
-  <div class="right_btn" v-if="showBtn">
-    <v-btn class="margin_right" color="rgb(46, 196, 246)" @click="modify()">修改</v-btn>
-    <v-btn class="margin_right" color="rgb(46, 196, 246)" @click="postInfo()">提交</v-btn>
-  </div>
+  <v-row>
+      <v-col cols="1"></v-col>
+      <!-- 粉丝数 -->
+      <v-col cols="4">
+        <div style="display:flex">
+        <div class="div_center char_style">粉丝数:&ensp;{{user.followers}}</div>
+        </div>
+      </v-col >
+      <v-col cols="1"></v-col>
+      <!-- 关注数 -->
+      <v-col cols="4">
+        <div style="display:flex">
+        <div class="div_center char_style">关注数:&ensp;{{user.followings}}</div>
+        </div>
+      </v-col>
+      <v-col cols="2"></v-col>
+      </v-row>
+        <v-row>
+        <v-col cols="1"></v-col>
+        <!-- 点赞数 -->
+        <v-col cols="4">
+          <div style="display:flex">
+          <div class="div_center char_style">点赞数:&ensp;{{user.likeCount}}</div>
+          </div>
+        </v-col >
+        <v-col cols="1"></v-col>
+        <!-- 帖子数 -->
+        <v-col cols="4">
+          <div style="display:flex">
+          <div class="div_center char_style">帖子数:&ensp;{{user.momentCount}}</div>
+          </div>
+        </v-col>
+        <v-col cols="2"></v-col>
+      </v-row>
+      <p></p>
+      <!-- 进入自身用户界面才显示 -->
+      <div class="right_btn" v-if="showBtn">
+        <v-btn class="margin_right" color="rgb(46, 196, 246)" @click="modify()">修改</v-btn>
+        <v-btn class="margin_right" color="rgb(46, 196, 246)" @click="postInfo()">提交</v-btn>
+      </div>
+      <p></p>
     <v-divider></v-divider>
   </v-container>
 </template>
@@ -70,7 +126,14 @@ export default {
         email : '',
         brithday : '',
         about : '',
+        followers : '',
+        followings : '',
+        likeCount : '',
+        momentCount : '',
+        isFollowing : false,
+        url : '',
       },
+      imgUrl : '',
       //修改标签
       readonly : true,
 
@@ -107,8 +170,24 @@ export default {
           this.user.email = res.data.data.email;
           this.user.birthday = res.data.data.birthday;
           this.user.about = res.data.data.about;
+          this.user.followers = res.data.data.followers;
+          this.user.followings = res.data.data.followings;
+          this.user.likeCount = res.data.data.likeCount;
+          this.user.momentCount = res.data.data.momentCount;
+          this.user.isFollowing = res.data.data.isFollowing;
+          this.user.url = res.data.data.avatarUrl;
         }
+        axios.get("/api/static/"+this.user.url,{
+                headers:{
+                  'token' : this.token
+                },
+                responseType : "blob"
+              }).then(res=>{
+                var blob = new Blob([res.data]);
+               this.$data.imgUrl = URL.createObjectURL(blob);
+          })
       })
+
     },
     //修改数据
     modify(){
@@ -138,6 +217,30 @@ export default {
           alert('提交成功')
         else
           alert('提交失败')
+      })
+    },
+    //修改头像
+    modifyPhoto()
+    {
+      
+    },
+    //点击关注
+    clickFollow() {
+      axios.post('/api/follow',
+          {
+            'cuid': this.uid,
+            'uid': this.toUid,
+            'isFollowing' : user.isFollowing
+          },
+          {
+            headers: {
+              'token' : localStorage.token,
+              "Content-Type": "multipart/form-data" 
+              },
+          }
+      ).then(res =>{
+        if(res.data.msg == 'success')
+          user.isFollowing = !user.isFollowing;
       })
     }
   },

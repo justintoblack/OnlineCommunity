@@ -10,6 +10,7 @@ import com.onlinecommunity.pojo.UserInfo;
 import com.onlinecommunity.result.Result;
 import com.onlinecommunity.result.ResultCode;
 import com.onlinecommunity.util.JwtUtil;
+import com.onlinecommunity.util.MyEnvBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,7 @@ public class UserService {
                 map.put("token",token);
 
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                 List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
                 for (UserInfo userInfo : allFollowingByUid)
                 {
@@ -146,6 +148,7 @@ public class UserService {
             if (uid != infoUid)
             {
                 Jedis jedis = new Jedis("127.0.0.1", 6379);
+                jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
                 Set<String> smembers = jedis.smembers(uid.toString() + "follow");
                 if (smembers.contains(userInfoByUid.getUid().toString()))
                     userInfoByUid.setIsFollowing(true);
@@ -216,6 +219,7 @@ public class UserService {
         List<UserInfo> allUserInfo = userInfoMapper.getAllUserInfo(uid);
         if (allUserInfo != null) {
             Jedis jedis = new Jedis("127.0.0.1", 6379);
+            jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
             Set<String> smembers = jedis.smembers(uid.toString() + "follow");
             for (UserInfo  userInfo : allUserInfo)
             {
@@ -243,6 +247,7 @@ public class UserService {
         if (integer <= 0) return Result.failure(ResultCode.WRONG_ADDFOLLOWING);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         jedis.sadd(uid.toString() + "follow",followingUid.toString());
         UserInfo uuserInfo = userInfoMapper.getUserInfoByUid(uid);
         uuserInfo.setFollowings(uuserInfo.getFollowings() + 1);
@@ -266,6 +271,7 @@ public class UserService {
         if (integer <= 0) return Result.failure(ResultCode.WRONG_DELETEFOLLOWING);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         jedis.srem(uid.toString() + "follow", followingUid.toString());
         UserInfo uuserInfo = userInfoMapper.getUserInfoByUid(uid);
         uuserInfo.setFollowings(uuserInfo.getFollowings() - 1);
@@ -291,6 +297,7 @@ public class UserService {
         List<UserInfo> allFollowingByUid = followingMapper.getAllFollowingByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembers = jedis.smembers(uid.toString() + "follow");
         for (UserInfo  userInfo : allFollowingByUid)
         {
@@ -315,6 +322,7 @@ public class UserService {
         List<UserInfo> allFollowersByUid = followingMapper.getAllFollowersByUid(uid);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
+        jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembers = jedis.smembers(uid.toString() + "follow");
         for (UserInfo  userInfo : allFollowersByUid)
         {

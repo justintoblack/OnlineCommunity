@@ -171,10 +171,17 @@ public class MomentService {
         }
 
         jedis.close();
+//        Result result = Result.success();
+//        Map<String, Object> resultMap = getMomentResultMap(momentList);
+//        result.setData(resultMap);
+//        return result;
+
+        List<ResultMoment> resultMomentList = getResultMomentList(momentList);
+        PageInfo<ResultMoment> pageInfo = new PageInfo<>(resultMomentList, 3);
         Result result = Result.success();
-        Map<String, Object> resultMap = getMomentResultMap(momentList);
-        result.setData(resultMap);
+        result.setData(pageInfo);
         return result;
+
     }
 
     /**

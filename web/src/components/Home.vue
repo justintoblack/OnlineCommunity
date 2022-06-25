@@ -137,7 +137,7 @@
             <div style="display: flex">
               <v-img
                 class="img_broder"
-                :src="item.imgurl"
+                :src="item.avatarUrl"
                 max-height="50px"
                 min-height="50px"
                 max-width="50px"
@@ -161,7 +161,7 @@
              <div>
               <div style="display: flex" v-if="item.pictureCount > 0">
                 <v-img
-                  :src="item.pictureURL[0]"
+                  :src="item.pic[0]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -170,7 +170,7 @@
 
                 <v-img
                   class="margin_left"
-                  :src="item.pictureURL[1]"
+                  :src="item.pic[1]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -179,7 +179,7 @@
 
                 <v-img
                   class="margin_left"
-                  :src="item.pictureURL[2]"
+                  :src="item.pic[2]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -188,7 +188,7 @@
               </div>
               <div style="display: flex" v-if="item.pictureCount > 3">
                 <v-img
-                  :src="item.pictureURL[3]"
+                  :src="item.pic[3]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -197,7 +197,7 @@
 
                 <v-img
                   class="margin_left"
-                  :src="item.pictureURL[4]"
+                  :src="item.pic[4]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -206,7 +206,7 @@
 
                 <v-img
                   class="margin_left"
-                  :src="item.pictureURL[5]"
+                  :src="item.pic[5]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -215,7 +215,7 @@
               </div>
               <div style="display: flex" v-if="item.pictureCount > 6">
                 <v-img
-                  :src="item.pictureURL[6]"
+                  :src="item.pic[6]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -224,7 +224,7 @@
 
                 <v-img
                   class="margin_left"
-                  :src="item.pictureURL[7]"
+                  :src="item.pic[7]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -233,7 +233,7 @@
 
                 <v-img
                   class="margin_left"
-                  :src="item.pictureURL[8]"
+                  :src="item.pic[8]"
                   max-height="200px"
                   min-height="200px"
                   max-width="200px"
@@ -311,9 +311,9 @@
     <!-- 下一页 首页 上一页 -->
     <div id="page" class="text_center">
       <div>
-      <v-btn color="#64B5F6"  @click="this.get_list(-1)">上一页</v-btn>
-      <v-btn color="#64B5F6" class="margin_left" @click="this.get_list(0)">首页</v-btn>
-      <v-btn color="#64B5F6" class="margin_left" @click="this.get_list(1)" >下一页</v-btn>
+      <v-btn color="#64B5F6"  @click="changePage(-1)">上一页</v-btn>
+      <v-btn color="#64B5F6" class="margin_left" @click="changePage(0)">首页</v-btn>
+      <v-btn color="#64B5F6" class="margin_left" @click="changePage(1)" >下一页</v-btn>
       </div>
     </div>
   </v-container>
@@ -325,12 +325,15 @@ export default {
   data() {
     return {
       page: 1,//当前页面
+      hasNextPage:false,//是否有下一页
+      hasPrePage:false,//是否有上一页
       inputText: "",//发布动态文本
       commentText : "",//评论文本
       moment_items: [],//动态列表
       imgFiles :[],//发布动态图片文件
       imgSrc :[],//发布动态图片资源
       token: localStorage.token,//token
+      test: [],
     };
   },
   mounted() {
@@ -439,7 +442,7 @@ export default {
         axios.post("/api/delete_star_moment",
                   {
                     'uid' : localStorage.uid,
-                    'sid' : this.moment_items[id].momentId,
+                    'momentId' : this.moment_items[id].momentId,
                   },
                   {
                     headers:{
@@ -562,9 +565,41 @@ export default {
     //搜索
     search() {
       console.log("点击搜索");
+      console.log(this.test);
+    },
+    //切页
+    changePage(page)
+    {
+      switch(page)
+      {
+        case -1:
+          if(this.hasPrePage){
+            page--;
+            }
+          else {
+            alert('已经是第一页');
+            return;
+          }
+          break;
+
+        case 0: 
+          page =1;
+          break;
+
+        case 1:
+          if(this.hasNextPage){
+            page++;
+          }
+          else{
+            alert('已经是最后一页');
+            return;
+          }
+          break;
+      }
+      this.get_list();
     },
     //获取首页动态
-    get_list(nextId){
+    get_list(){
       axios.get("/api/get_home_moment_list",{
       params:{
         'uid':localStorage.getItem('uid'),
@@ -577,8 +612,9 @@ export default {
       .then(res=>{
         console.log(res.data);
         if(res.data.msg!='success')return;
-        let momentList = res.data.data.momentList;
-        let usernameList = res.data.data.usernameList;
+        this.$data.hasNextPage = res.data.data.hasNextPage;
+        this.$data.hasPrePage = res.data.data.hasPreviousPage;
+        let momentList = res.data.data.list;
         //清空数组
         this.moment_items = [];
         //刷新数据
@@ -593,14 +629,39 @@ export default {
               commentCount : momentList[i].commentCount,//评论数
               comment_list : [],//评论
               pictureCount : momentList[i].pictureCount,//图片数
-              pictureURL : [],//图片
+              pictureURL : momentList[i].pictureUrlList,//图片路径
+              pic : [],//图片
               repostCount : momentList[i].repostCount,//转发数
-              username : usernameList[i],//动态用户名
-              isStar : momentList[i].star, //是否收藏
-              isLike : momentList[i].like, //是否点赞
-              isRepost : momentList[i].repost, //是否转发
+              username : momentList[i].username,//动态用户名
+              avatarUrl : momentList[i].avatarUrl,//头像
+              isStar : momentList[i].isStar, //是否收藏
+              isLike : momentList[i].isLike, //是否点赞
+              isRepost : momentList[i].isRepost, //是否转发
               show_comment : false,//显示评论
           };
+          //获取图片
+          for(var j = 0 ; j < momentInfo.pictureCount ; j++)
+          {
+              axios.get("/api/static/"+momentInfo.pictureURL[j],{
+                headers:{
+                  'token' : this.token
+                },
+                responseType : "blob"
+              }).then(res=>{
+                var blob = new Blob([res.data]);
+                momentInfo.pic.push(URL.createObjectURL(blob));
+          })
+          }
+          //获取头像
+          axios.get("/api/static/"+momentInfo.avatarUrl,{
+                headers:{
+                  'token' : this.token
+                },
+                responseType : "blob"
+              }).then(res=>{
+                var blob = new Blob([res.data]);
+                momentInfo.avatarUrl = URL.createObjectURL(blob);
+          });
           this.moment_items.push(momentInfo);
         }
       });
