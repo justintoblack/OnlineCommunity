@@ -172,7 +172,7 @@ public class UserService {
         }
 
         UserInfo userInfoByUsername = userInfoMapper.getUserInfoByUsername(userInfo.getUsername());
-        if (userInfoByUsername != null) {
+        if (userInfoByUsername != null && userInfoByUsername.getUid() != uid) {
             return Result.failure(ResultCode.EXIST_USERNAME);
         }
 
