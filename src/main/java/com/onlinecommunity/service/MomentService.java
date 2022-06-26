@@ -11,6 +11,7 @@ import com.onlinecommunity.util.MyEnvBeanUtil;
 import com.onlinecommunity.util.UploadUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -125,7 +126,9 @@ public class MomentService {
      * @return Result, 获得的动态列表在Result里的data中
      */
     public Result getSelfMomentList(Page page, Integer uid) {
+        PageHelper.startPage(page.getCurrentPage(),10);
         List<Moment> momentList = momentMapper.getActiveSelfMomentsByPage(page, uid);
+        PageInfo<Moment> pageInfo1 = new PageInfo<>(momentList,3);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
@@ -143,9 +146,12 @@ public class MomentService {
 
         jedis.close();
 
+        List<ResultMoment> resultMomentList = getResultMomentList(momentList);
+        PageInfo<ResultMoment> pageInfo2 = new PageInfo<>(resultMomentList, 3);
+        BeanUtils.copyProperties(pageInfo1,pageInfo2);
+        pageInfo2.setList(resultMomentList);
         Result result = Result.success();
-        Map<String, Object> resultMap = getMomentResultMap(momentList);
-        result.setData(resultMap);
+        result.setData(pageInfo2);
         return result;
     }
 
@@ -155,7 +161,9 @@ public class MomentService {
      * @return 主页动态列表，以及用户名列表，现在是分开的，后续可以考虑改进
      */
     public Result getHomeMomentList(Page page, Integer uid) {
+        PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> momentList = momentMapper.getActiveHomeMomentsByPage(page, uid);
+        PageInfo<Moment> pageInfo1 = new PageInfo<>(momentList, 3);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
@@ -178,9 +186,11 @@ public class MomentService {
 //        return result;
 
         List<ResultMoment> resultMomentList = getResultMomentList(momentList);
-        PageInfo<ResultMoment> pageInfo = new PageInfo<>(resultMomentList, 3);
+        PageInfo<ResultMoment> pageInfo2 = new PageInfo<>(resultMomentList, 3);
+        BeanUtils.copyProperties(pageInfo1,pageInfo2);
+        pageInfo2.setList(resultMomentList);
         Result result = Result.success();
-        result.setData(pageInfo);
+        result.setData(pageInfo2);
         return result;
 
     }
@@ -438,14 +448,15 @@ public class MomentService {
         if (userByUid == null) return Result.failure(ResultCode.NONEXISTENT_UID);
 
         PageHelper.startPage(page.getCurrentPage(), 10);
-        List<Moment> momentBySearch = momentMapper.getMomentBySearch(str);
+        List<Moment> momentList = momentMapper.getMomentBySearch(str);
+        PageInfo<Moment> pageInfo1 = new PageInfo<>(momentList, 3);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
         Set<String> smembersStar = jedis.smembers(uid.toString() + "star");
         Set<String> smembersLike = jedis.smembers(uid.toString() + "like");
         Set<String> smembersRepost = jedis.smembers(uid.toString() + "repost");
-        for (Moment moment : momentBySearch) {
+        for (Moment moment : momentList) {
             if (smembersStar.contains(moment.getMomentId().toString()))
                 moment.setStar(true);
             if (smembersLike.contains(moment.getMomentId().toString()))
@@ -455,11 +466,13 @@ public class MomentService {
         }
 
         jedis.close();
-        PageInfo<Moment> pageInfo = new PageInfo<Moment>(momentBySearch, 3);
-        log.info(String.valueOf(pageInfo));
-        Result result = Result.success();
-        result.setData(pageInfo);
 
+        List<ResultMoment> resultMomentList = getResultMomentList(momentList);
+        PageInfo<ResultMoment> pageInfo2 = new PageInfo<>(resultMomentList, 3);
+        BeanUtils.copyProperties(pageInfo1,pageInfo2);
+        pageInfo2.setList(resultMomentList);
+        Result result = Result.success();
+        result.setData(pageInfo2);
         return result;
     }
 
@@ -471,6 +484,7 @@ public class MomentService {
 
         PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> allLikesByUid = likeMapper.getAllLikesByUid(uid);
+        PageInfo<Moment> pageInfo1 = new PageInfo<>(allLikesByUid, 3);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
@@ -488,9 +502,13 @@ public class MomentService {
 
         jedis.close();
         List<ResultMoment> resultMomentList = getResultMomentList(allLikesByUid);
-        PageInfo<ResultMoment> pageInfo = new PageInfo<>(resultMomentList, 3);
+        PageInfo<ResultMoment> pageInfo2 = new PageInfo<>(resultMomentList, 3);
+
+        BeanUtils.copyProperties(pageInfo1,pageInfo2);
+        pageInfo2.setList(resultMomentList);
         Result result = Result.success();
-        result.setData(pageInfo);
+        result.setData(pageInfo2);
+
         return result;
     }
 
@@ -502,6 +520,7 @@ public class MomentService {
 
         PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> allStarsByUid = starMapper.getAllStarsByUid(uid);
+        PageInfo<Moment> pageInfo1 = new PageInfo<>(allStarsByUid, 3);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
@@ -519,9 +538,11 @@ public class MomentService {
 
         jedis.close();
         List<ResultMoment> resultMomentList = getResultMomentList(allStarsByUid);
-        PageInfo<ResultMoment> pageInfo = new PageInfo<>(resultMomentList, 3);
+        PageInfo<ResultMoment> pageInfo2 = new PageInfo<>(resultMomentList, 3);
+        BeanUtils.copyProperties(pageInfo1,pageInfo2);
+        pageInfo2.setList(resultMomentList);
         Result result = Result.success();
-        result.setData(pageInfo);
+        result.setData(pageInfo2);
         return result;
     }
 
@@ -533,6 +554,7 @@ public class MomentService {
 
         PageHelper.startPage(page.getCurrentPage(), 10);
         List<Moment> allRepostsByUid = repostMapper.getAllRepostsByUid(uid);
+        PageInfo<Moment> pageInfo1 = new PageInfo<>(allRepostsByUid, 3);
 
         Jedis jedis = new Jedis("127.0.0.1", 6379);
         jedis.auth(MyEnvBeanUtil.getProperty("spring.redis.password"));
@@ -549,9 +571,12 @@ public class MomentService {
         }
 
         jedis.close();
-        PageInfo<Moment> pageInfo = new PageInfo<>(allRepostsByUid, 3);
+        List<ResultMoment> resultMomentList = getResultMomentList(allRepostsByUid);
+        PageInfo<ResultMoment> pageInfo2 = new PageInfo<>(resultMomentList, 3);
+        BeanUtils.copyProperties(pageInfo1,pageInfo2);
+        pageInfo2.setList(resultMomentList);
         Result result = Result.success();
-        result.setData(pageInfo);
+        result.setData(pageInfo2);
         return result;
     }
 
@@ -565,15 +590,19 @@ public class MomentService {
 
         PageHelper.startPage(page.getCurrentPage(), 10);
         List<Comment> allCommentsByMid = commentMapper.getAllCommentsByMid(mid);
+        PageInfo<Comment> pageInfo1 = new PageInfo<Comment>(allCommentsByMid, 3);
+
         for (Comment comment : allCommentsByMid) {
             ResultComment resultComment = new ResultComment(comment);
             log.info(resultComment.toString());
             resultComments.add(resultComment);
         }
 
-        PageInfo<ResultComment> pageInfo = new PageInfo<ResultComment>(resultComments, 3);
+        PageInfo<ResultComment> pageInfo2 = new PageInfo<ResultComment>(resultComments, 3);
+        BeanUtils.copyProperties(pageInfo1,pageInfo2);
+        pageInfo2.setList(resultComments);
         Result result = Result.success();
-        result.setData(pageInfo);
+        result.setData(pageInfo2);
         return result;
     }
 
