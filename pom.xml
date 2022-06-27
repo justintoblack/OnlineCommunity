@@ -6,7 +6,8 @@
     <artifactId>springboot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springboot</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Spring Boot Project Online Community</description>
+    <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -23,6 +24,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <!--    移除默认Tomcat        -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -59,7 +67,7 @@
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-
+            <scope>provided</scope>
         </dependency>
         <!--   对jsp的支持    -->
 
@@ -135,6 +143,7 @@
     </dependencyManagement>
 
     <build>
+        <finalName>onlinecommunity</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
