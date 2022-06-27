@@ -1,17 +1,6 @@
 <template>
   <v-container >
 
-    <!-- 搜索框 -->
-    <v-text-field
-      id="home_top"
-      outlined
-      dense
-      label="搜索"
-      prepend-icon="fa-search"
-      v-model="searchKey"
-      @click:prepend="search()"
-    ></v-text-field>
-
     <v-divider></v-divider>
     <!-- 动态发布 -->
     <div>
