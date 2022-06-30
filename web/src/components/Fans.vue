@@ -6,7 +6,7 @@
         <div style="display: flex">
           <div>
             <v-img
-              :src="item.imgUrl"
+              :src="item.imgSrc"
               min-width="150px"
               max-width="150px"
               min-height="150px"
@@ -91,9 +91,18 @@ export default {
             username : lists[i].username,
             about : lists[i].about,
             isFollowing : lists[i].isFollowing,
-            imgUrl : lists[i].avatarUrl
-
+            imgUrl : lists[i].avatarUrl,
+            imgSrc : '',
           }
+           axios.get("/api/static/"+userInfo.imgUrl,{
+                headers:{
+                  'token' : this.token
+                },
+                responseType : "blob"
+              }).then(res=>{
+                var blob = new Blob([res.data]);
+                userInfo.imgSrc = URL.createObjectURL(blob);
+          });
           this.items.push(userInfo);
         }
       })
