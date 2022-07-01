@@ -1,0 +1,11 @@
+项目启动：需要先启动服务端，再启动前端
+
+后端：
+1.启动redis：进入redis文件夹终端，使用命令:redis-server.exe redis.windows.conf
+2.数据库：
+3.服务：
+
+前端：
+1.终端安装npm
+2.安装项目：vscode打开web文件，开启终端输入命令:npm install
+3.启动项目：终端输入命令：npm run serve
