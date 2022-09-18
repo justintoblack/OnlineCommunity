@@ -15,6 +15,13 @@
       </v-col >
       <!-- 关注 -->
       <v-col cols="1">
+        <!-- 隐藏上传文件按钮 -->
+          <input 
+              style="display:none"
+              type="file"
+              id = "selectPic"
+              accept="image/*"
+              @change="postAvatar($event)"/>
         <v-btn v-if="showBtn" color="#64B5F6" @click="modifyPhoto()">修改头像</v-btn>
         <v-btn v-if="!showBtn" :color="(user.isFollowing?'#64B5F6': 'white')" @click="clickFollow()">{{ user.isFollowing?'已关注':'未关注' }}</v-btn>
       </v-col>
@@ -193,17 +200,17 @@ export default {
     modify(){
       this.readonly = !this.readonly;
     },
-    //提交
+    //修改个人信息
     postInfo(){
       console.log(this.$data.user.name);
       axios.post('/api/modify_self_info',
         {
           'uid' : localStorage.uid,
           'username' : this.user.name,
-          'phone' : this.user.phone,
-          'email' : this.user.email,
-          'birthday' : this.user.birthday,
-          'about' : this.user.about,
+          'phone' : this.user.phone==""?" ":this.user.phone,
+          'email' : this.user.email==""?" ":this.user.email,
+          'birthday' : this.user.birthday==""?" ":"2000-01-01",
+          'about' : this.user.about==""?" ":this.user.about,
         }
       ,
       {
@@ -222,7 +229,31 @@ export default {
     //修改头像
     modifyPhoto()
     {
-      
+      let inputBtn =  document.querySelector("#selectPic");
+      inputBtn.click();
+    },
+    //上传头像
+    postAvatar(e)
+    {
+      var imgFiles = (e.target.files[0]);
+      var forms = new FormData();
+      forms.append('pictures',imgFiles);
+      forms.append('uid',localStorage.uid);
+      var config = {
+        headers:{
+          token : localStorage.token
+        }
+      };
+      axios.post('/api/modify_avatarUrl',forms,config)
+      .then(res=>{
+        if(res.data.code=='200')
+        {
+          alert('修改成功');
+          this.imgUrl = window.URL.createObjectURL(imgFiles);
+        }else{
+          alert('修改失败');
+        }
+      })
     },
     //点击关注
     clickFollow() {

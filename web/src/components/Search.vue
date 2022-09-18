@@ -6,7 +6,7 @@
         <div style="display: flex">
           <div>
             <v-img
-              :src="item.imgSrc"
+              :src="item.imgUrl"
               min-width="150px"
               max-width="150px"
               min-height="150px"
@@ -51,28 +51,13 @@ export default {
     this.getFollowList();
   },
   methods: {
-    // 模拟数据
-    imitation() {
-      for (let i = 0; i < 4; i++) {
-        let item = {
-          imgUrl: require("../assets/hutao" + i + ".png"),
-          name: "hutao" + i,
-          id: i,
-          sign: "啦啦啦啦啦lalalalal",
-          follow: true,
-          follow_text: "关注",
-        };
-        if (item.follow) item.follow_text = "已关注";
-        else item.follow_text = "未关注";
-        this.items.push(item);
-      }
-    },
     // 获取关注列表
     getFollowList() {
-      axios.get('/api/get_followings_list',{
+      axios.get('/api/search_userInfo',{
         params:{
           'currentPage' : this.page,
-          'uid':localStorage.uid
+          'uid':localStorage.uid,
+          'str':localStorage.key
         },
         headers:{
           'token':localStorage.getItem('token')
@@ -91,18 +76,9 @@ export default {
             username : lists[i].username,
             about : lists[i].about,
             isFollowing : lists[i].isFollowing,
-            imgUrl : lists[i].avatarUrl,
-            imgSrc : '',
+            imgUrl : lists[i].avatarUrl
+
           }
-           axios.get("/api/static/"+userInfo.imgUrl,{
-                headers:{
-                  'token' : this.token
-                },
-                responseType : "blob"
-              }).then(res=>{
-                var blob = new Blob([res.data]);
-                userInfo.imgSrc = URL.createObjectURL(blob);
-          });
           this.items.push(userInfo);
         }
       })

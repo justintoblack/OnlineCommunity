@@ -8,6 +8,7 @@
       dense
       label="搜索"
       prepend-icon="fa-search"
+      v-model="searchKey"
       @click:prepend="search()"
     ></v-text-field>
 
@@ -265,7 +266,7 @@
                     v-model="commentText"
                   ></v-textarea>
                   <div class="right_btn">
-                    <v-btn @click="op_comment(id)">评论</v-btn>
+                    <v-btn @click="post_comment(item.id)">评论</v-btn>
                   </div>
               </v-container>
               <v-list>
@@ -274,13 +275,14 @@
                     <div style="display: flex">
                       <v-img
                         class="img_broder"
-                        :src="com.imgurl"
+                        :src="com.avatarUrl"
                         max-height="50px"
                         min-height="50px"
                         max-width="50px"
                         min-width="50px"
                       ></v-img>
-                      <div class="char_style margin_left">{{ com.name }}</div>
+                      <div class="char_style margin_left">{{ com.username }}</div>
+                      <div class="char_style margin_left">{{ com.commentTime}}</div>
                     </div>
 
                     <p class="margin_vertical"></p>
@@ -297,8 +299,7 @@
                 </v-list-item>
               </v-list>
               <div>
-                <v-btn>更多评论</v-btn>
-                <v-btn @click="close_comment(item.id)">收起评论</v-btn>
+                <v-btn @click="more_comment(item.id)">更多评论</v-btn>
               </div>
             </div>
 
@@ -333,7 +334,8 @@ export default {
       imgFiles :[],//发布动态图片文件
       imgSrc :[],//发布动态图片资源
       token: localStorage.token,//token
-      test: [],
+      uid : localStorage.uid,//uid
+      searchKey: '',
     };
   },
   mounted() {
@@ -381,10 +383,6 @@ export default {
         };
         this.moment_items.push(item);
       }
-    },
-    //监听滚动
-    listenScroll(e){
-
     },
     //触发选择图片按钮
     selectPic(){
@@ -541,31 +539,103 @@ export default {
         })
       }
     },
-    //打开评论
+    //展开或关闭评论
     open_comment(id) {
-      this.moment_items[id].show_comment = !this.moment_items[id].show_comment;
-       
+      //关闭评论
+      if(this.moment_items[id].show_comment)
+      {
+        this.moment_items[id].show_comment = false;
+        this.moment_items[id].comment_page = 1;
+        this.moment_items[id].comment_list = [];
+        return;
+      } 
+      //展开
+      this.moment_items[id].show_comment = true;
+
+      this.get_comment_list(id);
+    },
+    //获取评论
+    get_comment_list(id)
+    {
+      console.log(this.moment_items[id]);
+
+      let list = [];
+
+      axios.get("/api/get_comment_list",{
+        params:{
+          'currentPage' : this.moment_items[id].comment_page,
+          'mid' : this.moment_items[id].momentId
+        },
+        headers:{
+          'token' : this.token
+        }
+      }).then(res=>{
+        console.log(res.data);
+        list = res.data.data.list;
+        this.moment_items[id].has_next_comment = res.data.data.hasNextPage;
+        for(let i = 0;i<list.length;i++)
+        {
+          //获取头像
+          axios.get("/api/static/"+list[i].avatarUrl,{
+                headers:{
+                  'token' : this.token
+                },
+                responseType : "blob"
+              }).then(res=>{
+                let blob = new Blob([res.data]);
+                let obj = list[i];
+                obj.avatarUrl = URL.createObjectURL(blob);
+                this.moment_items[id].comment_list.push(list[i]);
+          });
+        }
+      })
+    },
+    //更多评论
+    more_comment(id)
+    {
+      if(!this.moment_items[id].has_next_comment)
+      {
+        alert("没有更多评论了...");
+        return;
+      }
+      this.moment_items[id].comment_page += 1;
+      this.get_comment_list(id);
     },
     //关闭评论
-    close_comment(id) {
-      this.moment_items[id].show_comment = !this.moment_items[id].show_comment;
-    },
+    // close_comment(id) {
+    //   this.moment_items[id].show_comment = false;
+    // },
     //发表评论
     post_comment(id) {
         console.log("评论"+id+" 内容:"+this.commentText);
-        axios.post("/api/comment_moment",{
-          params:{
+
+        axios.post("/api/comment_moment",
+          {
             'mid' : this.moment_items[id].momentId,
+            'uid': this.uid,
             'ccontent' : this.commentText,
-          }.then(res=>{
-            console.log(res.data);
-          })
-        })
+          },
+          {
+            headers:{ 
+              'token' : this.token,
+              "Content-Type": "multipart/form-data"
+              }
+          }
+      ).then(res=>{
+        console.log(res.data);
+        if(res.data.msg=="success")
+        {
+          this.commentText = "";
+          this.moment_items[id].commentCount++;
+        }
+      })
     },
     //搜索
     search() {
       console.log("点击搜索");
-      console.log(this.test);
+      console.log(this.searchKey);
+      localStorage.key = this.searchKey;
+      this.$router.push("/main/search").catch((err) => err);
     },
     //切页
     changePage(page)
@@ -574,7 +644,7 @@ export default {
       {
         case -1:
           if(this.hasPrePage){
-            page--;
+            this.$data.page--;
             }
           else {
             alert('已经是第一页');
@@ -583,12 +653,12 @@ export default {
           break;
 
         case 0: 
-          page =1;
+          this.$data.page =1;
           break;
 
         case 1:
           if(this.hasNextPage){
-            page++;
+            this.$data.page++;
           }
           else{
             alert('已经是最后一页');
@@ -602,8 +672,8 @@ export default {
     get_list(){
       axios.get("/api/get_home_moment_list",{
       params:{
-        'uid':localStorage.getItem('uid'),
-        'page' : this.page
+        'uid': this.uid,
+        'currentPage' : this.page ,
       },
       headers:{
         'token' : this.token,
@@ -627,7 +697,6 @@ export default {
               momentTime : momentList[i].momentTime,//动态时间
               likeCount : momentList[i].likeCount,//点赞数
               commentCount : momentList[i].commentCount,//评论数
-              comment_list : [],//评论
               pictureCount : momentList[i].pictureCount,//图片数
               pictureURL : momentList[i].pictureUrlList,//图片路径
               pic : [],//图片
@@ -638,6 +707,9 @@ export default {
               isLike : momentList[i].isLike, //是否点赞
               isRepost : momentList[i].isRepost, //是否转发
               show_comment : false,//显示评论
+              comment_page: 1,//评论页面
+              comment_list:[],//评论
+              has_next_comment:true,//是否有更多评论
           };
           //获取图片
           for(var j = 0 ; j < momentInfo.pictureCount ; j++)

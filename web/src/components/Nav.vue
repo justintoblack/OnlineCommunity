@@ -66,6 +66,16 @@ export default {
         console.log('用户信息');
         console.log(res.data);
         this.username = res.data.data.username;
+        this.imgUrl = res.data.data.avatarUrl;
+        axios.get("/api/static/"+this.imgUrl,{
+                headers:{
+                  'token' : this.token
+                },
+                responseType : "blob"
+              }).then(res=>{
+                var blob = new Blob([res.data]);
+               this.$data.imgUrl = URL.createObjectURL(blob);
+          })
       })
     },
     //跳转
