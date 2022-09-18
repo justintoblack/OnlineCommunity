@@ -12,16 +12,11 @@
 
 后端：
 1.启动redis：进入redis文件夹终端, 使用命令:redis-server.exe redis.windows.conf
-redis auth的密码:j2ee123456-
 
 2.数据库:MySQL
-hostname:localhost
-username:root
-password:j2ee123456-
-需要先执行/backend/MySQL/online_community_dump.sql创建数据库和表。
 
-3.服务：IDEA打开pom.xml先安装jar包依赖，运行spring boot application。
-也使用idea内嵌Tomcat运行，也可以把项目war包放至Tomcat文件夹下的Webapps文件夹下，再启动Tomcat。
+3.服务：IDEA打开pom.xml先安装jar包依赖，运行springboot application。
+可以使用idea内嵌Tomcat运行，也可以把项目war包放至Tomcat文件夹下的Webapps文件夹下，再启动Tomcat。
 
 前端：
 1.终端安装npm
