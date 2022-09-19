@@ -69,7 +69,7 @@ export default {
         this.imgUrl = res.data.data.avatarUrl;
         axios.get("/api/static/"+this.imgUrl,{
                 headers:{
-                  'token' : this.token
+                  'token' : localStorage.token
                 },
                 responseType : "blob"
               }).then(res=>{

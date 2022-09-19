@@ -712,17 +712,23 @@ export default {
               has_next_comment:true,//是否有更多评论
           };
           //获取图片
+          // momentInfo.pic = new Array(momentInfo.pictureCount);
           for(var j = 0 ; j < momentInfo.pictureCount ; j++)
           {
               axios.get("/api/static/"+momentInfo.pictureURL[j],{
                 headers:{
-                  'token' : this.token
+                  'token' : this.token,
+                  'idx' : j
                 },
                 responseType : "blob"
               }).then(res=>{
                 var blob = new Blob([res.data]);
+                var url = URL.createObjectURL(blob)
                 momentInfo.pic.push(URL.createObjectURL(blob));
-          })
+                // momentInfo.pic[res.config.headers.idx] = url
+                // console.log(momentInfo.pic[res.config.headers.idx])
+                // console.log("-------");
+              }, )
           }
           //获取头像
           axios.get("/api/static/"+momentInfo.avatarUrl,{

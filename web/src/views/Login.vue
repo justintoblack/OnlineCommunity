@@ -87,11 +87,18 @@ export default {
         )
         .then((res) => {
           console.log(res.data);
-          localStorage.token = res.data.data.token;
-          localStorage.uid = res.data.data.uid;
-          localStorage.toUid = res.data.data.uid;
-          if (res.data.msg == "success") this.$router.push("/main/home");
-          else alert(res.data.msg);
+
+          if (res.data.msg == "success") {
+            localStorage.token = res.data.data.token;
+            localStorage.uid = res.data.data.uid;
+            localStorage.toUid = res.data.data.uid;
+            this.$router.push("/main/home");
+          }
+          else {
+            console.log(res.data.msg);
+            alert(res.data.msg);
+          }
+
         });
     },
     register() {
