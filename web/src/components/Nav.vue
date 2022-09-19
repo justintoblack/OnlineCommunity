@@ -57,7 +57,7 @@ export default {
       axios.get('/api/get_self_info',{
         params:{
           uid : localStorage.uid,
-          infoUid:localStorage.toUid,
+          infoUid:localStorage.uid,
         },
         headers:{
           token :localStorage.token

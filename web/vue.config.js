@@ -10,7 +10,7 @@ module.exports = {
         target: "http://localhost:8080",
         changeOrigin: true,  //  是否跨域
         pathRewrite: {
-          "^/api": "" //  重定向
+          "^/api": "/onlinecommunity" //  重定向
         },
       }
     }
