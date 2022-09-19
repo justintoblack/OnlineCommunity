@@ -54,7 +54,7 @@ export default {
     //获取用户信息
     getUserInfo() {
       this.imgUrl = require("../assets/hutao.png");
-      axios.get('/api/get_self_info',{
+      axios.get('/onlinecommunity/get_self_info',{
         params:{
           uid : localStorage.uid,
           infoUid:localStorage.uid,
@@ -67,7 +67,7 @@ export default {
         console.log(res.data);
         this.username = res.data.data.username;
         this.imgUrl = res.data.data.avatarUrl;
-        axios.get("/api/static/"+this.imgUrl,{
+        axios.get("/onlinecommunity/static/"+this.imgUrl,{
                 headers:{
                   'token' : localStorage.token
                 },

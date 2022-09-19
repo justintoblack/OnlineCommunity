@@ -105,7 +105,7 @@ export default {
       }
       axios
         .post(
-          "/api/register",
+          "/onlinecommunity/register",
           {
             username: this.username,
             password: this.password1,

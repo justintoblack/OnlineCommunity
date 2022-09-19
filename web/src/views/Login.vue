@@ -76,7 +76,7 @@ export default {
       }
       axios
         .post(
-          "/api/login",
+          "/onlinecommunity/login",
           {
             username: this.username,
             password: this.password,

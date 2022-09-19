@@ -419,7 +419,7 @@ export default {
           token : localStorage.token
         }
       };
-      axios.post('/api/post_moment',forms,config)
+      axios.post('/onlinecommunity/post_moment',forms,config)
       .then(res=>{
         if(res.data.code=='200')
         {
@@ -437,7 +437,7 @@ export default {
        console.log("收藏动态"+id);
       if(this.moment_items[id].isStar)
       {
-        axios.post("/api/delete_star_moment",
+        axios.post("/onlinecommunity/delete_star_moment",
                   {
                     'uid' : localStorage.uid,
                     'momentId' : this.moment_items[id].momentId,
@@ -457,7 +457,7 @@ export default {
               }})
       }
       else{
-        axios.get("/api/star_moment",{
+        axios.get("/onlinecommunity/star_moment",{
                 params:{
                   'uid':localStorage.uid,
                   'mid':this.moment_items[id].momentId,
@@ -475,7 +475,7 @@ export default {
       console.log("点击按钮" + id);
       if(!this.moment_items[id].isLike)
       {
-        axios.get("/api/like_moment",{
+        axios.get("/onlinecommunity/like_moment",{
                 params:{
                   'uid':localStorage.uid,
                   'mid':this.moment_items[id].momentId,
@@ -492,7 +492,7 @@ export default {
               }})
            }else{
              axios.
-          post("/api/delete_like_moment",
+          post("/onlinecommunity/delete_like_moment",
                   {
                     'uid' : localStorage.uid,
                     'momentId' : this.moment_items[id].momentId,
@@ -522,7 +522,7 @@ export default {
       }
       var dialog = confirm("确认转发吗");
       if(dialog){
-        axios.get("/api/repost_moment",{
+        axios.get("/onlinecommunity/repost_moment",{
           params:{
             uid: localStorage.uid,
             mid : this.moment_items[id].momentId,
@@ -561,7 +561,7 @@ export default {
 
       let list = [];
 
-      axios.get("/api/get_comment_list",{
+      axios.get("/onlinecommunity/get_comment_list",{
         params:{
           'currentPage' : this.moment_items[id].comment_page,
           'mid' : this.moment_items[id].momentId
@@ -576,7 +576,7 @@ export default {
         for(let i = 0;i<list.length;i++)
         {
           //获取头像
-          axios.get("/api/static/"+list[i].avatarUrl,{
+          axios.get("/onlinecommunity/static/"+list[i].avatarUrl,{
                 headers:{
                   'token' : this.token
                 },
@@ -609,7 +609,7 @@ export default {
     post_comment(id) {
         console.log("评论"+id+" 内容:"+this.commentText);
 
-        axios.post("/api/comment_moment",
+        axios.post("/onlinecommunity/comment_moment",
           {
             'mid' : this.moment_items[id].momentId,
             'uid': this.uid,
@@ -670,7 +670,7 @@ export default {
     },
     //获取首页动态
     get_list(){
-      axios.get("/api/get_home_moment_list",{
+      axios.get("/onlinecommunity/get_home_moment_list",{
       params:{
         'uid': this.uid,
         'currentPage' : this.page ,
@@ -715,7 +715,7 @@ export default {
           // momentInfo.pic = new Array(momentInfo.pictureCount);
           for(var j = 0 ; j < momentInfo.pictureCount ; j++)
           {
-              axios.get("/api/static/"+momentInfo.pictureURL[j],{
+              axios.get("/onlinecommunity/static/"+momentInfo.pictureURL[j],{
                 headers:{
                   'token' : this.token,
                   'idx' : j
@@ -731,7 +731,7 @@ export default {
               }, )
           }
           //获取头像
-          axios.get("/api/static/"+momentInfo.avatarUrl,{
+          axios.get("/onlinecommunity/static/"+momentInfo.avatarUrl,{
                 headers:{
                   'token' : this.token
                 },

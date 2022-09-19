@@ -159,7 +159,7 @@ export default {
   methods:{
     //获取个人信息
     getUserInfo() {
-      axios.get('/api/get_self_info',{
+      axios.get('/onlinecommunity/get_self_info',{
         params:{
           'uid' : this.uid,
           'infoUid': this.toUid,
@@ -184,7 +184,7 @@ export default {
           this.user.isFollowing = res.data.data.isFollowing;
           this.user.url = res.data.data.avatarUrl;
         }
-        axios.get("/api/static/"+this.user.url,{
+        axios.get("/onlinecommunity/static/"+this.user.url,{
                 headers:{
                   'token' : this.token
                 },
@@ -203,7 +203,7 @@ export default {
     //修改个人信息
     postInfo(){
       console.log(this.$data.user.name);
-      axios.post('/api/modify_self_info',
+      axios.post('/onlinecommunity/modify_self_info',
         {
           'uid' : localStorage.uid,
           'username' : this.user.name,
@@ -244,7 +244,7 @@ export default {
           token : localStorage.token
         }
       };
-      axios.post('/api/modify_avatarUrl',forms,config)
+      axios.post('/onlinecommunity/modify_avatarUrl',forms,config)
       .then(res=>{
         if(res.data.code=='200')
         {
@@ -257,7 +257,7 @@ export default {
     },
     //点击关注
     clickFollow() {
-      axios.post('/api/follow',
+      axios.post('/onlinecommunity/follow',
           {
             'cuid': this.uid,
             'uid': this.toUid,

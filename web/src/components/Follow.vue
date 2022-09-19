@@ -69,7 +69,7 @@ export default {
     },
     // 获取关注列表
     getFollowList() {
-      axios.get('/api/get_followings_list',{
+      axios.get('/onlinecommunity/get_followings_list',{
         params:{
           'currentPage' : this.page,
           'uid':localStorage.uid
@@ -94,7 +94,7 @@ export default {
             imgUrl : lists[i].avatarUrl,
             imgSrc : '',
           }
-           axios.get("/api/static/"+userInfo.imgUrl,{
+           axios.get("/onlinecommunity/static/"+userInfo.imgUrl,{
                 headers:{
                   'token' : this.token
                 },
@@ -141,7 +141,7 @@ export default {
     //点击关注按钮
     clickFollow(id) {
       console.log("点击了" + id);
-      axios.post('/api/follow',
+      axios.post('/onlinecommunity/follow',
           {
             'cuid': localStorage.uid,
             'uid': this.items[id].uid,
